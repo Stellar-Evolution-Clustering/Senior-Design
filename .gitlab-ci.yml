@@ -1,0 +1,9 @@
+build_ui:
+  image: node:latest
+  stage: build
+  only:
+    changes:
+      - UI/*
+  script:
+    - npm install
+    - ng build --prod
