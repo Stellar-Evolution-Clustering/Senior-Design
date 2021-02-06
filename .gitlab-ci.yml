@@ -22,6 +22,7 @@ test_ui:
   extends: build_ui
   stage: test
   script:
+    - cd UI
     - npm install -g @angular/cli
     - ng test --browsers ChromeHeadless
 
