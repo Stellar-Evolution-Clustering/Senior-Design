@@ -5,5 +5,7 @@ build_ui:
     changes:
       - UI/*
   script:
+    - cd UI
+    - npm install -g @angular/cli
     - npm install
     - ng build --prod
