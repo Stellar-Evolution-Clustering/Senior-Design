@@ -1,0 +1,41 @@
+<mat-card>
+  <mat-card-title> Variables </mat-card-title>
+  <mat-card-content>
+    <div>
+      <mat-form-field>
+        <mat-label>Select Variable</mat-label>
+        <mat-select>
+          <mat-option
+            *ngFor="let variable of variables | async"
+            value="option"
+            >{{ variable.name }}</mat-option
+          >
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-form-field>
+        <mat-label>Select Variable</mat-label>
+        <mat-select>
+          <mat-option
+            *ngFor="let variable of variables | async"
+            value="option"
+            >{{ variable.name }}</mat-option
+          >
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-form-field>
+        <mat-label>Select Variable</mat-label>
+        <mat-select>
+          <mat-option
+            *ngFor="let variable of variables | async"
+            value="option"
+            >{{ variable.name }}</mat-option
+          >
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </mat-card-content>
+</mat-card>
