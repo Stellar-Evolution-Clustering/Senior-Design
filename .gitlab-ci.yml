@@ -1,9 +1,29 @@
+stages:
+  - build
+  - test
+  - deploy
+
 build_ui:
   image: node:latest
   stage: build
+  artifacts:
+    paths:
+      - UI/dist
   only:
     changes:
       - UI/*
   script:
+    - cd UI
+    - npm install -g @angular/cli
     - npm install
     - ng build --prod
+
+test_ui:
+  extends: build_ui
+  stage: test
+  script:
+    - cd UI
+    - npm install -g @angular/cli
+    - ng test --browsers ChromeHeadless
+
+
