@@ -8,9 +8,14 @@ import { MaterialModule } from './material/material.module';
 import { NavModule } from './nav/nav.module';
 import { QueryComponent } from './query/query.component';
 import { ApiModule } from './api/api.module';
+import { GraphComponent } from './graph/graph.component';
+
+import { PlotlyModule } from 'angular-plotly.js';
+import * as Plotly from 'plotly.js/dist/plotly.js';
+PlotlyModule.plotlyjs = Plotly;
 
 @NgModule({
-  declarations: [AppComponent, QueryComponent],
+  declarations: [AppComponent, QueryComponent, GraphComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -18,6 +23,7 @@ import { ApiModule } from './api/api.module';
     NavModule,
     ApiModule,
     MaterialModule,
+    PlotlyModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
