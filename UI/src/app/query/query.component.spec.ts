@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ApiModule } from '../api/api.module';
 
 import { QueryComponent } from './query.component';
 
@@ -8,9 +9,9 @@ describe('QueryComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ QueryComponent ]
-    })
-    .compileComponents();
+      declarations: [QueryComponent],
+      imports: [ApiModule],
+    }).compileComponents();
   });
 
   beforeEach(() => {
