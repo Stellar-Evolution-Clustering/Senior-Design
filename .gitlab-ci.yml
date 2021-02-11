@@ -26,4 +26,15 @@ test_ui:
     - npm install -g @angular/cli
     - ng test --browsers ChromeHeadless
 
+test_api:
+  image: django:latest
+  stage: test
+  only:
+    changes:
+      - API/*
+  script:
+    - cd API
+    - ./manage.py test
+
+
 
