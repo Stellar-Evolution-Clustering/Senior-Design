@@ -1,11 +1,12 @@
 stages:
-  - build
-  - test
+  - test_api
+  - build_ui
+  - test_ui
   - deploy
 
 build_ui:
   image: node:latest
-  stage: build
+  stage: build_ui
   artifacts:
     paths:
       - UI/dist
@@ -20,10 +21,22 @@ build_ui:
 
 test_ui:
   extends: build_ui
-  stage: test
+  stage: test_ui
   script:
     - cd UI
     - npm install -g @angular/cli
     - ng test --browsers ChromeHeadless
+
+test_api:
+  image: django:latest
+  stage: test_api
+  only:
+    changes:
+      - API/*
+  script:
+    - cd API
+    - chmod +x manage.py
+    - ./manage.py test
+
 
 
