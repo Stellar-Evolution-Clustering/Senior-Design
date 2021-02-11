@@ -1,6 +1,7 @@
 stages:
-  - test
+  - test_api
   - build_ui
+  - test_ui
   - deploy
 
 build_ui:
@@ -20,7 +21,7 @@ build_ui:
 
 test_ui:
   extends: build_ui
-  stage: test
+  stage: test_ui
   script:
     - cd UI
     - npm install -g @angular/cli
@@ -28,7 +29,7 @@ test_ui:
 
 test_api:
   image: django:latest
-  stage: test
+  stage: test_api
   only:
     changes:
       - API/*
