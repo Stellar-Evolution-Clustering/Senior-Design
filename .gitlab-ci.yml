@@ -1,11 +1,11 @@
 stages:
-  - build
   - test
+  - build_ui
   - deploy
 
 build_ui:
   image: node:latest
-  stage: build
+  stage: build_ui
   artifacts:
     paths:
       - UI/dist
@@ -34,6 +34,7 @@ test_api:
       - API/*
   script:
     - cd API
+    - chmod +x manage.py
     - ./manage.py test
 
 
