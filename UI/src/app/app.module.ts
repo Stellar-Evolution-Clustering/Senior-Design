@@ -20,6 +20,7 @@ import { DistanceFuncComponent } from './distance-func/distance-func.component';
 import { ClusterMethodComponent } from './cluster-method/cluster-method.component';
 import { HelpComponent } from './help/help.component';
 import { AboutComponent } from './about/about.component';
+import { HomeComponent } from './home/home.component';
 
 PlotlyModule.plotlyjs = Plotly;
 
@@ -35,7 +36,8 @@ PlotlyModule.plotlyjs = Plotly;
     DistanceFuncComponent,
     ClusterMethodComponent,
     HelpComponent,
-    AboutComponent
+    AboutComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,

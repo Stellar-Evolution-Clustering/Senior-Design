@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
+import { Variable } from '../api/models/variable.model';
+import { VariablesService } from '../api/variables.service';
 
 @Component({
   selector: 'app-attribute',
@@ -6,10 +9,11 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./attribute.component.scss']
 })
 export class AttributeComponent implements OnInit {
+  public variables: Observable<Variable[]>;
 
-  constructor() { }
+  constructor(private variableService: VariablesService) { }
 
   ngOnInit(): void {
+    this.variables = this.variableService.getVariables();
   }
-
 }

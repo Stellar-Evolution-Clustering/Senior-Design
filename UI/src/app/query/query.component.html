@@ -1,45 +1,6 @@
-<mat-card>
-  <mat-card-title> Variables </mat-card-title>
-  <mat-card-content>
-    <div>
-      <mat-form-field>
-        <mat-label>Select Variable</mat-label>
-        <mat-select>
-          <mat-option
-            *ngFor="let variable of variables | async"
-            value="option"
-            >{{ variable.name }}</mat-option
-          >
-        </mat-select>
-      </mat-form-field>
-    </div>
-    <div>
-      <mat-form-field>
-        <mat-label>Select Variable</mat-label>
-        <mat-select>
-          <mat-option
-            *ngFor="let variable of variables | async"
-            value="option"
-            >{{ variable.name }}</mat-option
-          >
-        </mat-select>
-      </mat-form-field>
-    </div>
-    <div>
-      <mat-form-field>
-        <mat-label>Select Variable</mat-label>
-        <mat-select>
-          <mat-option
-            *ngFor="let variable of variables | async"
-            value="option"
-            >{{ variable.name }}</mat-option
-          >
-        </mat-select>
-      </mat-form-field>
-    </div>
-  </mat-card-content>
-</mat-card>
-<h1>Welcome to the Binary Star Clustering Tool!</h1>
 
-<a mat-raised-button color="primary" id="queryButton" [routerLink]="['/db']">Create New Query</a>
-<!-- <a mat-button [routerLink]="['/graph']">View Graph</a> -->
+<router-outlet></router-outlet>
+
+<a mat-fab color="primary" class="nextArrow">
+  <mat-icon svgIcon="arrow">arrow</mat-icon>
+</a>

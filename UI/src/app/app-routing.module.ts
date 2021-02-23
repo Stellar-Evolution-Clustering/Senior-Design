@@ -9,15 +9,18 @@ import { DistanceFuncComponent } from './distance-func/distance-func.component';
 import { ClusterMethodComponent } from './cluster-method/cluster-method.component';
 import { HelpComponent } from './help/help.component';
 import { AboutComponent } from './about/about.component';
+import { HomeComponent } from './home/home.component';
 
 const routes: Routes = [
-  { path: 'home', component: QueryComponent },
-  { path: 'db', component: DBComponent },
-  { path: 'attribute', component: AttributeComponent },
-  { path: 'weight', component: WeightComponent },
-  { path: 'distanceFunc', component: DistanceFuncComponent },
-  { path: 'clusterMethod', component: ClusterMethodComponent },
-  { path: 'graph', component: GraphComponent },
+  { path: 'home', component: HomeComponent },
+  { path: 'query', component: QueryComponent, children: [
+    { path: 'db', component: DBComponent },
+    { path: 'attribute', component: AttributeComponent },
+    { path: 'weight', component: WeightComponent },
+    { path: 'distanceFunc', component: DistanceFuncComponent },
+    { path: 'clusterMethod', component: ClusterMethodComponent },
+    { path: 'graph', component: GraphComponent },
+  ]},
   { path: 'help', component: HelpComponent },
   { path: 'about', component: AboutComponent },
   { path: '**', redirectTo: '/home', pathMatch: 'full' },
