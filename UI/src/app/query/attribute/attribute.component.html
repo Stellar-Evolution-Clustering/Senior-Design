@@ -1,0 +1,23 @@
+<mat-card>
+  <mat-card-title> Add Attributes </mat-card-title>
+  <mat-card-content>
+    <div *ngFor="let att of selectedAttributes">
+      <mat-form-field>
+        <mat-label>Select Variable</mat-label>
+        <mat-select>
+          <mat-option
+            *ngFor="let variable of variables | async"
+            value="option"
+            >{{ variable.name }}</mat-option
+          >
+        </mat-select>
+      </mat-form-field>
+      <button mat-fab color="primary" class="deleteAttribute" (click)="deleteAttribute()">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div>
+  </mat-card-content>
+  <button mat-fab color="primary" class="addAttribute" (click)="addAttribute()">
+    <mat-icon>add</mat-icon>
+  </button>
+</mat-card>

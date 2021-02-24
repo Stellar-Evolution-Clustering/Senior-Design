@@ -1,0 +1,11 @@
+<h1>Select Your Database</h1>
+
+<div>
+  <mat-form-field appearance="fill">
+    <mat-select>
+      <mat-option *ngFor="let db of dbs" value="option">
+        {{db}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>
