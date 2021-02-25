@@ -12,7 +12,6 @@ export class VariablesService {
       { name: 'Mass' },
       { name: 'Luminosity' },
     ];
-    console.log(respnose);
     return of(respnose);
   }
 }

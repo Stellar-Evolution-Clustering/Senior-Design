@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
   selector: 'app-weight',
@@ -6,6 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./weight.component.scss']
 })
 export class WeightComponent implements OnInit {
+  @Input() public weightAttributes: string[];
 
   constructor() { }
 
