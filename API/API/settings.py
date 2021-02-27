@@ -26,12 +26,23 @@ SECRET_KEY = 'nguh_tsf#ciz7vb*u0xu9l2&=7tbvzyotj8x!i)fn#6pp051-9'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+CORS_ORIGIN_ALLOW_ALL = False
+CORS_ORIGIN_WHITELIST = (
+    'http://localhost:8081',
+)
+
 ALLOWED_HOSTS = []
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    # Django REST framework
+    'rest_framework',
+    # CORS 
+    'corsheaders',
+
+    'binarystars.apps.BinarystarsConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -41,6 +52,10 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    # CORS
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
+
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -79,6 +94,8 @@ if os.environ.get('ENV') == 'PROD':
         'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'production',
+        'USER': os.environ.get('DB_USER'),
+        'PASSWORD': os.environ.get('DB_PASSWORD'),
         'USER': os.environ.get('DB_USER'),
         'PASSWORD': os.environ.get('DB_PASSWORD'),
         'HOST': 'sdmay21-30.ece.iastate.edu',
