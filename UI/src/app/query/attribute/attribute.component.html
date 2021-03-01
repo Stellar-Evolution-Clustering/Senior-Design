@@ -1,18 +1,18 @@
 <mat-card>
   <mat-card-title> Add Attributes </mat-card-title>
   <mat-card-content>
-    <div *ngFor="let att of selectedAttributes">
+    <div *ngFor="let att of selectedAttributes; index as i;trackBy:trackByAtt">
       <mat-form-field>
         <mat-label>Select Variable</mat-label>
-        <mat-select>
+        <mat-select [(value)]="selectedAttributes[i].att">
           <mat-option
             *ngFor="let variable of variables | async"
-            value="option"
-            >{{ variable.name }}</mat-option
-          >
+            value="{{variable.name}}"
+            >{{ variable.name }}
+          </mat-option>
         </mat-select>
       </mat-form-field>
-      <button mat-fab color="primary" class="deleteAttribute" (click)="deleteAttribute()">
+      <button mat-fab color="primary" class="deleteAttribute" (click)="deleteAttribute(i)">
         <mat-icon>delete</mat-icon>
       </button>
     </div>

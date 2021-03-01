@@ -28,15 +28,13 @@ test_ui:
     - ng test --browsers ChromeHeadless
 
 test_api:
-  image: django:latest
+  image: python:latest
   stage: test_api
   only:
     changes:
       - API/*
   script:
     - cd API
+    - pip install -r requirements.txt
     - chmod +x manage.py
     - ./manage.py test
-
-
-

@@ -8,6 +8,7 @@ import { DomSanitizer } from '@angular/platform-browser';
   styleUrls: ['./query.component.scss'],
 })
 export class QueryComponent implements OnInit {
+  public attributes: any[];
 
   constructor(
     private matIconRegistry: MatIconRegistry,
@@ -19,5 +20,7 @@ export class QueryComponent implements OnInit {
     );
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.attributes = new Array();
+  }
 }

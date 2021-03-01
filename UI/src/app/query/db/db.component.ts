@@ -7,7 +7,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DBComponent implements OnInit {
   dbs: string[] = [
-    "Database #1",
+    "COSMIC",
     "Database #2",
     "Database #3"
   ];

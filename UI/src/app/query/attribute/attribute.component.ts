@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Variable } from '../../api/models/variable.model';
 import { VariablesService } from '../../api/variables.service';
@@ -10,28 +10,31 @@ import { VariablesService } from '../../api/variables.service';
 })
 export class AttributeComponent implements OnInit {
   public variables: Observable<Variable[]>;
-  public selectedAttributes: string[];
+  @Input() public selectedAttributes: any[];
 
   constructor(
     private variableService: VariablesService,
   ) {
-
+    //TODO: Don't allow duplicate attributes
+    //TODO: Make a search box to help navigate large attribute lists
   }
 
   ngOnInit(): void {
     this.variables = this.variableService.getVariables();
-    this.selectedAttributes = new Array();
   }
 
   addAttribute(): void {
-    this.selectedAttributes.push("test");
-
-    //TODO: Add logic to store selected attributes
+    this.selectedAttributes.push({
+      "att": "",
+      "weight": 0.0
+    });
   }
 
-  deleteAttribute(): void {
-    this.selectedAttributes.pop();
+  deleteAttribute(i: number): void {
+    this.selectedAttributes.splice(i, 1);
+  }
 
-    //TODO: Add logic to store selected attributes
+  trackByAtt(index: number, att: any): number {
+    return index;
   }
 }
