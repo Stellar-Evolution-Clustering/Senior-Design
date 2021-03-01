@@ -1,42 +1,17 @@
-<mat-card>
-  <mat-card-title> Variables </mat-card-title>
-  <mat-card-content>
-    <div>
-      <mat-form-field>
-        <mat-label>Select Variable</mat-label>
-        <mat-select>
-          <mat-option
-            *ngFor="let variable of variables | async"
-            value="option"
-            >{{ variable.name }}</mat-option
-          >
-        </mat-select>
-      </mat-form-field>
-    </div>
-    <div>
-      <mat-form-field>
-        <mat-label>Select Variable</mat-label>
-        <mat-select>
-          <mat-option
-            *ngFor="let variable of variables | async"
-            value="option"
-            >{{ variable.name }}</mat-option
-          >
-        </mat-select>
-      </mat-form-field>
-    </div>
-    <div>
-      <mat-form-field>
-        <mat-label>Select Variable</mat-label>
-        <mat-select>
-          <mat-option
-            *ngFor="let variable of variables | async"
-            value="option"
-            >{{ variable.name }}</mat-option
-          >
-        </mat-select>
-      </mat-form-field>
-    </div>
-  </mat-card-content>
-</mat-card>
-<a mat-button [routerLink]="['/graph']">View Graph</a>
+
+<router-outlet></router-outlet>
+
+<a mat-fab color="primary" class="nextArrow" [routerLink]="['/query/attribute']">
+  <mat-icon svgIcon="arrow">arrow</mat-icon>
+</a>
+
+<app-attribute [selectedAttributes]="attributes"></app-attribute>
+<app-weight [weightAttributes]="attributes"></app-weight>
+
+
+<a [routerLink]="['/query/db']">to db</a> <br/>
+<a [routerLink]="['/query/attribute']">to attribute</a> <br/>
+<a [routerLink]="['/query/weight']">to weight</a> <br/>
+<a [routerLink]="['/query/distanceFunc']">to distance function</a> <br/>
+<a [routerLink]="['/query/clusterMethod']">to cluster method</a> <br/>
+<a [routerLink]="['/query/graph']">to graph</a> <br/>

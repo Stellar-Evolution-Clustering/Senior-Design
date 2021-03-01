@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
-import { Variable } from '../api/models/variable.model';
-import { VariablesService } from '../api/variables.service';
+import { MatIconRegistry } from "@angular/material/icon";
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-query',
@@ -9,11 +8,19 @@ import { VariablesService } from '../api/variables.service';
   styleUrls: ['./query.component.scss'],
 })
 export class QueryComponent implements OnInit {
-  public variables: Observable<Variable[]>;
+  public attributes: any[];
 
-  constructor(private variableService: VariablesService) {}
+  constructor(
+    private matIconRegistry: MatIconRegistry,
+    private domSanitizer: DomSanitizer
+  ) {
+    this.matIconRegistry.addSvgIcon(
+      'arrow',
+      this.domSanitizer.bypassSecurityTrustResourceUrl("../../assets/left_arrow.svg")
+    );
+  }
 
   ngOnInit(): void {
-    this.variables = this.variableService.getVariables();
+    this.attributes = new Array();
   }
 }

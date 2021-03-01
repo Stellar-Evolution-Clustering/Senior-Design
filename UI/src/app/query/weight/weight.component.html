@@ -1,0 +1,10 @@
+<mat-card>
+  <mat-card-title> Set Weight Functions </mat-card-title>
+  <mat-card-content>
+    <div *ngFor="let att of weightAttributes; index as i">
+        <mat-label>{{att.att}}</mat-label>
+        <mat-slider [(value)]="att.weight" min="0.0" max="1.0" step="0.01"></mat-slider>
+        <mat-label>{{att.weight}}</mat-label>
+    </div>
+  </mat-card-content>
+</mat-card>

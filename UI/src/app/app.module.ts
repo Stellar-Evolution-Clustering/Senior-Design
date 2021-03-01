@@ -1,5 +1,9 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { HttpClientModule } from '@angular/common/http';
+
+import { PlotlyModule } from 'angular-plotly.js';
+import * as Plotly from 'plotly.js/dist/plotly.js';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -8,14 +12,33 @@ import { MaterialModule } from './material/material.module';
 import { NavModule } from './nav/nav.module';
 import { QueryComponent } from './query/query.component';
 import { ApiModule } from './api/api.module';
-import { GraphComponent } from './graph/graph.component';
+import { GraphComponent } from './query/graph/graph.component';
+import { DBComponent } from './query/db/db.component';
+import { AttributeComponent } from './query/attribute/attribute.component';
+import { WeightComponent } from './query/weight/weight.component';
+import { DistanceFuncComponent } from './query/distance-func/distance-func.component';
+import { ClusterMethodComponent } from './query/cluster-method/cluster-method.component';
+import { HelpComponent } from './help/help.component';
+import { AboutComponent } from './about/about.component';
+import { HomeComponent } from './home/home.component';
 
-import { PlotlyModule } from 'angular-plotly.js';
-import * as Plotly from 'plotly.js/dist/plotly.js';
 PlotlyModule.plotlyjs = Plotly;
 
+
 @NgModule({
-  declarations: [AppComponent, QueryComponent, GraphComponent],
+  declarations: [
+    AppComponent,
+    QueryComponent,
+    GraphComponent,
+    DBComponent,
+    AttributeComponent,
+    WeightComponent,
+    DistanceFuncComponent,
+    ClusterMethodComponent,
+    HelpComponent,
+    AboutComponent,
+    HomeComponent
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -24,6 +47,7 @@ PlotlyModule.plotlyjs = Plotly;
     ApiModule,
     MaterialModule,
     PlotlyModule,
+    HttpClientModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
