@@ -28,7 +28,7 @@ test_ui:
     - ng test --browsers ChromeHeadless
 
 test_api:
-  image: django:python3-onbuild
+  image: python:latest
   stage: test_api
   only:
     changes:
