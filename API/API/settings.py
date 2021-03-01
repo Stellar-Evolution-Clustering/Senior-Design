@@ -33,7 +33,6 @@ CORS_ORIGIN_WHITELIST = (
 
 ALLOWED_HOSTS = []
 
-
 # Application definition
 
 INSTALLED_APPS = [

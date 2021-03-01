@@ -1,9 +1,9 @@
 from rest_framework import serializers
-from binarystars.models import Binarystar
+from binarystars.models import BinaryStars
 
-class BinarystarSerializer(serializers.ModelSerializer):
+class BinaryStarsSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Binarystar
+        model = BinaryStars
         fields = ('file_id', 
                     'id', 
                     'tphys',

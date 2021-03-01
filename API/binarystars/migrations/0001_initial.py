@@ -12,7 +12,7 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='BinaryStar',
+            name='BinaryStars',
             fields=[
                 ('file_id', models.IntegerField(blank=True, null=True)),
                 ('id', models.IntegerField(blank=True, null=True)),

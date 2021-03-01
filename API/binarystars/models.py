@@ -2,7 +2,7 @@ from django.db import models
 
 # Create your models here.
 
-class BinaryStar(models.Model):
+class BinaryStars(models.Model):
     file_id = models.IntegerField(blank=True, null=True)
     id = models.IntegerField(blank=True, null=True)
     tphys = models.FloatField(blank=True, null=True)
