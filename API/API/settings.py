@@ -40,7 +40,6 @@ INSTALLED_APPS = [
     'rest_framework',
     # CORS 
     'corsheaders',
-
     'binarystars.apps.BinarystarsConfig',
     'django.contrib.admin',
     'django.contrib.auth',

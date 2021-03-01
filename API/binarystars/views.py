@@ -12,15 +12,16 @@ from binarystars.models import BinaryStars
 from binarystars.serializers import BinaryStarsSerializer
 from rest_framework.decorators import api_view
 
+import binarystars.cluster.cluster as cluster
 
 @api_view(['GET', 'POST', 'DELETE'])
 def binarystars_list(request):
     if request.method == 'GET':
         binarystars = BinaryStars.objects.all()[:10]
         
-        title = request.GET.get('title', None)
-        if title is not None:
-            binarystars = binarystars.filter(title__icontains=title)
+        # title = request.GET.get('title', None)
+        # if title is not None:
+        #     binarystars = binarystars.filter(title__icontains=title)
         
         binarystar_serializer = BinaryStarsSerializer(binarystars, many=True)
         return JsonResponse(binarystar_serializer.data, safe=False)
@@ -40,5 +41,8 @@ def binarystars_detail(request, pk):
         binarystar_serializer = BinaryStarsSerializer(binarystar) 
         return JsonResponse(binarystar_serializer.data) 
 
-    
-
+@api_view(['GET'])
+def binarystars_cluster(request):
+    if request.method == 'GET':
+        clust = cluster.get_stars(3)
+        return JsonResponse(clust, safe=True)
