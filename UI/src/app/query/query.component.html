@@ -5,6 +5,10 @@
   <mat-icon svgIcon="arrow">arrow</mat-icon>
 </a>
 
+<app-attribute [selectedAttributes]="attributes"></app-attribute>
+<app-weight [weightAttributes]="attributes"></app-weight>
+
+
 <a [routerLink]="['/query/db']">to db</a> <br/>
 <a [routerLink]="['/query/attribute']">to attribute</a> <br/>
 <a [routerLink]="['/query/weight']">to weight</a> <br/>
