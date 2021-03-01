@@ -35,8 +35,6 @@ test_api:
       - API/*
   script:
     - cd API
+    - pip install -r requirements.txt
     - chmod +x manage.py
     - ./manage.py test
-
-
-
