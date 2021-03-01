@@ -7,7 +7,7 @@ from django.shortcuts import render
 from django.http.response import JsonResponse
 from rest_framework.parsers import JSONParser 
 from rest_framework import status
- 
+
 from binarystars.models import BinaryStars
 from binarystars.serializers import BinaryStarsSerializer
 from rest_framework.decorators import api_view
@@ -35,11 +35,10 @@ def binarystars_list(request):
 @api_view(['GET', 'PUT', 'DELETE'])
 def binarystars_detail(request, pk):
     binarystar = BinaryStars.objects.all(pk=pk)
- 
+
     if request.method == 'GET': 
         binarystar_serializer = BinaryStarsSerializer(binarystar) 
         return JsonResponse(binarystar_serializer.data) 
- 
+
     
- 
- 
+
