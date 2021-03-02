@@ -14,9 +14,10 @@ DATA_PROCESSORS = {
 def preprocess_data(data: np.ndarray, standarizer: str) -> np.ndarray:
     return DATA_PROCESSORS[standarizer].fit_transform(data)
 
-# default to mass difference, luminosity difference, and orbital period
-def get_stars(clusters: int, star_cnt: int=100, standarizer: str='abs', cluster_type: str='kmeans') -> list:
+def get_stars(n_clusters: int, star_cnt: int=100, standarizer: str='abs', cluster_type: str='kmeans') -> list:
     binarystars = BinaryStars.objects.all().order_by('time_id')[:star_cnt]
+    # soon, use BinaryStars.objects.values('value1', 'value2', ...).order_by('order_var')[:star_cnt]
+    # will leverage user input from frontend!
     time_ids = []
     stars_arr = []
     
@@ -36,7 +37,7 @@ def get_stars(clusters: int, star_cnt: int=100, standarizer: str='abs', cluster_
     
     clust = None
     if cluster_type == 'kmeans':
-        clust = kmeans_cluster(data=stars_arr, k=clusters)
+        clust = kmeans_cluster(data=stars_arr, k=n_clusters)
     elif cluster_type == 'dbscan':
         clust = dbscan_cluster(data=stars_arr)
     
