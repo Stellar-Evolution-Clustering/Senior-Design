@@ -10,6 +10,7 @@ import { ClusterMethodComponent } from './query/cluster-method/cluster-method.co
 import { HelpComponent } from './help/help.component';
 import { AboutComponent } from './about/about.component';
 import { HomeComponent } from './home/home.component';
+import { StepperComponent } from './query/stepper/stepper.component';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -20,6 +21,7 @@ const routes: Routes = [
     { path: 'distanceFunc', component: DistanceFuncComponent },
     { path: 'clusterMethod', component: ClusterMethodComponent },
     { path: 'graph', component: GraphComponent },
+    { path: 'step', component: StepperComponent },
   ]},
   { path: 'help', component: HelpComponent },
   { path: 'about', component: AboutComponent },
