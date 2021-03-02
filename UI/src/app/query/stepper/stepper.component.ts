@@ -8,12 +8,6 @@ interface Value {
   value: string | number;
 }
 
-interface Parameter {
-  name: string,
-  value: string,
-  weight: number
-}
-
 @Component({
   selector: 'app-stepper',
   templateUrl: './stepper.component.html',
@@ -33,12 +27,10 @@ export class StepperComponent implements OnInit {
   ]; //todo update values with actual attribute names in db
   //todo add remaining attributes
 
-  weights : Value[] = [];
-
   query = this.fb.group({
     dbSelect: ['',  Validators.required],
     attributes: this.fb.array([], Validators.required),
-    weights: this.fb.array([], Validators.required), //replace with custom validator to check for all weights?
+    weights: this.fb.array([]), //replace with custom validator to check that weights are valid values? (i.e. no out of bounds values and ensureing that all weights add up to 1.00?)
     distFunct: ['',  Validators.required],
     algorithm: ['',  Validators.required]
   });
@@ -60,15 +52,26 @@ export class StepperComponent implements OnInit {
     
   }
 
+  onSubmit() {
+    // TODO: Use EventEmitter with form value
+    console.info(this.query.value);
+  }
+
   selected(event: MatChipSelectionChange): void {
-    //this.fruits.push(event.option.viewValue);
     if(event.selected) {
-      this.weights.push({display: (event.source.value as string), value: this.weigh.length}); //use the future index of the weight in the formarray as the value
       this.attr.push(this.fb.control(event.source.value)); //push the attribute to the attribute array
-      this.weigh.push(this.fb.control(''))
+      this.weigh.push(this.fb.control('', Validators.required));
       
     } else {
-      //todo iterate through arrays and remove attribute
+      for (let index = 0; index < this.attr.length; index++) {
+        if (this.attr.controls[index].value == (event.source.value)) {
+          this.attr.removeAt(index);
+          this.weigh.removeAt(index);
+          break;
+        }
+        
+      }
+
     }
   }
 
@@ -78,7 +81,7 @@ export class StepperComponent implements OnInit {
   }
 
   
-  get attr() {
+  get attr(): FormArray {
     return this.query.get('attributes') as FormArray;
   }
   

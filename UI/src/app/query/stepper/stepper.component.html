@@ -1,4 +1,4 @@
-<form [formGroup]="query">
+<form [formGroup]="query" (ngSubmit)="onSubmit()">
     <mat-horizontal-stepper linear #stepper>
         <mat-step [stepControl]="query.get('dbSelect')">
             <ng-template matStepLabel>Choose DB</ng-template>
@@ -21,12 +21,13 @@
             <p>Select which attributes to include in your query:</p>
             <mat-form-field>
                 <mat-chip-list #chipList aria-label="Attributes:" [multiple]=true>
-                  <mat-chip *ngFor="let attr of attributes" [selectable]=true #chip="matChip" (click)="chip.selected ? chip.deselect() : chip.select()" (selectionChange)="selected($event)">
-                    {{attr.display}}
+                  <mat-chip *ngFor="let attrib of attributes" [value]=attrib [selectable]=true #chip="matChip" (click)="chip.selected ? chip.deselect() : chip.select()" (selectionChange)="selected($event)">
+                    {{attrib.display}}
                   </mat-chip>
                 </mat-chip-list>
               </mat-form-field>
             <div>
+                <button mat-button matStepperPrevious type="button">Back</button>
                 <button mat-button matStepperNext type="button">Next</button>
                 <button mat-button (click)="print()">Print</button>
             </div>
@@ -34,13 +35,14 @@
         <mat-step [stepControl]="query.get('weights')">
             <ng-template matStepLabel>Define Weight</ng-template>
             <p>Define the weights of your selected attributes:</p>
-            <div *ngFor="let weight of weights">
+            <div *ngFor="let att of attr.controls; index as i">
                 <mat-form-field>
-                    <mat-label>{{weight.display}}</mat-label>
-                    <input matInput [formControl]="weigh.at(weight.value)">
+                    <mat-label>{{att.value.display}}</mat-label>
+                    <input matInput [formControl]="weigh.at(i)">
                   </mat-form-field>
             </div>
             <div>
+                <button mat-button matStepperPrevious type="button">Back</button>
                 <button mat-button matStepperNext type="button">Next</button>
             </div>
         </mat-step>
@@ -56,6 +58,7 @@
                 </mat-select>
             </mat-form-field>
             <div>
+                <button mat-button matStepperPrevious type="button">Back</button>
                 <button mat-button matStepperNext type="button">Next</button>
             </div>
         </mat-step>
@@ -71,15 +74,17 @@
                 </mat-select>
             </mat-form-field>
             <div>
+                <button mat-button matStepperPrevious type="button">Back</button>
                 <button mat-button matStepperNext type="button">Next</button>
             </div>
         </mat-step>
         <mat-step>
-            <ng-template matStepLabel>Done</ng-template>
-            <p>You are now done.</p>
+            <ng-template matStepLabel>Review & Submit</ng-template>
+            <p>The query to submit:</p>
             <div>
             <button mat-button matStepperPrevious type="button">Back</button>
             <button mat-button (click)="stepper.reset()">Reset</button>
+            <button mat-button type="submit">Submit</button>
             </div>
         </mat-step>
     </mat-horizontal-stepper>
