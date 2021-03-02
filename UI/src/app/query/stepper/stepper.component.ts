@@ -54,7 +54,18 @@ export class StepperComponent implements OnInit {
 
   onSubmit() {
     // TODO: Use EventEmitter with form value
-    console.info(this.query.value);
+    
+    const json = {
+      "db": this.query.get('dbSelect').value as string,
+      "attributes": [],
+      "distFunct": this.query.get('distFunct').value as string,
+      "clustering": this.query.get('algorithm').value as string,
+    }
+    for (let index = 0; index < this.attr.length; index++) {
+      json.attributes.push({"attr": this.attr.controls[index].value.display, "weight": this.weigh.controls[index].value});
+    }
+
+    console.info(JSON.stringify(json));
   }
 
   selected(event: MatChipSelectionChange): void {
