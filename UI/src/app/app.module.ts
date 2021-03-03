@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
 
 import { PlotlyModule } from 'angular-plotly.js';
 import * as Plotly from 'plotly.js/dist/plotly.js';
@@ -48,6 +49,7 @@ PlotlyModule.plotlyjs = Plotly;
     MaterialModule,
     PlotlyModule,
     HttpClientModule,
+    FormsModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

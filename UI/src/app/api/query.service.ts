@@ -13,7 +13,7 @@ export class QueryService {
   constructor(private http: HttpClient) { }
 
   getTestQuery(): Observable<any> {
-    return this.http.get<any>(`${this.backendUrl}/`).pipe(
+    return this.http.get<any>(`${this.backendUrl}`).pipe(
       tap(_ => console.log("sending query to backend")),
       catchError(this.handleError<any>('getTestQuery', null))
     );

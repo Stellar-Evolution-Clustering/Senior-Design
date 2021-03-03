@@ -14,18 +14,24 @@ export class GraphComponent implements OnInit {
 
   public graph;
   public graph3D;
+  selectedCluster: string;
+
+  private data3D: any;
 
   constructor(
     private queryService: QueryService,
   ) { }
 
   ngOnInit(): void {
+    this.selectedCluster = "all";
+    console.log(this.selectedCluster);
+    this.data3D = this.makeRandomData3D();
     this.graph = {
           data: this.makeRandomData(),
           layout: {width: 640, height: 480, title: 'A 2D graph'}
     };
     this.graph3D = {
-          data: this.makeRandomData3D(),
+          data: this.data3D,
           layout: {
             autosize: true,
             height: 480,
@@ -71,11 +77,42 @@ export class GraphComponent implements OnInit {
     };
   }
 
-  getBackendDataTest(): void {
-    //TODO use queryService.getTestQuery().callbackBlahBlah
-    // to get data from django
+  zoomCluster(): void {
+    console.log(this.selectedCluster);
+    if( this.selectedCluster == "all" ){
+      this.graph3D["data"] = this.data3D;
+    } else {
+      // var clusterNum = Number(this.selectedCluster);
+      // var copyData = this.data3D;
+      // var zoomData = [];
+      // zoomData.push(copyData.splice(clusterNum, 1));
+      // this.graph3D["data"] = zoomData;
 
-    //then format the data correctly into this.graph
+      //TODO: arg, figure out how to filter the data. Main problem was with copying arrays ...
+    }
+  }
+
+  getBackendDataTest(): void {
+    this.queryService.getTestQuery().subscribe(response => {
+      console.log(response);
+
+      var data = [];
+      var colors: string[] = ['red','blue','yellow'];
+      for( let i = 0; i < 3; i ++ ){
+        data.push(
+          { x: [], y: [], z: [], type: 'scatter3d', mode: 'markers', marker: {color: colors[i], size: 2}, name: `Cluster ${i + 1}`}
+        );
+      }
+      for( let j = 0; j < response.length; j++ ){
+        var clusterNum = response[j]["cluster_idx"];
+        data[clusterNum].x.push(response[j]["coords"]["mass_diff"]);
+        data[clusterNum].y.push(response[j]["coords"]["lumin_diff"]);
+        data[clusterNum].z.push(response[j]["coords"]["porb"]);
+      }
+
+      this.data3D = data;
+      this.graph3D["data"] = data;
+    });
   }
 
   makeRandomData(): any[] {
