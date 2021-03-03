@@ -31,14 +31,14 @@ CORS_ORIGIN_WHITELIST = (
     'http://localhost:8081',
 )
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["sdmay21-30.ece.iastate.edu:8000"]
 
 # Application definition
 
 INSTALLED_APPS = [
     # Django REST framework
     'rest_framework',
-    # CORS 
+    # CORS
     'corsheaders',
     'binarystars.apps.BinarystarsConfig',
     'django.contrib.admin',
@@ -90,25 +90,25 @@ WSGI_APPLICATION = 'API.wsgi.application'
 if os.environ.get('ENV') == 'PROD':
     DATABASES = {
         'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'production',
-        'USER': os.environ.get('DB_USER'),
-        'PASSWORD': os.environ.get('DB_PASSWORD'),
-        'USER': os.environ.get('DB_USER'),
-        'PASSWORD': os.environ.get('DB_PASSWORD'),
-        'HOST': 'sdmay21-30.ece.iastate.edu',
-        'PORT': '5432' 
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'production',
+            'USER': os.environ.get('DB_USER'),
+            'PASSWORD': os.environ.get('DB_PASSWORD'),
+            'USER': os.environ.get('DB_USER'),
+            'PASSWORD': os.environ.get('DB_PASSWORD'),
+            'HOST': 'sdmay21-30.ece.iastate.edu',
+            'PORT': '5432'
         }
     }
 else:
     DATABASES = {
         'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'dev',
-        'USER': os.environ.get('DB_USER'),
-        'PASSWORD': os.environ.get('DB_PASSWORD'),
-        'HOST': 'sdmay21-30.ece.iastate.edu',
-        'PORT': '5432' 
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'dev',
+            'USER': os.environ.get('DB_USER'),
+            'PASSWORD': os.environ.get('DB_PASSWORD'),
+            'HOST': 'sdmay21-30.ece.iastate.edu',
+            'PORT': '5432'
         }
     }
 
