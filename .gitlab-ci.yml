@@ -1,5 +1,4 @@
 stages:
-  - build_api
   - test_api
   - build_ui
   - test_ui
@@ -28,11 +27,12 @@ test_ui:
     - npm install -g @angular/cli
     - ng test --browsers ChromeHeadless
 
-build_api:
-  stage: build_api
+deploy:
+  stage: deploy
   script:
-    - cd API
-    - docker build . -t $API_CONTAINER_TAG
+    - docker compose -f docker-compose.yml down
+    - docker-compose -f docker-compose.yml build --no-cache
+    - docker-compose -f docker-compose.yml up -d
 
 test_api:
   image: python:latest
