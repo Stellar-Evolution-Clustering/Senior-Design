@@ -1,8 +1,8 @@
 stages:
-  - deploy
   - build_ui
   - test_ui
   - test_api
+  - deploy
 
 build_ui:
   image: node:latest
@@ -47,6 +47,8 @@ test_api:
 
 deploy:
   stage: deploy
+  only:
+    - master
   script:
     - docker-compose -f docker-compose.yml down
     - docker-compose -f docker-compose.yml build --no-cache
