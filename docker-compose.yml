@@ -4,3 +4,6 @@ services:
     build: ./API/.
     ports:
       - "8000:8000"
+    environment:
+      - DB_USER=$DB_USER
+      - DB_PASSWORD=$DB_PASSWORD
