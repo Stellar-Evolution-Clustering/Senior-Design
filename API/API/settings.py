@@ -31,7 +31,7 @@ CORS_ORIGIN_WHITELIST = (
     'http://localhost:8081',
 )
 
-ALLOWED_HOSTS = ["sdmay21-30.ece.iastate.edu:8000"]
+ALLOWED_HOSTS = ["sdmay21-30.ece.iastate.edu"]
 
 # Application definition
 
