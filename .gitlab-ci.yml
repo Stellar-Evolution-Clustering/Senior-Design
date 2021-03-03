@@ -1,7 +1,7 @@
 stages:
-  - test_api
-  - build_ui
-  - test_ui
+  #- build_ui
+  #- test_ui
+  #- test_api
   - deploy
 
 docker build_ui:
