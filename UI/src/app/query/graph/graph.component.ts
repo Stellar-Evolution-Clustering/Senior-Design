@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { QueryService } from '../../api/query.service'
+
 import * as Plotly from 'plotly.js/dist/plotly.js';
 
 // PlotlyModule.plotlyjs = Plotly;
@@ -13,7 +15,9 @@ export class GraphComponent implements OnInit {
   public graph;
   public graph3D;
 
-  constructor() { }
+  constructor(
+    private queryService: QueryService,
+  ) { }
 
   ngOnInit(): void {
     this.graph = {
@@ -65,6 +69,13 @@ export class GraphComponent implements OnInit {
             width: 640
           }
     };
+  }
+
+  getBackendDataTest(): void {
+    //TODO use queryService.getTestQuery().callbackBlahBlah
+    // to get data from django
+
+    //then format the data correctly into this.graph
   }
 
   makeRandomData(): any[] {
