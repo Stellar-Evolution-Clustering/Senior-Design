@@ -20,6 +20,7 @@ build_ui:
     - ng build --prod
 
 test_ui:
+  image: node:latest
   extends: build_ui
   stage: test_ui
   script:
