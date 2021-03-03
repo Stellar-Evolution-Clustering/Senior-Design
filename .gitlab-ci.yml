@@ -21,7 +21,6 @@ docker build_ui:
 
 docker test_ui:
   image: node:latest
-  extends: build_ui
   stage: test_ui
   script:
     - cd UI
