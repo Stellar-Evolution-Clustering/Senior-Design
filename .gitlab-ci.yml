@@ -1,8 +1,8 @@
 stages:
-  #- build_ui
-  #- test_ui
-  #- test_api
   - deploy
+  - build_ui
+  - test_ui
+  - test_api
 
 docker build_ui:
   image: node:latest
