@@ -82,13 +82,14 @@ export class GraphComponent implements OnInit {
     if( this.selectedCluster == "all" ){
       this.graph3D["data"] = this.data3D;
     } else {
-      // var clusterNum = Number(this.selectedCluster);
-      // var copyData = this.data3D;
-      // var zoomData = [];
-      // zoomData.push(copyData.splice(clusterNum, 1));
-      // this.graph3D["data"] = zoomData;
-
-      //TODO: arg, figure out how to filter the data. Main problem was with copying arrays ...
+      var clusterNum: number = Number(this.selectedCluster);
+      var copyData = [...this.data3D];
+      for( let i = 2; i >= 0; i-- ){
+        if( clusterNum != i ){
+          copyData.splice(i, 1);
+        }
+      }
+      this.graph3D["data"] = copyData;
     }
   }
 
