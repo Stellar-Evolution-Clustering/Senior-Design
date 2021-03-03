@@ -27,6 +27,11 @@ test_ui:
     - npm install -g @angular/cli
     - ng test --browsers ChromeHeadless
 
+build_api:
+  script:
+    - cd API
+    - docker build . -t $API_CONTAINER_TAG
+
 test_api:
   image: python:latest
   stage: test_api
