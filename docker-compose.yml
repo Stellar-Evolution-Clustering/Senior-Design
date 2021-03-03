@@ -7,3 +7,7 @@ services:
     environment:
       - DB_USER=$DB_USER
       - DB_PASSWORD=$DB_PASSWORD
+  ui:
+    build: ./UI/.
+    ports:
+      - "80:80"
