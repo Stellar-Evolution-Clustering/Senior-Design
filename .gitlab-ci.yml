@@ -1,4 +1,5 @@
 stages:
+  - build_api
   - test_api
   - build_ui
   - test_ui
@@ -28,6 +29,7 @@ test_ui:
     - ng test --browsers ChromeHeadless
 
 build_api:
+  stage: build_api
   script:
     - cd API
     - docker build . -t $API_CONTAINER_TAG
