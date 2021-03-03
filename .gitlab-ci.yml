@@ -4,7 +4,7 @@ stages:
   - test_ui
   - deploy
 
-build_ui:
+docker build_ui:
   image: node:latest
   stage: build_ui
   artifacts:
@@ -19,7 +19,7 @@ build_ui:
     - npm install
     - ng build --prod
 
-test_ui:
+docker test_ui:
   image: node:latest
   extends: build_ui
   stage: test_ui
@@ -28,14 +28,14 @@ test_ui:
     - npm install -g @angular/cli
     - ng test --browsers ChromeHeadless
 
-deploy:
+shell deploy:
   stage: deploy
   script:
     - docker-compose -f docker-compose.yml down
     - docker-compose -f docker-compose.yml build --no-cache
     - docker-compose -f docker-compose.yml up -d
 
-test_api:
+docker test_api:
   image: python:latest
   stage: test_api
   only:
