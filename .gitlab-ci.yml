@@ -1,7 +1,7 @@
 stages:
-  - test_api
   - build_ui
   - test_ui
+  - test_api
   - deploy
 
 build_ui:
@@ -18,14 +18,18 @@ build_ui:
     - npm install -g @angular/cli
     - npm install
     - ng build --prod
+  tags:
+    - docker
 
 test_ui:
-  extends: build_ui
+  image: node:latest
   stage: test_ui
   script:
     - cd UI
     - npm install -g @angular/cli
     - ng test --browsers ChromeHeadless
+  tags:
+    - docker
 
 test_api:
   image: python:latest
@@ -38,3 +42,16 @@ test_api:
     - pip install -r requirements.txt
     - chmod +x manage.py
     - ./manage.py test
+  tags:
+    - docker
+
+deploy:
+  stage: deploy
+  only:
+    - master
+  script:
+    - docker-compose -f docker-compose.yml down
+    - docker-compose -f docker-compose.yml build --no-cache
+    - docker-compose -f docker-compose.yml up -d
+  tags:
+    - shell
