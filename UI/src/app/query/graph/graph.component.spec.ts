@@ -1,4 +1,6 @@
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { QueryService } from 'src/app/api/query.service';
 
 import { GraphComponent } from './graph.component';
 
@@ -8,9 +10,10 @@ describe('GraphComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ GraphComponent ]
-    })
-    .compileComponents();
+      declarations: [GraphComponent],
+      providers: [QueryService],
+      imports: [HttpClientModule],
+    }).compileComponents();
   });
 
   beforeEach(() => {

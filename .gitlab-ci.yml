@@ -27,6 +27,7 @@ test_ui:
   script:
     - cd UI
     - npm install -g @angular/cli
+    - npm install
     - ng test --browsers ChromeHeadless
   tags:
     - docker

@@ -1,4 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { MaterialModule } from 'src/app/material/material.module';
 
 import { StepperComponent } from './stepper.component';
 
@@ -8,9 +11,14 @@ describe('StepperComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ StepperComponent ]
-    })
-    .compileComponents();
+      declarations: [StepperComponent],
+      imports: [
+        FormsModule,
+        ReactiveFormsModule,
+        MaterialModule,
+        NoopAnimationsModule,
+      ],
+    }).compileComponents();
   });
 
   beforeEach(() => {
