@@ -1,91 +1,98 @@
 <form [formGroup]="query" (ngSubmit)="onSubmit()">
-    <mat-horizontal-stepper linear #stepper>
-        <mat-step [stepControl]="query.get('dbSelect')">
-            <ng-template matStepLabel>Choose DB</ng-template>
-            <p>Choose a database to query from:</p>
-            
-            <mat-form-field appearance="standard">
-                <mat-label>Database</mat-label>
-                <mat-select [formControl]="query.get('dbSelect')" required>
-                  <mat-option *ngFor="let db of databases" [value]="db.value">
-                    {{db.display}}
-                  </mat-option>
-                </mat-select>
-            </mat-form-field>
-            <div>
-                <button mat-button matStepperNext type="button">Next</button>
-            </div>
-        </mat-step>
-        <mat-step [stepControl]="query.get('attributes')">
-            <ng-template matStepLabel>Add Attributes</ng-template>
-            <p>Select which attributes to include in your query:</p>
-            <mat-form-field>
-                <mat-chip-list #chipList aria-label="Attributes:" [multiple]=true>
-                  <mat-chip *ngFor="let attrib of attributes" [value]=attrib [selectable]=true #chip="matChip" (click)="chip.selected ? chip.deselect() : chip.select()" (selectionChange)="selected($event)">
-                    {{attrib.display}}
-                  </mat-chip>
-                </mat-chip-list>
-              </mat-form-field>
-            <div>
-                <button mat-button matStepperPrevious type="button">Back</button>
-                <button mat-button matStepperNext type="button">Next</button>
-                <button mat-button (click)="print()">Print</button>
-            </div>
-        </mat-step>
-        <mat-step [stepControl]="query.get('weights')">
-            <ng-template matStepLabel>Define Weight</ng-template>
-            <p>Define the weights of your selected attributes:</p>
-            <div *ngFor="let att of attr.controls; index as i">
-              <mat-form-field>
-                  <mat-label>{{att.value.display}}</mat-label>
-                  <input matInput type="number" [formControl]="weigh.at(i)">
-                </mat-form-field>
-          </div>
-            <div>
-                <button mat-button matStepperPrevious type="button">Back</button>
-                <button mat-button matStepperNext type="button">Next</button>
-            </div>
-        </mat-step>
-        <mat-step [stepControl]="query.get('distFunct')">
-            <ng-template matStepLabel>Choose Distance Functions</ng-template>
-            <p>Pick the function used for distance:</p>
-            <mat-form-field appearance="standard">
-                <mat-label>Function</mat-label>
-                <mat-select [formControl]="query.get('distFunct')" required>
-                  <mat-option *ngFor="let fn of distFunctions" [value]="fn.value">
-                    {{fn.display}}
-                  </mat-option>
-                </mat-select>
-            </mat-form-field>
-            <div>
-                <button mat-button matStepperPrevious type="button">Back</button>
-                <button mat-button matStepperNext type="button">Next</button>
-            </div>
-        </mat-step>
-        <mat-step>
-            <ng-template matStepLabel>Choose Clustering Method</ng-template>
-            <p>Choose the clustering algorithm to run your query on:</p>
-            <mat-form-field appearance="standard">
-                <mat-label>Clustering Algorithm</mat-label>
-                <mat-select [formControl]="query.get('algorithm')" required>
-                  <mat-option *ngFor="let alg of algorithms" [value]="alg.value">
-                    {{alg.display}}
-                  </mat-option>
-                </mat-select>
-            </mat-form-field>
-            <div>
-                <button mat-button matStepperPrevious type="button">Back</button>
-                <button mat-button matStepperNext type="button">Next</button>
-            </div>
-        </mat-step>
-        <mat-step>
-            <ng-template matStepLabel>Review & Submit</ng-template>
-            <p>The query to submit:</p>
-            <div>
-            <button mat-button matStepperPrevious type="button">Back</button>
-            <button mat-button (click)="stepper.reset()">Reset</button>
-            <button mat-button type="submit">Submit</button>
-            </div>
-        </mat-step>
-    </mat-horizontal-stepper>
+  <mat-horizontal-stepper linear #stepper>
+    <mat-step [stepControl]="query.get('dbSelect')">
+      <ng-template matStepLabel>Choose DB</ng-template>
+      <p>Choose a database to query from:</p>
+
+      <mat-form-field appearance="standard">
+        <mat-label>Database</mat-label>
+        <mat-select [formControl]="query.get('dbSelect')" required>
+          <mat-option *ngFor="let db of databases" [value]="db.value">
+            {{ db.display }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <div>
+        <button mat-button matStepperNext type="button">Next</button>
+      </div>
+    </mat-step>
+    <mat-step [stepControl]="query.get('attributes')">
+      <ng-template matStepLabel>Add Attributes</ng-template>
+      <p>Select which attributes to include in your query:</p>
+      <mat-form-field>
+        <mat-chip-list #chipList aria-label="Attributes:" [multiple]="true">
+          <mat-chip
+            *ngFor="let attrib of attributes"
+            [value]="attrib"
+            [selectable]="true"
+            #chip="matChip"
+            (click)="chip.selected ? chip.deselect() : chip.select()"
+            (selectionChange)="selected($event)"
+          >
+            {{ attrib.display }}
+          </mat-chip>
+        </mat-chip-list>
+      </mat-form-field>
+      <div>
+        <button mat-button matStepperPrevious type="button">Back</button>
+        <button mat-button matStepperNext type="button">Next</button>
+        <button mat-button (click)="print()">Print</button>
+      </div>
+    </mat-step>
+    <mat-step [stepControl]="query.get('weights')">
+      <ng-template matStepLabel>Define Weight</ng-template>
+      <p>Define the weights of your selected attributes:</p>
+      <div *ngFor="let att of attr.controls; index as i">
+        <mat-form-field>
+          <mat-label>{{ att.value.display }}</mat-label>
+          <input matInput [formControl]="weigh.at(i)" />
+        </mat-form-field>
+      </div>
+      <div>
+        <button mat-button matStepperPrevious type="button">Back</button>
+        <button mat-button matStepperNext type="button">Next</button>
+      </div>
+    </mat-step>
+    <mat-step [stepControl]="query.get('distFunct')">
+      <ng-template matStepLabel>Choose Distance Functions</ng-template>
+      <p>Pick the function used for distance:</p>
+      <mat-form-field appearance="standard">
+        <mat-label>Function</mat-label>
+        <mat-select [formControl]="query.get('distFunct')" required>
+          <mat-option *ngFor="let fn of distFunctions" [value]="fn.value">
+            {{ fn.display }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <div>
+        <button mat-button matStepperPrevious type="button">Back</button>
+        <button mat-button matStepperNext type="button">Next</button>
+      </div>
+    </mat-step>
+    <mat-step>
+      <ng-template matStepLabel>Choose Clustering Method</ng-template>
+      <p>Choose the clustering algorithm to run your query on:</p>
+      <mat-form-field appearance="standard">
+        <mat-label>Clustering Algorithm</mat-label>
+        <mat-select [formControl]="query.get('algorithm')" required>
+          <mat-option *ngFor="let alg of algorithms" [value]="alg.value">
+            {{ alg.display }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <div>
+        <button mat-button matStepperPrevious type="button">Back</button>
+        <button mat-button matStepperNext type="button">Next</button>
+      </div>
+    </mat-step>
+    <mat-step>
+      <ng-template matStepLabel>Review & Submit</ng-template>
+      <p>The query to submit:</p>
+      <div>
+        <button mat-button matStepperPrevious type="button">Back</button>
+        <button mat-button (click)="stepper.reset()">Reset</button>
+        <a mat-button type="submit" [routerLink]="['/query/graph']">Submit</a>
+      </div>
+    </mat-step>
+  </mat-horizontal-stepper>
 </form>

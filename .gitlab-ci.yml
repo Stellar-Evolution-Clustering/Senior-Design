@@ -5,7 +5,7 @@ stages:
   - deploy
 
 build_ui:
-  image: node:latest
+  image: node:lts-alpine3.12
   stage: build_ui
   artifacts:
     paths:
@@ -22,17 +22,20 @@ build_ui:
     - docker
 
 test_ui:
-  image: node:latest
+  image: node:lts-alpine3.12
   stage: test_ui
   script:
+    - apk add chromium
     - cd UI
+    - export CHROME_BIN=/usr/bin/chromium-browser
     - npm install -g @angular/cli
+    - npm install
     - ng test --browsers ChromeHeadless
   tags:
     - docker
 
 test_api:
-  image: python:latest
+  image: python:3
   stage: test_api
   only:
     changes:
