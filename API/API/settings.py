@@ -31,7 +31,7 @@ CORS_ORIGIN_WHITELIST = (
     'http://localhost:8081',
 )
 
-ALLOWED_HOSTS = ["sdmay21-30.ece.iastate.edu"]
+ALLOWED_HOSTS = ['sdmay21-30.ece.iastate.edu', 'localhost', '127.0.0.1'] 
 
 # Application definition
 
@@ -92,8 +92,6 @@ if os.environ.get('ENV') == 'PROD':
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
             'NAME': 'production',
-            'USER': os.environ.get('DB_USER'),
-            'PASSWORD': os.environ.get('DB_PASSWORD'),
             'USER': os.environ.get('DB_USER'),
             'PASSWORD': os.environ.get('DB_PASSWORD'),
             'HOST': 'sdmay21-30.ece.iastate.edu',
