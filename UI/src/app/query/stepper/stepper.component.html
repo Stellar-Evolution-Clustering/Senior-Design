@@ -3,7 +3,7 @@
         <mat-step [stepControl]="query.get('dbSelect')">
             <ng-template matStepLabel>Choose DB</ng-template>
             <p>Choose a database to query from:</p>
-            
+
             <mat-form-field appearance="standard">
                 <mat-label>Database</mat-label>
                 <mat-select [formControl]="query.get('dbSelect')" required>
@@ -84,7 +84,7 @@
             <div>
             <button mat-button matStepperPrevious type="button">Back</button>
             <button mat-button (click)="stepper.reset()">Reset</button>
-            <button mat-button type="submit">Submit</button>
+            <a mat-button type="submit" [routerLink]="['/query/graph']">Submit</a>
             </div>
         </mat-step>
     </mat-horizontal-stepper>
