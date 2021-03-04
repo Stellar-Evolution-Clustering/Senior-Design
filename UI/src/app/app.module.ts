@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
 
 import { PlotlyModule } from 'angular-plotly.js';
 import * as Plotly from 'plotly.js/dist/plotly.js';
@@ -21,6 +22,8 @@ import { ClusterMethodComponent } from './query/cluster-method/cluster-method.co
 import { HelpComponent } from './help/help.component';
 import { AboutComponent } from './about/about.component';
 import { HomeComponent } from './home/home.component';
+import { StepperComponent } from './query/stepper/stepper.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 PlotlyModule.plotlyjs = Plotly;
 
@@ -37,7 +40,8 @@ PlotlyModule.plotlyjs = Plotly;
     ClusterMethodComponent,
     HelpComponent,
     AboutComponent,
-    HomeComponent
+    HomeComponent,
+    StepperComponent
   ],
   imports: [
     BrowserModule,
@@ -48,6 +52,8 @@ PlotlyModule.plotlyjs = Plotly;
     MaterialModule,
     PlotlyModule,
     HttpClientModule,
+    FormsModule,
+    ReactiveFormsModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
