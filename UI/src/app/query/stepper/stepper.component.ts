@@ -15,7 +15,7 @@ interface Value {
 })
 export class StepperComponent implements OnInit {
   databases : Value[] = [
-    {display:'Database #1', value:'DB1'},
+    {display:'COSMIC', value:'COSMIC'},
     {display:'Database #2', value:'DB2'},
     {display:'Database #3', value:'DB3'},
   ]; //todo update with actual database names

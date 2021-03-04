@@ -36,11 +36,11 @@
             <ng-template matStepLabel>Define Weight</ng-template>
             <p>Define the weights of your selected attributes:</p>
             <div *ngFor="let att of attr.controls; index as i">
-                <mat-form-field>
-                    <mat-label>{{att.value.display}}</mat-label>
-                    <input matInput [formControl]="weigh.at(i)">
-                  </mat-form-field>
-            </div>
+              <mat-form-field>
+                  <mat-label>{{att.value.display}}</mat-label>
+                  <input matInput type="number" [formControl]="weigh.at(i)">
+                </mat-form-field>
+          </div>
             <div>
                 <button mat-button matStepperPrevious type="button">Back</button>
                 <button mat-button matStepperNext type="button">Next</button>
