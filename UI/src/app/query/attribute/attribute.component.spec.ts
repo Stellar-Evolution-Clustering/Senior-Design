@@ -1,4 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ReactiveFormsModule } from '@angular/forms';
+import { VariablesService } from 'src/app/api/variables.service';
 
 import { AttributeComponent } from './attribute.component';
 
@@ -8,9 +10,9 @@ describe('AttributeComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ AttributeComponent ]
-    })
-    .compileComponents();
+      declarations: [AttributeComponent],
+      providers: [VariablesService],
+    }).compileComponents();
   });
 
   beforeEach(() => {
