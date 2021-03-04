@@ -22,6 +22,8 @@ import { ClusterMethodComponent } from './query/cluster-method/cluster-method.co
 import { HelpComponent } from './help/help.component';
 import { AboutComponent } from './about/about.component';
 import { HomeComponent } from './home/home.component';
+import { StepperComponent } from './query/stepper/stepper.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 PlotlyModule.plotlyjs = Plotly;
 
@@ -38,7 +40,8 @@ PlotlyModule.plotlyjs = Plotly;
     ClusterMethodComponent,
     HelpComponent,
     AboutComponent,
-    HomeComponent
+    HomeComponent,
+    StepperComponent
   ],
   imports: [
     BrowserModule,
@@ -50,6 +53,7 @@ PlotlyModule.plotlyjs = Plotly;
     PlotlyModule,
     HttpClientModule,
     FormsModule,
+    ReactiveFormsModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
