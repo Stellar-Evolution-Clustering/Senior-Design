@@ -2,26 +2,45 @@
   <mat-horizontal-stepper linear #stepper>
     <mat-step [stepControl]="query.get('dbSelect')">
       <ng-template matStepLabel>Choose DB</ng-template>
-      <app-db [fc]= "query.get('dbSelect')"></app-db>
+      <app-db [fc]="query.get('dbSelect')"></app-db>
+      <div>
+        <button mat-button matStepperNext type="button">Next</button>
+      </div>
     </mat-step>
     <mat-step [stepControl]="query.get('attributes')">
       <ng-template matStepLabel>Add Attributes</ng-template>
       <app-attribute [formArray]= "query.get('attributes')"
       (selectAttributeEvent)="addAttribute($event)"
       (deleteAttributeEvent)="deleteAttribute($event)"></app-attribute>
+      <div>
+        <button mat-button matStepperPrevious type="button">Back</button>
+        <button mat-button matStepperNext type="button">Next</button>
+      </div>
     </mat-step>
     <mat-step [stepControl]="query.get('weights')">
       <ng-template matStepLabel>Define Weight</ng-template>
       <app-weight [weightArray]= "query.get('weights')" 
-      [attributeArray]= "query.get('attributes')"></app-weight>
+      [attributeArray]= "this.attr.controls"></app-weight>
+      <div>
+        <button mat-button matStepperPrevious type="button">Back</button>
+        <button mat-button matStepperNext type="button">Next</button>
+      </div>
     </mat-step>
     <mat-step [stepControl]="query.get('distFunct')">
       <ng-template matStepLabel>Choose Distance Functions</ng-template>
       <app-distance-func [fc]= "query.get('distFunct')"></app-distance-func>
+      <div>
+        <button mat-button matStepperPrevious type="button">Back</button>
+        <button mat-button matStepperNext type="button">Next</button>
+      </div>
     </mat-step>
     <mat-step [stepControl]="query.get('algorithm')">
       <ng-template matStepLabel>Choose Clustering Method</ng-template>
       <app-cluster-method [fc]= "query.get('algorithm')"></app-cluster-method>
+      <div>
+        <button mat-button matStepperPrevious type="button">Back</button>
+        <button mat-button matStepperNext type="button">Next</button>
+      </div>
     </mat-step>
     <mat-step>
       <ng-template matStepLabel>Review & Submit</ng-template>
