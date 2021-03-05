@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-db',
@@ -11,6 +12,8 @@ export class DBComponent implements OnInit {
     "Database #2",
     "Database #3"
   ];
+
+  @Input() fc: FormControl;
 
   constructor() {}
 

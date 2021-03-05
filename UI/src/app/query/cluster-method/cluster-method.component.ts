@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-cluster-method',
@@ -6,6 +7,13 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./cluster-method.component.scss']
 })
 export class ClusterMethodComponent implements OnInit {
+
+  algorithms : string[] = [
+    "K-means",
+    "DBScan",
+  ];
+  
+  @Input() fc: FormControl;
 
   constructor() { }
 

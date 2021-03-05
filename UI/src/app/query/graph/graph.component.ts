@@ -30,6 +30,7 @@ export class GraphComponent implements OnInit {
           data: this.makeRandomData(),
           layout: {width: 640, height: 480, title: 'A 2D graph'}
     };
+    this.getBackendDataTest();
     this.graph3D = {
           data: this.data3D,
           layout: {
@@ -59,19 +60,22 @@ export class GraphComponent implements OnInit {
                     }
                 },
                 xaxis: {
+                    title: 'mass_diff',
                     type: 'linear',
-                    zeroline: false
+                    zeroline: false,
                 },
                 yaxis: {
+                    title: 'lumin_diff',
                     type: 'linear',
                     zeroline: false
                 },
                 zaxis: {
+                    title: 'porb',
                     type: 'linear',
                     zeroline: false
                 }
             },
-            title: 'A 3D graph!',
+            title: '3D Cluster Visualization',
             width: 640
           }
     };

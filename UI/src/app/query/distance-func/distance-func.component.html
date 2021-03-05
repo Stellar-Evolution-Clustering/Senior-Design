@@ -1,1 +1,15 @@
-<p>distance-func works!</p>
+<p>Pick the function used for distance:</p>
+
+<mat-form-field appearance="standard">
+    <mat-label>Function</mat-label>
+    <mat-select [formControl]="fc" required>
+        <mat-option *ngFor="let fn of distFunctions" [value]="fn">
+            {{ fn }}
+        </mat-option>
+    </mat-select>
+</mat-form-field>
+
+<div>
+    <button mat-button matStepperPrevious type="button">Back</button>
+    <button mat-button matStepperNext type="button">Next</button>
+  </div>

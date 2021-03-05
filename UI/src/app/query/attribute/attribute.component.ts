@@ -1,4 +1,6 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
+import { FormArray, Validators } from '@angular/forms';
+import { MatChipSelectionChange } from '@angular/material/chips';
 import { Observable } from 'rxjs';
 import { Variable } from '../../api/models/variable.model';
 import { VariablesService } from '../../api/variables.service';
@@ -11,6 +13,9 @@ import { VariablesService } from '../../api/variables.service';
 export class AttributeComponent implements OnInit {
   public variables: Observable<Variable[]>;
   @Input() public selectedAttributes: any[];
+  @Input() formArray: FormArray;
+  @Output() selectAttributeEvent = new EventEmitter<string>();
+  @Output() deleteAttributeEvent = new EventEmitter<string>();
 
   constructor(
     private variableService: VariablesService,
@@ -36,5 +41,13 @@ export class AttributeComponent implements OnInit {
 
   trackByAtt(index: number, att: any): number {
     return index;
+  }
+
+  selected(event: MatChipSelectionChange): void {
+    if(event.selected) {
+      this.selectAttributeEvent.emit(event.source.value);
+    } else {
+      this.deleteAttributeEvent.emit(event.source.value);
+    }
   }
 }

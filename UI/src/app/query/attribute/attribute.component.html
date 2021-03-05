@@ -1,4 +1,4 @@
-<mat-card>
+<!-- <mat-card>
   <mat-card-title> Add Attributes </mat-card-title>
   <mat-card-content>
     <div *ngFor="let att of selectedAttributes; index as i;trackBy:trackByAtt">
@@ -20,4 +20,18 @@
   <button mat-fab color="primary" class="addAttribute" (click)="addAttribute()">
     <mat-icon>add</mat-icon>
   </button>
-</mat-card>
+</mat-card> -->
+
+<p>Select which attributes to include in your query:</p>
+<mat-form-field>
+  <mat-chip-list #chipList aria-label="Attributes:" [multiple]="true">
+    <mat-chip *ngFor="let variable of variables | async" [value]="variable.name" [selectable]="true" #chip="matChip"
+      (click)="chip.selected ? chip.deselect() : chip.select()" (selectionChange)="selected($event)">
+      {{ variable.name }}
+    </mat-chip>
+  </mat-chip-list>
+</mat-form-field>
+<div>
+  <button mat-button matStepperPrevious type="button">Back</button>
+  <button mat-button matStepperNext type="button">Next</button>
+</div>

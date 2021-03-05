@@ -14,11 +14,6 @@ interface Value {
   styleUrls: ['./stepper.component.scss']
 })
 export class StepperComponent implements OnInit {
-  databases : Value[] = [
-    {display:'Database #1', value:'DB1'},
-    {display:'Database #2', value:'DB2'},
-    {display:'Database #3', value:'DB3'},
-  ]; //todo update with actual database names
 
   attributes : Value[] = [
     {display:'Helium', value:'Helium'},
@@ -34,17 +29,6 @@ export class StepperComponent implements OnInit {
     distFunct: ['',  Validators.required],
     algorithm: ['',  Validators.required]
   });
-  
-  distFunctions : Value[] = [
-    {display:'Function #1', value:'Funct1'},
-    {display:'Function #2', value:'Funct2'},
-    {display:'Function #3', value:'Funct3'},
-  ];
-
-  algorithms : Value[] = [
-    {display:'K-means', value:'kmeans'},
-    {display:'DBScan', value:'dbscan'},
-  ];
 
   constructor(private fb: FormBuilder) {}
 
@@ -68,21 +52,19 @@ export class StepperComponent implements OnInit {
     console.info(JSON.stringify(json));
   }
 
-  selected(event: MatChipSelectionChange): void {
-    if(event.selected) {
-      this.attr.push(this.fb.control(event.source.value)); //push the attribute to the attribute array
-      this.weigh.push(this.fb.control('', Validators.required));
-      
-    } else {
-      for (let index = 0; index < this.attr.length; index++) {
-        if (this.attr.controls[index].value == (event.source.value)) {
-          this.attr.removeAt(index);
-          this.weigh.removeAt(index);
-          break;
-        }
-        
-      }
+  addAttribute(name: string): void {
+    this.attr.push(this.fb.control(name)); //push the attribute to the attribute array
+    this.weigh.push(this.fb.control('', Validators.required));
+  }
 
+  deleteAttribute(name: string): void {
+    for (let index = 0; index < this.attr.length; index++) {
+      if (this.attr.controls[index].value == (name)) {
+        this.attr.removeAt(index);
+        this.weigh.removeAt(index);
+        break;
+      }
+      
     }
   }
 
