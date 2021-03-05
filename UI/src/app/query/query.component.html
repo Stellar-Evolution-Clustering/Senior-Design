@@ -1,11 +1,5 @@
-<mat-button-toggle-group #toggle="matButtonToggleGroup" >
-  <mat-button-toggle [checked]="true" [value]="false">Query</mat-button-toggle>
-  <mat-button-toggle [value]="true">Graph</mat-button-toggle>
-</mat-button-toggle-group>
-<app-stepper *ngIf="!toggle.value"></app-stepper>
-<app-graph *ngIf="toggle.value"></app-graph>
-<!-- <router-outlet></router-outlet>
-
+<router-outlet></router-outlet>
+<!-- 
 <a mat-fab color="primary" class="nextArrow" [routerLink]="['/query/attribute']">
   <mat-icon svgIcon="arrow">arrow</mat-icon>
 </a>

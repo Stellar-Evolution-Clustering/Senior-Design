@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { FormArray } from '@angular/forms';
 
 @Component({
   selector: 'app-weight',
@@ -7,6 +8,8 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class WeightComponent implements OnInit {
   @Input() public weightAttributes: string[];
+  @Input() weightArray: FormArray;
+  @Input() attributeArray: FormArray;
 
   constructor() { }
 
