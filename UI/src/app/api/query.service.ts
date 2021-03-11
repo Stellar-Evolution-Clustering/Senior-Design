@@ -19,6 +19,22 @@ export class QueryService {
     );
   }
 
+  postQuery(body: any): Observable<any> {
+    // Here's the post body. It's a Javascript object which is automatically translated into a JSON object by post()
+    // var body = {
+    //   "data1": 1,
+    //   "data2": 2
+    //   "data3": [
+    //      "data3.1": "hello",
+    //      "data3.2": "there"
+    //   ]
+    // };
+    return this.http.post<any>(`${this.backendUrl}`, body).pipe(
+      tap(_ => console.log("posting query to backend")),
+      catchError(this.handleError<any>('getTestQuery', null))
+    )
+  }
+
   private handleError<T>(operation = 'operation', result?: T) {
    return (error: any): Observable<T> => {
      console.error(error);
