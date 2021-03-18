@@ -1,4 +1,7 @@
 <!-- <plotly-plot [data]="graph.data" [layout]="graph.layout"></plotly-plot> -->
+
+<button mat-raised-button color="primary" (click)="configureGraph()">Configure Graph</button>
+
 <div class="graphBlock">
   <div class="graph">
     <plotly-plot [data]="graph3D.data" [layout]="graph3D.layout"></plotly-plot>
@@ -14,4 +17,5 @@
   </mat-radio-group>
 </div>
 
+<!-- <app-configure-graph></app-configure-graph> -->
 <!-- <button mat-raised-button color="primary" (click)="getBackendDataTest()">Get Clustered Query</button> -->

@@ -21,8 +21,13 @@ export class ClusteredData {
       this.attributes[i] = attrs[i];
     }
 
-    //TODO: extract num clusters from jsonData -> numClusters
-    
+    this.numClusters = 0;
+    for(let i = 0; i < jsonData.length; i++){
+      if(jsonData[i]["cluster_idx"] > this.numClusters) {
+        this.numClusters = jsonData[i]["cluster_idx"];
+      }
+    }
+    this.numClusters++;
   }
 
   getAllAttr(): string[] {

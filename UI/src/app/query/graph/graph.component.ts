@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { QueryService } from '../../api/query.service';
 import { ClusteredData } from './clusteredData';
+import { ConfigureGraphComponent } from './configure-graph/configure-graph.component';
 
 import * as Plotly from 'plotly.js/dist/plotly.js';
+import {MatDialog} from '@angular/material/dialog';
 
 // PlotlyModule.plotlyjs = Plotly;
 
@@ -22,8 +24,10 @@ export class GraphComponent implements OnInit {
   private data3D: any;
   private clusteredData: ClusteredData;
 
+
   constructor(
     private queryService: QueryService,
+    private dialog: MatDialog
   ) { }
 
   ngOnInit(): void {
@@ -122,6 +126,13 @@ export class GraphComponent implements OnInit {
       this.clusteredData = new ClusteredData(response);
       this.data3D = data;
       this.graph3D["data"] = data;
+    });
+  }
+
+  configureGraph(): void {
+    let dialogRef = this.dialog.open(ConfigureGraphComponent, {
+      height: '60%',
+      width: '80%',
     });
   }
 
