@@ -19,10 +19,6 @@ def binarystars_list(request):
     if request.method == 'GET':
         binarystars = BinaryStars.objects.all()[:10]
         
-        # title = request.GET.get('title', None)
-        # if title is not None:
-        #     binarystars = binarystars.filter(title__icontains=title)
-        
         binarystar_serializer = BinaryStarsSerializer(binarystars, many=True)
         return JsonResponse(binarystar_serializer.data, safe=False)
     elif request.method == 'POST':
