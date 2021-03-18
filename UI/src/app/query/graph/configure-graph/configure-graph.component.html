@@ -11,7 +11,7 @@
   <mat-form-field appearance="fill">
     <mat-label>Attribute Select</mat-label>
     <p></p>
-    <p *ngFor="let attribute of attributes; let i = index">
+    <p *ngFor="let attribute of data['attrs']; let i = index">
       <input matInput [hidden]="true">
       <mat-checkbox matInput [(ngModel)]="attrsSelected[i]"
                     (ngModelChange)="attrChecked($event)"
@@ -19,4 +19,12 @@
                     >{{attribute}}</mat-checkbox>
     </p>
   </mat-form-field>
+
+  <button mat-raised-button color="primary" class="cancelButton" (click)="closeDialog()">
+    Cancel
+  </button>
+
+  <button mat-raised-button color="primary" class="applyButton" [mat-dialog-close]="getAttrList()">
+    Apply
+  </button>
 </div>

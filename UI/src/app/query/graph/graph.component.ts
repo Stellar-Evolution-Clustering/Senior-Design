@@ -4,7 +4,7 @@ import { ClusteredData } from './clusteredData';
 import { ConfigureGraphComponent } from './configure-graph/configure-graph.component';
 
 import * as Plotly from 'plotly.js/dist/plotly.js';
-import {MatDialog} from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 
 // PlotlyModule.plotlyjs = Plotly;
 
@@ -23,7 +23,6 @@ export class GraphComponent implements OnInit {
 
   private data3D: any;
   private clusteredData: ClusteredData;
-
 
   constructor(
     private queryService: QueryService,
@@ -133,6 +132,14 @@ export class GraphComponent implements OnInit {
     let dialogRef = this.dialog.open(ConfigureGraphComponent, {
       height: '60%',
       width: '80%',
+      data: {"attrs": this.clusteredData.getAllAttr()}
+    });
+
+    dialogRef.afterClosed().subscribe(attrsSelected => {
+      console.log('The dialog was closed');
+      console.log(attrsSelected);
+
+      //TODO: Continue passing this data to the next data structure
     });
   }
 

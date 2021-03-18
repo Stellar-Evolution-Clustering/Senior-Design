@@ -1,4 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+
+
 
 enum GraphType {
   Graph_2D,
@@ -14,17 +17,22 @@ export class ConfigureGraphComponent implements OnInit {
 
   public selectedGraph: number = GraphType.Graph_3D;
 
-  public attributes: string[] = ["att 1","att 2","att 3", "att 4"];
-
+  private attributes: string[];
   private numAttrSelected: number = 0;
   private attrsSelected: boolean[];
   private disabledCheckboxes: boolean[];
 
-  constructor() {
-    this.attrsSelected = new Array(this.attributes.length);
-    this.disabledCheckboxes = new Array(this.attributes.length);
-    for(let i = 0; i < this.attributes.length; i++){
+  constructor(
+    public dialogRef: MatDialogRef<ConfigureGraphComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: string[]
+  ) {
+    this.attributes = new Array(data['attrs'].length);
+    this.attrsSelected = new Array(data['attrs'].length);
+    this.disabledCheckboxes = new Array(data['attrs'].length);
+    for(let i = 0; i < data['attrs'].length; i++){
+      this.attributes[i] = data['attrs'][i];
       this.disabledCheckboxes[i] = true;
+      console.log("data:",i," ", data[i])
     }
   }
 
@@ -83,5 +91,20 @@ export class ConfigureGraphComponent implements OnInit {
         this.disabledCheckboxes[i] = false;
       }
     }
+  }
+
+  closeDialog() {
+    this.dialogRef.close();
+  }
+
+  getAttrList(): string[] {
+    let attrReturn: string[] = new Array(this.numAttrSelected);
+    let index: number = 0;
+    for(let i = 0; i < this.attrsSelected.length; i++){
+      if(this.attrsSelected[i] == true){
+        attrReturn[index++] = this.attributes[i];
+      }
+    }
+    return attrReturn;
   }
 }
