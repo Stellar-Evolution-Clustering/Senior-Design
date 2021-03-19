@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { QueryService } from '../../api/query.service';
 import { ClusteredData } from './clusteredData';
 import { ConfigureGraphComponent } from './configure-graph/configure-graph.component';
+import { GraphType } from './clusteredData';
+
 
 import * as Plotly from 'plotly.js/dist/plotly.js';
 import { MatDialog } from '@angular/material/dialog';
@@ -16,13 +18,12 @@ import { MatDialog } from '@angular/material/dialog';
   styleUrls: ['./graph.component.scss']
 })
 export class GraphComponent implements OnInit {
-
-  public graph;
+  public graph2D;
   public graph3D;
   selectedCluster: string;
 
   private data3D: any;
-  private clusteredData: ClusteredData;
+  public clusteredData: ClusteredData;
 
   constructor(
     private queryService: QueryService,
@@ -31,16 +32,16 @@ export class GraphComponent implements OnInit {
 
   ngOnInit(): void {
     this.selectedCluster = "all";
-    console.log(this.selectedCluster);
     this.data3D = null;
-    this.graph = {
+    this.graph2D = {
           data: null,
-          layout: {width: 640, height: 480, title: 'A 2D graph'}
+          layout: {width: 640, height: 480, title: '2D Cluster Visualization'}
     };
     this.graph3D = {
           data: this.data3D,
           layout: {
             autosize: true,
+            width: 640,
             height: 480,
             scene: {
                 aspectratio: {
@@ -81,8 +82,7 @@ export class GraphComponent implements OnInit {
                     zeroline: false
                 }
             },
-            title: '3D Cluster Visualization',
-            width: 640
+            title: '3D Cluster Visualization'
           }
     };
     this.getBackendDataTest();
@@ -135,11 +135,15 @@ export class GraphComponent implements OnInit {
       data: {"attrs": this.clusteredData.getAllAttr()}
     });
 
-    dialogRef.afterClosed().subscribe(attrsSelected => {
-      console.log('The dialog was closed');
-      console.log(attrsSelected);
+    dialogRef.afterClosed().subscribe(data => {
+      this.clusteredData.graphType = data['graphType'];
+      this.clusteredData.setSelectedAttributes(data['attrs']);
 
-      //TODO: Continue passing this data to the next data structure
+      if( this.clusteredData.graphType == GraphType.Graph_2D ){
+        this.graph2D["data"] = this.clusteredData.getGraphData();
+      } else if ( this.clusteredData.graphType == GraphType.Graph_3D ) {
+        this.graph3D["data"] = this.clusteredData.getGraphData();
+      }
     });
   }
 

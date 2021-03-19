@@ -1,12 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { GraphType } from '../clusteredData';
 
-
-
-enum GraphType {
-  Graph_2D,
-  Graph_3D
-}
 
 @Component({
   selector: 'app-configure-graph',
@@ -15,7 +10,8 @@ enum GraphType {
 })
 export class ConfigureGraphComponent implements OnInit {
 
-  public selectedGraph: number = GraphType.Graph_3D;
+  public graphType: number = GraphType.Graph_3D;
+  public canApply: boolean = true;
 
   private attributes: string[];
   private numAttrSelected: number = 0;
@@ -32,7 +28,6 @@ export class ConfigureGraphComponent implements OnInit {
     for(let i = 0; i < data['attrs'].length; i++){
       this.attributes[i] = data['attrs'][i];
       this.disabledCheckboxes[i] = true;
-      console.log("data:",i," ", data[i])
     }
   }
 
@@ -40,9 +35,6 @@ export class ConfigureGraphComponent implements OnInit {
   }
 
   graphSelect(event){
-
-    console.log("hello:",(this.selectedGraph == GraphType.Graph_3D))
-
     this.numAttrSelected = 0;
 
     for(let i = 0; i < this.attributes.length; i++){
@@ -55,26 +47,30 @@ export class ConfigureGraphComponent implements OnInit {
     if(event){
       this.numAttrSelected++;
       //if this is the 2nd/3rd attribute selected, then disable the other boxes
-      if( this.selectedGraph == GraphType.Graph_2D ){
+      if( this.graphType == GraphType.Graph_2D ){
         if( this.numAttrSelected == 2 ){
           this.disableUncheckedBoxes(true);
+          this.canApply = false;
         }
-      } else if ( this.selectedGraph == GraphType.Graph_3D ){
+      } else if ( this.graphType == GraphType.Graph_3D ){
         if( this.numAttrSelected == 3 ){
           this.disableUncheckedBoxes(true);
+          this.canApply = false;
         }
       }
     } else {
       this.numAttrSelected--;
 
       //if this is the 2nd/3rd attribute selected, then enable all boxes
-      if( this.selectedGraph == GraphType.Graph_2D ){
+      if( this.graphType == GraphType.Graph_2D ){
         if( this.numAttrSelected == 1 ){
           this.disableUncheckedBoxes(false);
+          this.canApply = true;
         }
-      } else if ( this.selectedGraph == GraphType.Graph_3D ){
+      } else if ( this.graphType == GraphType.Graph_3D ){
         if( this.numAttrSelected == 2 ){
           this.disableUncheckedBoxes(false);
+          this.canApply = true;
         }
       }
     }
@@ -97,7 +93,8 @@ export class ConfigureGraphComponent implements OnInit {
     this.dialogRef.close();
   }
 
-  getAttrList(): string[] {
+  getAttrList(): any {
+    let returnObject = {};
     let attrReturn: string[] = new Array(this.numAttrSelected);
     let index: number = 0;
     for(let i = 0; i < this.attrsSelected.length; i++){
@@ -105,6 +102,9 @@ export class ConfigureGraphComponent implements OnInit {
         attrReturn[index++] = this.attributes[i];
       }
     }
-    return attrReturn;
+    returnObject['attrs'] = attrReturn;
+    returnObject['graphType'] = this.graphType;
+
+    return returnObject;
   }
 }

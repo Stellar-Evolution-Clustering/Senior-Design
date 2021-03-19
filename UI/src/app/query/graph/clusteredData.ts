@@ -1,5 +1,11 @@
 
 
+
+export enum GraphType {
+  Graph_2D,
+  Graph_3D
+}
+
 /**
 * ClusteredData
 *
@@ -9,8 +15,9 @@ export class ClusteredData {
 
   numClusters: number;
   attributes: string[];
+  public selectedAttributes: string[];
   jsonData: any;
-
+  public graphType: GraphType = 0;
 
   constructor(jsonData: any) {
     this.jsonData = jsonData;
@@ -34,23 +41,11 @@ export class ClusteredData {
     return this.attributes;
   }
 
-  /**
-  *
-  * Generates all clusters from the stored data
-  *
-  */
-  generate2DGraphData(attr1: string, attr2: string): any {
-    //TODO: format the data of this class so that it can be plugged into a plot.ly 3d graph
-
-  }
-
-  /**
-  *
-  * Generates a single cluster from the stored data
-  *
-  */
-  getSelectiveCluster2DData(clusterNums: number[], attr1: string, attr2: string): any {
-
+  setSelectedAttributes(attrs: string[]): void {
+    this.selectedAttributes = new Array(attrs.length);
+    for(let i = 0; i < attrs.length; i++ ){
+      this.selectedAttributes[i] = attrs[i];
+    }
   }
 
   /**
@@ -58,9 +53,38 @@ export class ClusteredData {
   * Generates all clusters from the stored data
   *
   */
-  generate3DGraphData(attr1: string, attr2: string, attr3: string): any {
-    //TODO: format the data of this class so that it can be plugged into a plot.ly 3d graph
+  getGraphData(): any {
+    var data = [];
+    if( this.graphType == GraphType.Graph_2D ){
+      var colors: string[] = ['red','blue','green'];  //TODO: what is there's more that three clusters
+      for( let i = 0; i < this.numClusters; i ++ ){
+        data.push(
+          { x: [], y: [], type: 'scatter', mode: 'markers', marker: {color: colors[i], size: 2}, name: `Cluster ${i + 1}`}
+        );
+      }
+      for( let j = 0; j < this.jsonData.length; j++ ){
+        var clusterNum = this.jsonData[j]["cluster_idx"];
 
+        data[clusterNum].x.push(this.jsonData[j]["coords"][this.selectedAttributes[0]]);
+        data[clusterNum].y.push(this.jsonData[j]["coords"][this.selectedAttributes[1]]);
+      }
+      return data;
+    } else if ( this.graphType == GraphType.Graph_3D ){
+      var colors: string[] = ['red','blue','green']; //TODO: what is there's more that three clusters
+      for( let i = 0; i < 3; i ++ ){
+        data.push(
+          { x: [], y: [], z: [], type: 'scatter3d', mode: 'markers', marker: {color: colors[i], size: 2}, name: `Cluster ${i + 1}`}
+        );
+      }
+      for( let j = 0; j < this.jsonData.length; j++ ){
+        var clusterNum = this.jsonData[j]["cluster_idx"];
+        data[clusterNum].x.push(this.jsonData[j]["coords"][this.selectedAttributes[0]]);
+        data[clusterNum].y.push(this.jsonData[j]["coords"][this.selectedAttributes[1]]);
+        data[clusterNum].z.push(this.jsonData[j]["coords"][this.selectedAttributes[2]]);
+      }
+      return data;
+    }
+    return null;
   }
 
   /**
@@ -68,7 +92,7 @@ export class ClusteredData {
   * Generates a single cluster from the stored data
   *
   */
-  getSelectiveCluster3DData(clusterNum: number[], attr1: string, attr2: string, attr3: string): any {
+  getSelectiveClusterData(clusterNums: number[]): any {
 
   }
 

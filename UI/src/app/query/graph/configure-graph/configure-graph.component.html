@@ -2,7 +2,7 @@
   <p>
     <mat-form-field appearance="fill">
       <mat-label>Graph Type</mat-label>
-      <mat-select [(ngModel)]="selectedGraph" (ngModelChange)="graphSelect($event)">
+      <mat-select [(ngModel)]="graphType" (ngModelChange)="graphSelect($event)">
         <mat-option value=0>2D Graph</mat-option>
         <mat-option value=1>3D Graph</mat-option>
       </mat-select>
@@ -24,7 +24,10 @@
     Cancel
   </button>
 
-  <button mat-raised-button color="primary" class="applyButton" [mat-dialog-close]="getAttrList()">
+  <button mat-raised-button color="primary"
+          class="applyButton"
+          [mat-dialog-close]="getAttrList()"
+          [disabled]="canApply">
     Apply
   </button>
 </div>
