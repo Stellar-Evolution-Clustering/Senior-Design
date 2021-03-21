@@ -4,7 +4,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatDialogModule, MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatDialogModule } from '@angular/material/dialog';
 
 
 import { PlotlyModule } from 'angular-plotly.js';
@@ -64,10 +64,7 @@ PlotlyModule.plotlyjs = Plotly;
     MatFormFieldModule,
     MatDialogModule,
   ],
-  providers: [
-    MatDialog,
-    MatDialogRef
-  ],
+  providers: [],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
