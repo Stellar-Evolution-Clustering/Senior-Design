@@ -19,10 +19,6 @@ def binarystars_list(request):
     if request.method == 'GET':
         binarystars = BinaryStars.objects.all()[:10]
         
-        # title = request.GET.get('title', None)
-        # if title is not None:
-        #     binarystars = binarystars.filter(title__icontains=title)
-        
         binarystar_serializer = BinaryStarsSerializer(binarystars, many=True)
         return JsonResponse(binarystar_serializer.data, safe=False)
     elif request.method == 'POST':
@@ -35,11 +31,11 @@ def binarystars_list(request):
 
 @api_view(['GET', 'PUT', 'DELETE'])
 def binarystars_detail(request, pk):
-    binarystar = BinaryStars.objects.all(pk=pk)
+    binarystar = BinaryStars.objects.get(pk=pk)
 
     if request.method == 'GET': 
         binarystar_serializer = BinaryStarsSerializer(binarystar) 
-        return JsonResponse(binarystar_serializer.data) 
+        return JsonResponse(binarystar_serializer.data, safe=False) 
 
 @api_view(['GET'])
 def binarystars_cluster(request):
