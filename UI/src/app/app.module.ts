@@ -4,6 +4,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatDialogModule, MatDialog, MatDialogRef } from '@angular/material/dialog';
+
 
 import { PlotlyModule } from 'angular-plotly.js';
 import * as Plotly from 'plotly.js/dist/plotly.js';
@@ -60,8 +62,12 @@ PlotlyModule.plotlyjs = Plotly;
     ReactiveFormsModule,
     MatInputModule,
     MatFormFieldModule,
+    MatDialogModule,
   ],
-  providers: [],
+  providers: [
+    MatDialog,
+    MatDialogRef
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
