@@ -24,6 +24,7 @@ export class GraphComponent implements OnInit {
 
   private data3D: any;
   public clusteredData: ClusteredData;
+  public selectedClusters: boolean[];
 
   constructor(
     private queryService: QueryService,
@@ -88,43 +89,23 @@ export class GraphComponent implements OnInit {
     this.getBackendDataTest();
   }
 
-  zoomCluster(): void {
-    console.log(this.selectedCluster);
-    if( this.selectedCluster == "all" ){
-      this.graph3D["data"] = this.data3D;
-    } else {
-      var clusterNum: number = Number(this.selectedCluster);
-      var copyData = [...this.data3D];
-      for( let i = 2; i >= 0; i-- ){
-        if( clusterNum != i ){
-          copyData.splice(i, 1);
-        }
-      }
-      this.graph3D["data"] = copyData;
-    }
-  }
-
   getBackendDataTest(): void {
     this.queryService.getTestQuery().subscribe(response => {
       console.log(response);
 
-      var data = [];
-      var colors: string[] = ['red','blue','green'];
-      for( let i = 0; i < 3; i ++ ){
-        data.push(
-          { x: [], y: [], z: [], type: 'scatter3d', mode: 'markers', marker: {color: colors[i], size: 2}, name: `Cluster ${i + 1}`}
-        );
-      }
-      for( let j = 0; j < response.length; j++ ){
-        var clusterNum = response[j]["cluster_idx"];
-        data[clusterNum].x.push(response[j]["coords"]["mass_diff"]);
-        data[clusterNum].y.push(response[j]["coords"]["lumin_diff"]);
-        data[clusterNum].z.push(response[j]["coords"]["porb"]);
+      this.clusteredData = new ClusteredData(response);
+      this.selectedClusters = new Array(this.clusteredData.numClusters);
+
+      //Set to 3D graph by default
+      this.clusteredData.graphType = GraphType.Graph_3D;
+      this.clusteredData.setSelectedAttributes(this.clusteredData.getAllAttr());
+      this.graph3D["data"] = this.clusteredData.getGraphData();
+
+      //Show all clusters by default
+      for( let i = 0; i < this.selectedClusters.length; i++ ){
+        this.selectedClusters[i] = true;
       }
 
-      this.clusteredData = new ClusteredData(response);
-      this.data3D = data;
-      this.graph3D["data"] = data;
     });
   }
 
@@ -145,6 +126,28 @@ export class GraphComponent implements OnInit {
         this.graph3D["data"] = this.clusteredData.getGraphData();
       }
     });
+  }
+
+  trackBySelectedCluster(index: number, cluster: any): number {
+    return index;
+  }
+
+  selectedClustersChanged(event){
+    for( let i = 0; i < this.clusteredData.numClusters; i++ ){
+      if( !this.selectedClusters[i] ){
+        if( this.clusteredData.graphType == GraphType.Graph_2D ){
+          this.graph2D["data"][i].visible = false;
+        } else if ( this.clusteredData.graphType == GraphType.Graph_3D ){
+          this.graph3D["data"][i].visible = false;
+        }
+      } else {
+        if( this.clusteredData.graphType == GraphType.Graph_2D ){
+          this.graph2D["data"][i].visible = true;
+        } else if ( this.clusteredData.graphType == GraphType.Graph_3D ){
+          this.graph3D["data"][i].visible = true;
+        }
+      }
+    }
   }
 
 }

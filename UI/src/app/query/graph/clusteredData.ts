@@ -1,9 +1,7 @@
-
-
-
 export enum GraphType {
   Graph_2D,
-  Graph_3D
+  Graph_3D,
+  None
 }
 
 /**
@@ -13,13 +11,14 @@ export enum GraphType {
 */
 export class ClusteredData {
 
-  numClusters: number;
+  public numClusters: number;
   attributes: string[];
   public selectedAttributes: string[];
+
   jsonData: any;
   public graphType: GraphType = 0;
 
-  constructor(jsonData: any) {
+  constructor(jsonData: any) {  //TODO: make a default constructor and then later inject the data so graph type can be none. Or default to displaying 3d data
     this.jsonData = jsonData;
 
     let attrs = Object.keys(jsonData[0]["coords"]);
@@ -59,7 +58,7 @@ export class ClusteredData {
       var colors: string[] = ['red','blue','green'];  //TODO: what is there's more that three clusters
       for( let i = 0; i < this.numClusters; i ++ ){
         data.push(
-          { x: [], y: [], type: 'scatter', mode: 'markers', marker: {color: colors[i], size: 2}, name: `Cluster ${i + 1}`}
+          { x: [], y: [], type: 'scatter', mode: 'markers', marker: {color: colors[i], size: 2}, name: `Cluster ${i + 1}`, visible: true}
         );
       }
       for( let j = 0; j < this.jsonData.length; j++ ){
@@ -85,15 +84,6 @@ export class ClusteredData {
       return data;
     }
     return null;
-  }
-
-  /**
-  *
-  * Generates a single cluster from the stored data
-  *
-  */
-  getSelectiveClusterData(clusterNums: number[]): any {
-
   }
 
 }

@@ -10,13 +10,9 @@
 </div>
 
 <div class="clusterSelect">
-  <mat-radio-group aria-label="Cluster Select" [(ngModel)]="selectedCluster" (change)="zoomCluster()">
-    <mat-radio-button value="all">All</mat-radio-button> <br/>
-    <mat-radio-button value="0">Cluster 1</mat-radio-button> <br/>
-    <mat-radio-button value="1">Cluster 2</mat-radio-button> <br/>
-    <mat-radio-button value="2">Cluster 3</mat-radio-button> <br/><br/>
-  </mat-radio-group>
+  <div *ngFor="let cluster of selectedClusters; let i = index; trackBy:trackBySelectedCluster">
+    <mat-checkbox matInput [(ngModel)]="selectedClusters[i]"
+                           (ngModelChange)="selectedClustersChanged($event)"
+                  >Cluster {{i + 1}}</mat-checkbox>
+  </div>
 </div>
-
-<!-- <app-configure-graph></app-configure-graph> -->
-<!-- <button mat-raised-button color="primary" (click)="getBackendDataTest()">Get Clustered Query</button> -->
