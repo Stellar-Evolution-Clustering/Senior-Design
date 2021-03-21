@@ -2,6 +2,10 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatDialogModule } from '@angular/material/dialog';
+
 
 import { PlotlyModule } from 'angular-plotly.js';
 import * as Plotly from 'plotly.js/dist/plotly.js';
@@ -24,6 +28,7 @@ import { AboutComponent } from './about/about.component';
 import { HomeComponent } from './home/home.component';
 import { StepperComponent } from './query/stepper/stepper.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { ConfigureGraphComponent } from './query/graph/configure-graph/configure-graph.component';
 
 PlotlyModule.plotlyjs = Plotly;
 
@@ -41,7 +46,8 @@ PlotlyModule.plotlyjs = Plotly;
     HelpComponent,
     AboutComponent,
     HomeComponent,
-    StepperComponent
+    StepperComponent,
+    ConfigureGraphComponent
   ],
   imports: [
     BrowserModule,
@@ -54,6 +60,9 @@ PlotlyModule.plotlyjs = Plotly;
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
+    MatInputModule,
+    MatFormFieldModule,
+    MatDialogModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

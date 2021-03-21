@@ -1,0 +1,33 @@
+<div mat-dialog-content>
+  <p>
+    <mat-form-field appearance="fill">
+      <mat-label>Graph Type</mat-label>
+      <mat-select [(ngModel)]="graphType" (ngModelChange)="graphSelect($event)">
+        <mat-option value=0>2D Graph</mat-option>
+        <mat-option value=1>3D Graph</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </p>
+  <mat-form-field appearance="fill">
+    <mat-label>Attribute Select</mat-label>
+    <p></p>
+    <p *ngFor="let attribute of data['attrs']; let i = index">
+      <input matInput [hidden]="true">
+      <mat-checkbox matInput [(ngModel)]="attrsSelected[i]"
+                    (ngModelChange)="attrChecked($event)"
+                    [disabled]="disabledCheckboxes[i]"
+                    >{{attribute}}</mat-checkbox>
+    </p>
+  </mat-form-field>
+
+  <button mat-raised-button color="primary" class="cancelButton" (click)="closeDialog()">
+    Cancel
+  </button>
+
+  <button mat-raised-button color="primary"
+          class="applyButton"
+          [mat-dialog-close]="getAttrList()"
+          [disabled]="canApply">
+    Apply
+  </button>
+</div>
