@@ -25,6 +25,7 @@ export class GraphComponent implements OnInit {
   private data3D: any;
   public clusteredData: ClusteredData;
   public selectedClusters: boolean[];
+  public GraphTypeEnum = GraphType;
 
   constructor(
     private queryService: QueryService,
@@ -124,6 +125,10 @@ export class GraphComponent implements OnInit {
         this.graph2D["data"] = this.clusteredData.getGraphData();
       } else if ( this.clusteredData.graphType == GraphType.Graph_3D ) {
         this.graph3D["data"] = this.clusteredData.getGraphData();
+      }
+
+      for( let i = 0; i < this.selectedClusters.length; i++ ){
+        this.selectedClusters[i] = true;
       }
     });
   }
