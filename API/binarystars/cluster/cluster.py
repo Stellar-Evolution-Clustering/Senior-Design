@@ -64,7 +64,6 @@ def get_stars(n_clusters: int=None, n_samples: int=None, eps: float=None, standa
     
     cluster_dict_list = []
     
-    ttt = True
     for i in range(len(clust)):
         cluster_attributes = cstar.ClusterAttributes(idx=int(clust[i]), attributes=None)
         clustered_star = cstar.ClusteredStar(key=ids[i], cluster_attributes=cluster_attributes, binarystar=bs_serialzer.data)

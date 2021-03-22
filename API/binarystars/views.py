@@ -46,6 +46,12 @@ def binarystars_detail(request, pk):
         binarystar_serializer = BinaryStarsSerializer(binarystar) 
         return JsonResponse(binarystar_serializer.data, safe=False) 
 
+@api_view(['GET'])
+def binarystars_attributes(request):
+    att = [f.name for f in BinaryStars._meta.get_fields()]
+    if request.method == 'GET':
+        return JsonResponse(att, safe=False)
+
 @api_view(['GET', 'POST'])
 def binarystars_cluster(request):
     if request.method == 'GET':
