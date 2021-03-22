@@ -5,7 +5,6 @@ import { ClusterMethodComponent } from './cluster-method/cluster-method.componen
 import { DBComponent } from './db/db.component';
 import { DistanceFuncComponent } from './distance-func/distance-func.component';
 import { GraphComponent } from './graph/graph.component';
-import { QueryComponent } from './query.component';
 import { StepperComponent } from './stepper/stepper.component';
 import { WeightComponent } from './weight/weight.component';
 

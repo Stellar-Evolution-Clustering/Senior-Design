@@ -14,7 +14,6 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from './material/material.module';
 import { NavModule } from './nav/nav.module';
-import { QueryComponent } from './query/query.component';
 import { ApiModule } from './api/api.module';
 import { HelpComponent } from './help/help.component';
 import { AboutComponent } from './about/about.component';
@@ -28,7 +27,6 @@ PlotlyModule.plotlyjs = Plotly;
 @NgModule({
   declarations: [
     AppComponent,
-    QueryComponent,
     HelpComponent,
     AboutComponent,
     HomeComponent,
