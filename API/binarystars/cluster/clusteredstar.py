@@ -1,5 +1,4 @@
 import json
-from binarystars.serializers import BinaryStarsSerializer
 
 class ClusterAttributes(object):
     def __init__(self, idx, attributes) -> None:
@@ -12,8 +11,8 @@ class ClusterAttributes(object):
             
                 attribute_name: attribute_value 
         """
-        self.idx = idx
-        self.attributes = attributes
+        self.idx = { 'cluster_idx': idx }
+        self.attributes = { 'attributes' : attributes }
     
     def to_json(self):
         return json.dumps(self, default=lambda x: x.__dict__, sort_keys=True, indent=4)
@@ -23,7 +22,7 @@ class ClusteredStar(object):
     Will be returned to the frontend for graphing purposes
 
     """
-    def __init__(self, key, cluster_attributes: ClusterAttributes, binarystar: BinaryStarsSerializer) -> None:
+    def __init__(self, key, cluster_attributes: ClusterAttributes, binarystar: dict) -> None:
         """Constructor for ClustedStar object. Creates a new ClusteredStar object with given args
 
         Args:
@@ -32,8 +31,8 @@ class ClusteredStar(object):
             binarystar (BinaryStarsSerializer): All of the binary star information from this binary star, including what was not used
             in clustering.
         """
-        self.key = key
-        self.cluster_attributes = cluster_attributes
+        self.key = { 'key': key }
+        self.cluster_attributes = { 'cluster_attributes': cluster_attributes }
         self.binarystar = binarystar
     
     def to_json(self):

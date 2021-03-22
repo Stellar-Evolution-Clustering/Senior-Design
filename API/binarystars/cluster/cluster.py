@@ -1,8 +1,9 @@
 from binarystars.models import BinaryStars
+from binarystars.serializers import BinaryStarsSerializer
 import numpy as np
 from sklearn.cluster import KMeans, DBSCAN
 from sklearn import preprocessing
-import binarystars.cluster.clusteredstar
+import binarystars.cluster.clusteredstar as cstar
 
 DATA_PROCESSORS = {
     "minmax": preprocessing.MinMaxScaler(),
@@ -10,15 +11,27 @@ DATA_PROCESSORS = {
     "standard": preprocessing.StandardScaler()
 }
 
-
 def preprocess_data(data: np.ndarray, standarizer: str) -> np.ndarray:
     return DATA_PROCESSORS[standarizer].fit_transform(data)
 
-def get_stars(n_clusters: int=3, num_samples: int=5, eps: float=0.5, standarizer: str='abs', cluster_type: str='kmeans') -> list:
+# TODO: Figure out how to determine attributes from k-v pair given by frontend
+# key = name of attribute
+# value = weight of attribute
+def determine_attributes(attri: list):
+    return None
+
+def get_stars(n_clusters: int=None, n_samples: int=None, eps: float=None, standarizer: str=None, 
+                cluster_type: str=None, attributes: dict=None) -> list:
     binarystars = BinaryStars.objects.order_by('file_id', 'id', 'time_id').distinct('file_id', 'id')
+    bs_serialzer = BinaryStarsSerializer(binarystars, many=True)
+    
     stars_arr = []
     ids = []
     
+    cluster_properties = determine_attributes(attri=list(attributes.keys()))
+    weights = [attributes[key] for key in attributes]
+    
+    # logic will have to change here... need to use given attributes...
     for bss in binarystars:
         mass_diff = bss.mass_1 - bss.mass_2
         lumin_diff = bss.lumin_1 - bss.lumin_2
@@ -35,13 +48,28 @@ def get_stars(n_clusters: int=3, num_samples: int=5, eps: float=0.5, standarizer
     
     clust = None
     if cluster_type == 'kmeans':
-        clust = kmeans_cluster(data=stars_arr, k=n_clusters)
+        if n_clusters:
+            clust = kmeans_cluster(data=stars_arr, k=n_clusters)
+        else:
+            clust = kmeans_cluster(data=stars_arr)
     elif cluster_type == 'dbscan':
-        clust = dbscan_cluster(data=stars_arr, min_samples=num_samples, eps=eps)
+        if n_samples and eps:
+            clust = dbscan_cluster(data=stars_arr, min_samples=n_samples, eps=eps)
+        elif n_samples:
+            clust = dbscan_cluster(data=stars_arr, min_samples=n_samples)
+        elif eps:
+            clust = dbscan_cluster(data=stars_arr, eps=eps)
+        else:
+            clust = dbscan_cluster(data=stars_arr)
     
     cluster_dict_list = []
     
+    ttt = True
     for i in range(len(clust)):
+        cluster_attributes = cstar.ClusterAttributes(idx=int(clust[i]), attributes=None)
+        clustered_star = cstar.ClusteredStar(key=ids[i], cluster_attributes=cluster_attributes, binarystar=bs_serialzer.data)
+        # above two are what we will eventually use... below is old hard code
+        
         id_cluster_dict = {}
         id_cluster_dict['key'] = ids[i]
         id_cluster_dict['cluster_idx'] = int(clust[i])
@@ -56,8 +84,8 @@ def get_stars(n_clusters: int=3, num_samples: int=5, eps: float=0.5, standarizer
     
     return cluster_dict_list
 
-def kmeans_cluster(data: np.ndarray, k: int, weights=None) -> np.ndarray:
+def kmeans_cluster(data: np.ndarray, k: int=3, weights=None) -> np.ndarray:
     return KMeans(n_clusters=k).fit_predict(X=data, sample_weight=weights)
 
-def dbscan_cluster(data: np.ndarray, eps: float, min_samples: int, weights=None) -> np.ndarray:
+def dbscan_cluster(data: np.ndarray, eps: float=0.5, min_samples: int=5, weights=None) -> np.ndarray:
     return DBSCAN(eps=eps, min_samples=min_samples).fit_predict(X=data, sample_weight=weights)
