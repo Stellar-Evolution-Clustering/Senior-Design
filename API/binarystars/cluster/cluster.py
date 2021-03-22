@@ -14,7 +14,7 @@ DATA_PROCESSORS = {
 def preprocess_data(data: np.ndarray, standarizer: str) -> np.ndarray:
     return DATA_PROCESSORS[standarizer].fit_transform(data)
 
-def get_stars(n_clusters: int, num_samples: int, eps: float, standarizer: str='abs', cluster_type: str='kmeans') -> list:
+def get_stars(n_clusters: int=3, num_samples: int=5, eps: float=0.5, standarizer: str='abs', cluster_type: str='kmeans') -> list:
     binarystars = BinaryStars.objects.order_by('file_id', 'id', 'time_id').distinct('file_id', 'id')
     stars_arr = []
     ids = []
@@ -56,8 +56,8 @@ def get_stars(n_clusters: int, num_samples: int, eps: float, standarizer: str='a
     
     return cluster_dict_list
 
-def kmeans_cluster(data: np.ndarray, k: int=8, weights=None) -> np.ndarray:
+def kmeans_cluster(data: np.ndarray, k: int, weights=None) -> np.ndarray:
     return KMeans(n_clusters=k).fit_predict(X=data, sample_weight=weights)
 
-def dbscan_cluster(data: np.ndarray, eps: float=0.5, min_samples: int=5, weights=None) -> np.ndarray:
+def dbscan_cluster(data: np.ndarray, eps: float, min_samples: int, weights=None) -> np.ndarray:
     return DBSCAN(eps=eps, min_samples=min_samples).fit_predict(X=data, sample_weight=weights)

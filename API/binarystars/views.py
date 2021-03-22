@@ -40,5 +40,5 @@ def binarystars_detail(request, pk):
 @api_view(['GET'])
 def binarystars_cluster(request):
     if request.method == 'GET':
-        clust = cluster.get_stars(3)
+        clust = cluster.get_stars()
         return JsonResponse(clust, safe=False)
