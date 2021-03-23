@@ -69,17 +69,17 @@ export class GraphComponent implements OnInit {
                     }
                 },
                 xaxis: {
-                    title: 'mass_diff',
+                    title: '',
                     type: 'linear',
                     zeroline: false,
                 },
                 yaxis: {
-                    title: 'lumin_diff',
+                    title: '',
                     type: 'linear',
                     zeroline: false
                 },
                 zaxis: {
-                    title: 'porb',
+                    title: '',
                     type: 'linear',
                     zeroline: false
                 }
@@ -102,11 +102,15 @@ export class GraphComponent implements OnInit {
       this.clusteredData.setSelectedAttributes(this.clusteredData.getAllAttr());
       this.graph3D["data"] = this.clusteredData.getGraphData();
 
+      //Label axis
+      this.graph3D.layout.scene.xaxis.title = this.clusteredData.selectedAttributes[0];
+      this.graph3D.layout.scene.yaxis.title = this.clusteredData.selectedAttributes[1];
+      this.graph3D.layout.scene.zaxis.title = this.clusteredData.selectedAttributes[2];
+
       //Show all clusters by default
       for( let i = 0; i < this.selectedClusters.length; i++ ){
         this.selectedClusters[i] = true;
       }
-
     });
   }
 

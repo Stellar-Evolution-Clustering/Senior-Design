@@ -12,6 +12,7 @@ export class ConfigureGraphComponent implements OnInit {
 
   public graphType: number = GraphType.Graph_3D;
   public canApply: boolean = true;
+  public GraphTypeEnum = GraphType;
 
   private attributes: string[];
   private numAttrSelected: number = 0;
