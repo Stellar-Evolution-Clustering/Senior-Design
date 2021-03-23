@@ -8,8 +8,9 @@ class ClusteredStar(object):
 
         Args:
             key (Tuple(int, int, int)): Unique indentifier key to determine which star this object is
-            cluster_attributes (ClusterAttributes): All of the attributes that were used to cluster this bss and which cluster it is in
-            binarystar (BinaryStarsSerializer): All of the binary star information from this binary star, including what was not used
+            idx (int): index of the cluster that the star belongs to
+            cluster_attributes (list): All of the attributes that were used to cluster this bss
+            binarystar (dict): All of the binary star information from this binary star, including what was not used
             in clustering.
         """
         self.key = key
