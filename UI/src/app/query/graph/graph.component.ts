@@ -43,8 +43,8 @@ export class GraphComponent implements OnInit {
           data: this.data3D,
           layout: {
             autosize: true,
-            width: 640,
-            height: 480,
+            width: window.innerWidth * (1/2),//640,
+            height: window.innerHeight * (3/4),//480,
             scene: {
                 aspectratio: {
                     x: 1,
@@ -58,9 +58,9 @@ export class GraphComponent implements OnInit {
                         z: 0
                     },
                     eye: {
-                        x: 1.25,
-                        y: 1.25,
-                        z: 1.25
+                        x: 1.5,
+                        y: 1.5,
+                        z: 1.5,
                     },
                     up: {
                         x: 0,
