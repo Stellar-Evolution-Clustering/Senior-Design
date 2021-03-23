@@ -43,8 +43,8 @@ export class GraphComponent implements OnInit {
           data: this.data3D,
           layout: {
             autosize: true,
-            width: 640,
-            height: 480,
+            width: window.innerWidth * (1/2),//640,
+            height: window.innerHeight * (3/4),//480,
             scene: {
                 aspectratio: {
                     x: 1,
@@ -58,9 +58,9 @@ export class GraphComponent implements OnInit {
                         z: 0
                     },
                     eye: {
-                        x: 1.25,
-                        y: 1.25,
-                        z: 1.25
+                        x: 1.5,
+                        y: 1.5,
+                        z: 1.5,
                     },
                     up: {
                         x: 0,
@@ -69,17 +69,17 @@ export class GraphComponent implements OnInit {
                     }
                 },
                 xaxis: {
-                    title: 'mass_diff',
+                    title: '',
                     type: 'linear',
                     zeroline: false,
                 },
                 yaxis: {
-                    title: 'lumin_diff',
+                    title: '',
                     type: 'linear',
                     zeroline: false
                 },
                 zaxis: {
-                    title: 'porb',
+                    title: '',
                     type: 'linear',
                     zeroline: false
                 }
@@ -102,11 +102,15 @@ export class GraphComponent implements OnInit {
       this.clusteredData.setSelectedAttributes(this.clusteredData.getAllAttr());
       this.graph3D["data"] = this.clusteredData.getGraphData();
 
+      //Label axis
+      this.graph3D.layout.scene.xaxis.title = this.clusteredData.selectedAttributes[0];
+      this.graph3D.layout.scene.yaxis.title = this.clusteredData.selectedAttributes[1];
+      this.graph3D.layout.scene.zaxis.title = this.clusteredData.selectedAttributes[2];
+
       //Show all clusters by default
       for( let i = 0; i < this.selectedClusters.length; i++ ){
         this.selectedClusters[i] = true;
       }
-
     });
   }
 

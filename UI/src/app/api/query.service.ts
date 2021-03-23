@@ -8,12 +8,19 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 })
 export class QueryService {
 
-  private backendUrl = 'http://localhost:8000/api/binarystars/cluster';
+  private backendUrl = 'http://localhost:8000/api/binarystars';
 
   constructor(private http: HttpClient) { }
 
   getTestQuery(): Observable<any> {
-    return this.http.get<any>(`${this.backendUrl}`).pipe(
+    return this.http.get<any>(`${this.backendUrl}/cluster`).pipe(
+      tap(_ => console.log("sending query to backend")),
+      catchError(this.handleError<any>('getTestQuery', null))
+    );
+  }
+
+  getAttributes(): Observable<any> {
+    return this.http.get<any>(`${this.backendUrl}/attributes`).pipe(
       tap(_ => console.log("sending query to backend")),
       catchError(this.handleError<any>('getTestQuery', null))
     );
@@ -29,7 +36,7 @@ export class QueryService {
     //      "data3.2": "there"
     //   ]
     // };
-    return this.http.post<any>(`${this.backendUrl}`, body).pipe(
+    return this.http.post<any>(`${this.backendUrl}/cluster`, body).pipe(
       tap(_ => console.log("posting query to backend")),
       catchError(this.handleError<any>('getTestQuery', null))
     )

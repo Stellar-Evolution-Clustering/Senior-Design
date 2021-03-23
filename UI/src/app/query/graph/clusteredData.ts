@@ -1,7 +1,7 @@
 export enum GraphType {
+  Graph_1D,
   Graph_2D,
-  Graph_3D,
-  None
+  Graph_3D
 }
 
 /**
@@ -18,7 +18,7 @@ export class ClusteredData {
   jsonData: any;
   public graphType: GraphType = 0;
 
-  constructor(jsonData: any) {  //TODO: make a default constructor and then later inject the data so graph type can be none. Or default to displaying 3d data
+  constructor(jsonData: any) {
     this.jsonData = jsonData;
 
     let attrs = Object.keys(jsonData[0]["coords"]);
@@ -55,7 +55,7 @@ export class ClusteredData {
   getGraphData(): any {
     var data = [];
     if( this.graphType == GraphType.Graph_2D ){
-      var colors: string[] = ['red','blue','green'];  //TODO: what is there's more that three clusters
+      var colors: string[] = ['red','blue','green'];  //TODO: what is there's more that three clusters, it breaks
       for( let i = 0; i < this.numClusters; i ++ ){
         data.push(
           { x: [], y: [], type: 'scatter', mode: 'markers', marker: {color: colors[i], size: 2}, name: `Cluster ${i + 1}`, visible: true}
@@ -82,6 +82,14 @@ export class ClusteredData {
         data[clusterNum].z.push(this.jsonData[j]["coords"][this.selectedAttributes[2]]);
       }
       return data;
+    } else if ( this.graphType == GraphType.Graph_1D ){
+      //TODO: graph just one attribute over time
+
+      // x - time
+      // y - attribute
+
+
+      //TODO: Possibly a 3d one also, x is time y,z are two attributes
     }
     return null;
   }
