@@ -25,8 +25,14 @@
 <p>Select which attributes to include in your query:</p>
 <mat-form-field>
   <mat-chip-list #chipList aria-label="Attributes:" [multiple]="true">
-    <mat-chip *ngFor="let variable of variables | async" [value]="variable.name" [selectable]="true" #chip="matChip"
-      (click)="chip.selected ? chip.deselect() : chip.select()" (selectionChange)="selected($event)">
+    <mat-chip
+      *ngFor="let variable of variables | async"
+      [value]="variable.name"
+      [selectable]="true"
+      #chip="matChip"
+      (click)="chip.selected ? chip.deselect() : chip.select()"
+      (selectionChange)="selected($event)"
+    >
       {{ variable.name }}
     </mat-chip>
   </mat-chip-list>

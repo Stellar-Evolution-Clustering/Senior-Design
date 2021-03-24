@@ -31,7 +31,7 @@ CORS_ORIGIN_WHITELIST = (
     'http://localhost:8081',
 )
 
-ALLOWED_HOSTS = ['sdmay21-30.ece.iastate.edu', 'localhost', '127.0.0.1'] 
+ALLOWED_HOSTS = ['sdmay21-30.ece.iastate.edu', 'localhost', '127.0.0.1']
 
 # Application definition
 
@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'drf_yasg',
 ]
 
 MIDDLEWARE = [
