@@ -31,7 +31,7 @@ export class AttributeComponent implements OnInit {
           this.varList.push({name: DisplayNames[iterator], db_name: iterator});
         }
       }
-    })
+    });
   }
 
   trackByAtt(index: number, att: any): number {
