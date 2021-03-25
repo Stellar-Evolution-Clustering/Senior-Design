@@ -21,6 +21,7 @@
           <ng-template matStepLabel>Add Attributes</ng-template>
           <app-attribute
             [formArray]="query.get('attributes')"
+            [variables]="attributes"
             (selectAttributeEvent)="addAttribute($event)"
             (deleteAttributeEvent)="deleteAttribute($event)"
           ></app-attribute>

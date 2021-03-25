@@ -2,11 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormControl, FormArray, FormGroup, Validators} from '@angular/forms';
 import {ENTER} from '@angular/cdk/keycodes';
 import { MatChipSelectionChange } from '@angular/material/chips';
-
-interface Value {
-  display: string;
-  value: string | number;
-}
+import { QueryService } from '../../api/query.service'
+import { Observable } from 'rxjs';
+import { Variable } from '../../api/models/variable.model';
 
 @Component({
   selector: 'app-stepper',
@@ -15,12 +13,13 @@ interface Value {
 })
 export class StepperComponent implements OnInit {
 
-  attributes : Value[] = [
+  /*attributes : Value[] = [
     {display:'Helium', value:'Helium'},
     {display:'Mass', value:'Mass'},
     {display:'Luminosity', value:'Luminosity'},
-  ]; //todo update values with actual attribute names in db
-  //todo add remaining attributes
+  ];*/
+
+  attributes : Observable<any>;
 
   query = this.fb.group({
     dbSelect: ['',  Validators.required],
@@ -30,10 +29,12 @@ export class StepperComponent implements OnInit {
     algorithm: ['',  Validators.required]
   });
 
-  constructor(private fb: FormBuilder) {}
+  constructor(private fb: FormBuilder, private queryService: QueryService) {
+    
+  }
 
   ngOnInit() {
-    
+    this.attributes = this.queryService.getAttributes();
   }
 
   onSubmit() {

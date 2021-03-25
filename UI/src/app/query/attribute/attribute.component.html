@@ -1,32 +1,10 @@
-<!-- <mat-card>
-  <mat-card-title> Add Attributes </mat-card-title>
-  <mat-card-content>
-    <div *ngFor="let att of selectedAttributes; index as i;trackBy:trackByAtt">
-      <mat-form-field>
-        <mat-label>Select Variable</mat-label>
-        <mat-select [(value)]="selectedAttributes[i].att">
-          <mat-option
-            *ngFor="let variable of variables | async"
-            value="{{variable.name}}"
-            >{{ variable.name }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-      <button mat-fab color="primary" class="deleteAttribute" (click)="deleteAttribute(i)">
-        <mat-icon>delete</mat-icon>
-      </button>
-    </div>
-  </mat-card-content>
-  <button mat-fab color="primary" class="addAttribute" (click)="addAttribute()">
-    <mat-icon>add</mat-icon>
-  </button>
-</mat-card> -->
-
 <p>Select which attributes to include in your query:</p>
-<mat-form-field>
+<p>(P) = Primary Star</p>
+<p>(S) = Secondary Star</p>
+<mat-form-field class="attribute-list">
   <mat-chip-list #chipList aria-label="Attributes:" [multiple]="true">
     <mat-chip
-      *ngFor="let variable of variables | async"
+      *ngFor="let variable of varList"
       [value]="variable.name"
       [selectable]="true"
       #chip="matChip"

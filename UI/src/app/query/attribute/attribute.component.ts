@@ -2,7 +2,7 @@ import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { FormArray, Validators } from '@angular/forms';
 import { MatChipSelectionChange } from '@angular/material/chips';
 import { Observable } from 'rxjs';
-import { Variable } from '../../api/models/variable.model';
+import { Variable, DisplayNames } from '../../api/models/variable.model';
 import { VariablesService } from '../../api/variables.service';
 
 @Component({
@@ -11,32 +11,27 @@ import { VariablesService } from '../../api/variables.service';
   styleUrls: ['./attribute.component.scss']
 })
 export class AttributeComponent implements OnInit {
-  public variables: Observable<Variable[]>;
-  @Input() public selectedAttributes: any[];
+  @Input() public variables: Observable<string[]>;
   @Input() formArray: FormArray;
   @Output() selectAttributeEvent = new EventEmitter<string>();
   @Output() deleteAttributeEvent = new EventEmitter<string>();
 
-  constructor(
-    private variableService: VariablesService,
-  ) {
+  public varList : Variable[] = [];
+
+  constructor() {
     //TODO: Don't allow duplicate attributes
     //TODO: Make a search box to help navigate large attribute lists
   }
 
   ngOnInit(): void {
-    this.variables = this.variableService.getVariables();
-  }
-
-  addAttribute(): void {
-    this.selectedAttributes.push({
-      "att": "",
-      "weight": 0.0
-    });
-  }
-
-  deleteAttribute(i: number): void {
-    this.selectedAttributes.splice(i, 1);
+    this.variables.subscribe(async (vars : string[]) => {
+      for await (const iterator of vars) {
+        //console.log(iterator);
+        if(DisplayNames.hasOwnProperty(iterator)) {
+          this.varList.push({name: DisplayNames[iterator], db_name: iterator});
+        }
+      }
+    })
   }
 
   trackByAtt(index: number, att: any): number {
