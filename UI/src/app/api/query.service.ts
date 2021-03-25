@@ -3,6 +3,7 @@ import { Observable, of } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
+import { Attribute } from './models/attribute.model';
 
 @Injectable({
   providedIn: 'root',
@@ -19,8 +20,8 @@ export class QueryService {
     );
   }
 
-  getAttributes(): Observable<any> {
-    return this.http.get<any>(`${this.backendUrl}/attributes`).pipe(
+  getAttributes(): Observable<Attribute[]> {
+    return this.http.get<String[]>(`${this.backendUrl}/attributes`).pipe(
       tap((_) => console.log('sending query to backend')),
       catchError(this.handleError<any>('getTestQuery', null))
     );

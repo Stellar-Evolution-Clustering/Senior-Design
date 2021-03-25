@@ -4,7 +4,7 @@ import {ENTER} from '@angular/cdk/keycodes';
 import { MatChipSelectionChange } from '@angular/material/chips';
 import { QueryService } from '../../api/query.service'
 import { Observable } from 'rxjs';
-import { Variable } from '../../api/models/variable.model';
+import { Attribute } from '../../api/models/attribute.model';
 
 @Component({
   selector: 'app-stepper',

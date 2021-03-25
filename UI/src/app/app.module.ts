@@ -43,7 +43,7 @@ PlotlyModule.plotlyjs = Plotly;
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
-    QueryModule,
+    ApiModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
