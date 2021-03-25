@@ -91,7 +91,10 @@ export class GraphComponent implements OnInit {
   }
 
   getBackendDataTest(): void {
-    this.queryService.getTestQuery().subscribe(response => {
+
+    var hardcodedJSON: string = `{"n_clusters": 3,"n_samples": null,"eps": null,"standardizer": "minmax","cluster_type": "kmeans","attributes": {"mass_1": 0.33,"lumin_1": 0.33,"porb": 0.34}}`;
+
+    this.queryService.postQuery(hardcodedJSON).subscribe(response => {
       console.log(response);
 
       this.clusteredData = new ClusteredData(response);
