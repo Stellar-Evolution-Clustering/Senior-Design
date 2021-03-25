@@ -128,7 +128,7 @@ export class GraphComponent implements OnInit {
       this.clusteredData.graphType = data['graphType'];
       this.clusteredData.setSelectedAttributes(data['attrs']);
 
-      if( this.clusteredData.graphType == GraphType.Graph_2D ){
+      if( this.clusteredData.graphType == GraphType.Graph_2D || this.clusteredData.graphType == GraphType.Graph_1D){
         this.graph2D["data"] = this.clusteredData.getGraphData();
       } else if ( this.clusteredData.graphType == GraphType.Graph_3D ) {
         this.graph3D["data"] = this.clusteredData.getGraphData();
@@ -147,13 +147,13 @@ export class GraphComponent implements OnInit {
   selectedClustersChanged(event){
     for( let i = 0; i < this.clusteredData.numClusters; i++ ){
       if( !this.selectedClusters[i] ){
-        if( this.clusteredData.graphType == GraphType.Graph_2D ){
+        if( this.clusteredData.graphType == GraphType.Graph_2D || this.clusteredData.graphType == GraphType.Graph_1D){
           this.graph2D["data"][i].visible = false;
         } else if ( this.clusteredData.graphType == GraphType.Graph_3D ){
           this.graph3D["data"][i].visible = false;
         }
       } else {
-        if( this.clusteredData.graphType == GraphType.Graph_2D ){
+        if( this.clusteredData.graphType == GraphType.Graph_2D || this.clusteredData.graphType == GraphType.Graph_1D){
           this.graph2D["data"][i].visible = true;
         } else if ( this.clusteredData.graphType == GraphType.Graph_3D ){
           this.graph3D["data"][i].visible = true;
