@@ -63,5 +63,5 @@ def binarystars_cluster(request):
         body = JSONParser().parse(request)
         clust = cluster.get_stars(n_clusters=body[ClusterRequestBody.N_CLUSTERS.value], n_samples=body[ClusterRequestBody.N_SAMPLES.value], 
                                     eps=body[ClusterRequestBody.EPS.value], attributes=body[ClusterRequestBody.ATTRIBUTES.value],
-                                    standarizer=body[ClusterRequestBody.STANDARDIZER.value], cluster_type=body[ClusterRequestBody.CLUSTER_TYPE.value])
+                                    standardizer=body[ClusterRequestBody.STANDARDIZER.value], cluster_type=body[ClusterRequestBody.CLUSTER_TYPE.value])
         return JsonResponse(clust, status=status.HTTP_200_OK, safe=False)

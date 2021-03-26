@@ -10,10 +10,10 @@ DATA_PROCESSORS = {
     "standard": preprocessing.StandardScaler()
 }
 
-def preprocess_data(data: np.ndarray, standarizer: str) -> np.ndarray:
-    return DATA_PROCESSORS[standarizer].fit_transform(data)
+def preprocess_data(data: np.ndarray, standardizer: str) -> np.ndarray:
+    return DATA_PROCESSORS[standardizer].fit_transform(data)
 
-def get_stars(n_clusters: int=None, n_samples: int=None, eps: float=None, standarizer: str=None, 
+def get_stars(n_clusters: int=None, n_samples: int=None, eps: float=None, standardizer: str=None, 
                 cluster_type: str=None, attributes: dict=None) -> list:
     
     binarystars = BinaryStars.objects.order_by('file_id', 'id', 'time_id').distinct('file_id', 'id')
@@ -41,9 +41,9 @@ def get_stars(n_clusters: int=None, n_samples: int=None, eps: float=None, standa
     stars_arr = np.array(stars_arr) # convert to numpy array for clustering
     copy_stars = None
     
-    if standarizer:
+    if standardizer:
         copy_stars = np.copy(stars_arr) # make a copy with unscaled values
-        stars_arr = preprocess_data(data=stars_arr, standarizer=standarizer)
+        stars_arr = preprocess_data(data=stars_arr, standardizer=standardizer)
     
     clust = None
     if cluster_type == 'kmeans':
@@ -65,7 +65,7 @@ def get_stars(n_clusters: int=None, n_samples: int=None, eps: float=None, standa
     
     for i in range(len(clust)):
         cluster_att_dict = {}
-        if standarizer:
+        if standardizer:
             for j in range(len(attribute_list)):
                 cluster_att_dict[attribute_list[j]] = copy_stars[i][j]
         
