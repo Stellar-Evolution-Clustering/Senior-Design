@@ -29,6 +29,7 @@ DEBUG = True
 CORS_ORIGIN_ALLOW_ALL = False
 CORS_ORIGIN_WHITELIST = (
     'http://localhost:8081',
+    'http://sdmay21-30.ece.iastate.edu'
 )
 
 ALLOWED_HOSTS = ['sdmay21-30.ece.iastate.edu', 'localhost', '127.0.0.1']
