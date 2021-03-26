@@ -1,5 +1,10 @@
 from rest_framework import serializers
-from binarystars.models import BinaryStars
+from binarystars.models import BinaryStars, Attribute
+
+class AttributeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Attribute
+        fields = ('display_name','database_name' )
 
 class BinaryStarsSerializer(serializers.ModelSerializer):
     class Meta:

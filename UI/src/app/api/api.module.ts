@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { VariablesService } from './variables.service';
+import { QueryService } from './query.service';
 
 @NgModule({
   declarations: [],
   imports: [CommonModule],
-  providers: [VariablesService],
+  providers: [QueryService],
 })
 export class ApiModule {}

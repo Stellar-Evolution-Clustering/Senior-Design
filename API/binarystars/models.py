@@ -2,6 +2,14 @@ from django.db import models
 
 # Create your models here.
 
+class Attribute(models.Model):
+    database_name = models.TextField(primary_key=True)
+    display_name = models.TextField()
+    enabled = models.BooleanField(default=True)
+    class Meta:
+        managed = False
+        db_table = 'attributes'
+
 class BinaryStars(models.Model):
     file_id = models.IntegerField(blank=True, null=True)
     id = models.IntegerField(blank=True, null=True)

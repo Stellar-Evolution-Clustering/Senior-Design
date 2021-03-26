@@ -6,12 +6,13 @@ from django.http.response import JsonResponse
 from rest_framework.parsers import JSONParser 
 from rest_framework import status
 
-from binarystars.models import BinaryStars
-from binarystars.serializers import BinaryStarsSerializer
+from binarystars.models import BinaryStars, Attribute
+from binarystars.serializers import BinaryStarsSerializer, AttributeSerializer
 from rest_framework.decorators import api_view
 
 import binarystars.cluster.cluster as cluster
 import enum
+import json
 
 class ClusterRequestBody(enum.Enum):
     N_CLUSTERS = 'n_clusters'
@@ -48,9 +49,10 @@ def binarystars_detail(request, pk):
 
 @api_view(['GET'])
 def binarystars_attributes(request):
-    att = [f.name for f in BinaryStars._meta.get_fields()]
+    att = Attribute.objects.all().exclude(enabled=False)
+    att_serializer = AttributeSerializer(list(att), many=True)
     if request.method == 'GET':
-        return JsonResponse(att, safe=False)
+        return JsonResponse(att_serializer.data, safe=False)
 
 @api_view(['GET', 'POST'])
 def binarystars_cluster(request):
@@ -61,5 +63,5 @@ def binarystars_cluster(request):
         body = JSONParser().parse(request)
         clust = cluster.get_stars(n_clusters=body[ClusterRequestBody.N_CLUSTERS.value], n_samples=body[ClusterRequestBody.N_SAMPLES.value], 
                                     eps=body[ClusterRequestBody.EPS.value], attributes=body[ClusterRequestBody.ATTRIBUTES.value],
-                                    standarizer=body[ClusterRequestBody.STANDARDIZER.value], cluster_type=body[ClusterRequestBody.CLUSTER_TYPE.value])
+                                    standardizer=body[ClusterRequestBody.STANDARDIZER.value], cluster_type=body[ClusterRequestBody.CLUSTER_TYPE.value])
         return JsonResponse(clust, status=status.HTTP_200_OK, safe=False)
