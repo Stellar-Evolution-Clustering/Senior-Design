@@ -3,7 +3,7 @@ FROM node:lts-alpine as builder
 COPY . /app
 WORKDIR /app
 RUN npm install
-RUN npm run build --prod
+RUN npm run build --prod --configuration production
 
 FROM nginx:alpine
 RUN rm -rf /usr/share/nginx/html/*
