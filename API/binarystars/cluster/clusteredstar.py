@@ -3,7 +3,7 @@ class ClusteredStar(object):
     Will be returned to the frontend for graphing purposes
 
     """
-    def __init__(self, key, idx, cluster_attributes, binarystar) -> None:
+    def __init__(self, key, idx, cluster_attributes) -> None: #, binarystar) -> None:
         """Constructor for ClustedStar object. Creates a new ClusteredStar object with given args
 
         Args:
@@ -16,7 +16,7 @@ class ClusteredStar(object):
         self.key = key
         self.cluster_idx = idx
         self.cluster_attributes = cluster_attributes
-        self.binarystar = binarystar
+        # self.binarystar = binarystar
         
     def to_json(self):
         return self.__dict__
