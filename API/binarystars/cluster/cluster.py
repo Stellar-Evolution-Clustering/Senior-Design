@@ -64,9 +64,8 @@ def get_stars(n_clusters: int=None, n_samples: int=None, eps: float=None, standa
     
     for i in range(len(clust)):
         cluster_att_dict = {}
-        if standardizer:
-            for j in range(len(attribute_list)):
-                cluster_att_dict[attribute_list[j]] = stars_arr[i][j]
+        for j in range(len(attribute_list)):
+            cluster_att_dict[attribute_list[j]] = stars_arr[i][j]
         
         clustered_star = cstar.ClusteredStar(key=ids[i], idx=int(clust[i]), cluster_attributes=cluster_att_dict) #, binarystar=bss_att_list[i])
         cluster_dict_list.append(clustered_star.to_json())
