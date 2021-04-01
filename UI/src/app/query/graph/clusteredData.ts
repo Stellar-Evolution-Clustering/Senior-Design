@@ -92,7 +92,7 @@ export class ClusteredData {
       for( let j = 0; j < this.jsonData.length; j++ ){
         var clusterNum = this.jsonData[j]["cluster_idx"];
         // x - time
-        data[clusterNum].x.push(this.jsonData[j]["key"][1]);
+        data[clusterNum].x.push(this.jsonData[j]["key"][2]);
         // data[0].x.push(j);
         // y - attribute
         data[clusterNum].y.push(this.jsonData[j]["cluster_attributes"][this.selectedAttributes[0]]);
