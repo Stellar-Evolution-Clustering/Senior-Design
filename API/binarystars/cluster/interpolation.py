@@ -1,6 +1,7 @@
 import numpy as np
 from binarystars.models import BinaryStars, Attribute
 from django.db.models import Count
+import matplotlib.pyplot as plt
 
 
 def interpolate(xp, fp, num_wanted):
@@ -35,8 +36,8 @@ def interpolate_all():
     num_wanted = row_counts[0]['rowcount']
 
     result = []
-
     for star in row_counts:
+        print("Beginning Star: " + str(star))
         fp = []
         xp = [i for i in range(1, star['rowcount'] + 1)]
         interpolated = []
@@ -44,44 +45,23 @@ def interpolate_all():
         starid = star['id']
         starfile = star['file_id']
         starlist = bss.filter(id=starid, file_id=starfile).order_by('id')
-        all_att_strings = [str(att) for att in starlist[0].__dict__]
+        all_att_strings = [str(att) for att in starlist[0].__dict__ if att != "_state"]
 
         for att in all_att_strings:
             current_att = []
             for s in starlist:
-                current_att.append(getattr(s, str(att)))
+                current_att.append(float(getattr(s, str(att))))
             fp.append(current_att)
         
         for f in fp:
             interpolated.append(interpolate(xp, f, num_wanted))
-
+            
         transposed_interpolated = np.array(interpolated).transpose()
-
         for t in transposed_interpolated:
             new_star = BinaryStars()
             for count, s in enumerate(all_att_strings):
                 setattr(new_star, s, t[count])
             result.append(new_star)
-    
-    test = result[0]
-    print(str(test))
-
-
-if __name__ == '__main__':
-
-    bss = BinaryStars.objects
-    bss = BinaryStars.objects.values('id').annotate(rowcount=Count('id'))
-
-    print(str(bss))
-
-    xp = [1, 2, 3]
-    fp = [0.5, 1, 2]
-    num_wanted = 21
-    
-    # result = interpolate(xp, fp, num_wanted)
-    # print(str(result))
-
-    
 
 
     
