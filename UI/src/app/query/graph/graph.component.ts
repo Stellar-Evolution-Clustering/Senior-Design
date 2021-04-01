@@ -7,6 +7,7 @@ import { GraphType } from './clusteredData';
 
 import * as Plotly from 'plotly.js/dist/plotly.js';
 import { MatDialog } from '@angular/material/dialog';
+import { ClusterType, DataProcessors } from 'src/app/api/models/cluster-request.model';
 
 // PlotlyModule.plotlyjs = Plotly;
 
@@ -91,9 +92,18 @@ export class GraphComponent implements OnInit {
   }
 
   getBackendDataTest(): void {
-    this.queryService.getTestQuery().subscribe(response => {
-      console.log(response);
-
+    this.queryService.postQuery({
+      attributes: {
+        mass_1: 0.33,
+        lumin_1: 0.33,
+        porb: 0.34,
+      },
+      n_clusters: 3,
+      eps: null,
+      n_samples: null,
+      standardizer: DataProcessors.MinMax,
+      cluster_type: ClusterType.KMeans,
+    }).subscribe(response => {
       this.clusteredData = new ClusteredData(response);
       this.selectedClusters = new Array(this.clusteredData.numClusters);
 
@@ -111,6 +121,7 @@ export class GraphComponent implements OnInit {
       for( let i = 0; i < this.selectedClusters.length; i++ ){
         this.selectedClusters[i] = true;
       }
+      console.log(this.clusteredData)
     });
   }
 

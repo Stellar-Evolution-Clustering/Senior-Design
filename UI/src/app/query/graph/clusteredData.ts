@@ -21,7 +21,7 @@ export class ClusteredData {
   constructor(jsonData: any) {
     this.jsonData = jsonData;
 
-    let attrs = Object.keys(jsonData[0]["coords"]);
+    let attrs = Object.keys(jsonData[0]["cluster_attributes"]);
     this.attributes = new Array(attrs.length);
     for(let i = 0; i < attrs.length; i++) {
       this.attributes[i] = attrs[i];
@@ -64,8 +64,8 @@ export class ClusteredData {
       for( let j = 0; j < this.jsonData.length; j++ ){
         var clusterNum = this.jsonData[j]["cluster_idx"];
 
-        data[clusterNum].x.push(this.jsonData[j]["coords"][this.selectedAttributes[0]]);
-        data[clusterNum].y.push(this.jsonData[j]["coords"][this.selectedAttributes[1]]);
+        data[clusterNum].x.push(this.jsonData[j]["cluster_attributes"][this.selectedAttributes[0]]);
+        data[clusterNum].y.push(this.jsonData[j]["cluster_attributes"][this.selectedAttributes[1]]);
       }
       return data;
     } else if ( this.graphType == GraphType.Graph_3D ){
@@ -77,9 +77,9 @@ export class ClusteredData {
       }
       for( let j = 0; j < this.jsonData.length; j++ ){
         var clusterNum = this.jsonData[j]["cluster_idx"];
-        data[clusterNum].x.push(this.jsonData[j]["coords"][this.selectedAttributes[0]]);
-        data[clusterNum].y.push(this.jsonData[j]["coords"][this.selectedAttributes[1]]);
-        data[clusterNum].z.push(this.jsonData[j]["coords"][this.selectedAttributes[2]]);
+        data[clusterNum].x.push(this.jsonData[j]["cluster_attributes"][this.selectedAttributes[0]]);
+        data[clusterNum].y.push(this.jsonData[j]["cluster_attributes"][this.selectedAttributes[1]]);
+        data[clusterNum].z.push(this.jsonData[j]["cluster_attributes"][this.selectedAttributes[2]]);
       }
       return data;
     } else if ( this.graphType == GraphType.Graph_1D ){

@@ -91,12 +91,12 @@
           <ng-template matStepLabel>Review & Submit</ng-template>
           <p>The query to submit:</p>
           <div>
-            {{ query.value | json }}
+            {{ buildRequestTemplate() | json }}
           </div>
           <div>
             <button mat-button matStepperPrevious type="button">Back</button>
             <button mat-button (click)="stepper.reset()">Reset</button>
-            <a mat-button type="submit" [routerLink]="['/query/graph']"
+            <a mat-button type="submit" (click)="onSubmit()"
               >Submit</a
             >
           </div>

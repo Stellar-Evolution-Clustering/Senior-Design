@@ -5,7 +5,7 @@
   <mat-chip-list #chipList aria-label="Attributes:" [multiple]="true">
     <mat-chip
       *ngFor="let variable of varList"
-      [value]="variable.name"
+      [value]="variable"
       [selectable]="true"
       #chip="matChip"
       (click)="chip.selected ? chip.deselect() : chip.select()"

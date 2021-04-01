@@ -4,6 +4,12 @@ import { catchError, tap } from 'rxjs/operators';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { Attribute } from './models/attribute.model';
+import {
+  ClusterType,
+  DataProcessors,
+  IClusterRequest,
+} from './models/cluster-request.model';
+import { ClusterBinaryStar } from './models/clustered-binary-star.model';
 
 @Injectable({
   providedIn: 'root',
@@ -11,7 +17,8 @@ import { Attribute } from './models/attribute.model';
 export class QueryService {
   private backendUrl = environment.apiUrl;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+  }
 
   getTestQuery(): Observable<any> {
     return this.http.get<any>(`${this.backendUrl}/cluster`).pipe(
@@ -27,7 +34,7 @@ export class QueryService {
     );
   }
 
-  postQuery(body: any): Observable<any> {
+  postQuery(body: IClusterRequest): Observable<ClusterBinaryStar> {
     // Here's the post body. It's a Javascript object which is automatically translated into a JSON object by post()
     // var body = {
     //   "data1": 1,
@@ -46,9 +53,7 @@ export class QueryService {
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
       console.error(error);
-
       console.log(`${operation} failed: ${error.message}`);
-
       return of(result as T);
     };
   }
