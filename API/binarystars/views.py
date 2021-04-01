@@ -9,6 +9,7 @@ from rest_framework import status
 from binarystars.models import BinaryStars, Attribute
 from binarystars.serializers import BinaryStarsSerializer, AttributeSerializer
 from rest_framework.decorators import api_view
+from binarystars.cluster.interpolation import interpolate_all
 
 import binarystars.cluster.cluster as cluster
 import enum
@@ -65,3 +66,10 @@ def binarystars_cluster(request):
                                     eps=body[ClusterRequestBody.EPS.value], attributes=body[ClusterRequestBody.ATTRIBUTES.value],
                                     standardizer=body[ClusterRequestBody.STANDARDIZER.value], cluster_type=body[ClusterRequestBody.CLUSTER_TYPE.value])
         return JsonResponse(clust, status=status.HTTP_200_OK, safe=False)
+
+@api_view(['GET'])
+def interpolate_data(request):
+    #I'm thinking in the future this can be a POST request that takes a DB name
+    if request.method == 'GET':
+        interpolate_all()
+        return JsonResponse("", status=status.HTTP_200_OK, safe=False)
