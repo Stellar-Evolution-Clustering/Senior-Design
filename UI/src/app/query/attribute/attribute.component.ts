@@ -12,21 +12,15 @@ import { Attribute } from '../../api/models/attribute.model';
 export class AttributeComponent implements OnInit {
   @Input() public variables: Observable<Attribute[]>;
   @Input() formArray: FormArray;
-  @Output() selectAttributeEvent = new EventEmitter<string>();
-  @Output() deleteAttributeEvent = new EventEmitter<string>();
-
-  public varList: Attribute[] = [];
+  @Output() selectAttributeEvent = new EventEmitter<Attribute>();
+  @Output() deleteAttributeEvent = new EventEmitter<Attribute>();
 
   constructor() {
     //TODO: Don't allow duplicate attributes
     //TODO: Make a search box to help navigate large attribute lists
   }
 
-  ngOnInit(): void {
-    this.variables.subscribe(async (vars: Attribute[]) => {
-      this.varList = vars
-    });
-  }
+  ngOnInit(): void {}
 
   trackByAtt(index: number, att: any): number {
     return index;

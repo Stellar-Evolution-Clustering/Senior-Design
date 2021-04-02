@@ -46,7 +46,7 @@ export class StepperComponent implements OnInit {
     }
 
     return <IClusterRequest>{
-      cluster_type: ClusterType.DBScan,
+      cluster_type: this.query.get('algorithm').value as ClusterType,
       n_clusters: null,
       eps: null,
       n_samples: null,
@@ -56,19 +56,19 @@ export class StepperComponent implements OnInit {
   }
 
   onSubmit() {
-    const queryParams = toQueryPararms(this.buildRequestTemplate())
-    console.log(queryParams)
+    const queryParams = toQueryPararms(this.buildRequestTemplate());
+    console.log(queryParams);
     this.router.navigate(['/query/graph'], { queryParams: queryParams });
   }
 
-  addAttribute(name: string): void {
-    this.attr.push(this.fb.control(name)); //push the attribute to the attribute array
+  addAttribute(attribute: Attribute): void {
+    this.attr.push(this.fb.control(attribute)); //push the attribute to the attribute array
     this.weigh.push(this.fb.control('', Validators.required));
   }
 
-  deleteAttribute(name: string): void {
+  deleteAttribute(attribute: Attribute): void {
     for (let index = 0; index < this.attr.length; index++) {
-      if (this.attr.controls[index].value == name) {
+      if (this.attr.controls[index].value == attribute) {
         this.attr.removeAt(index);
         this.weigh.removeAt(index);
         break;
@@ -85,7 +85,7 @@ export class StepperComponent implements OnInit {
     return this.query.get('attributes') as FormArray;
   }
 
-  get weigh() {
+  get weigh(): FormArray {
     return this.query.get('weights') as FormArray;
   }
 }

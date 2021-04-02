@@ -3,7 +3,7 @@
     <mat-card-title>New Query</mat-card-title>
     <mat-card-content>
       <mat-vertical-stepper linear #stepper>
-        <mat-step [stepControl]="query.get('dbSelect')">
+        <!-- <mat-step [stepControl]="query.get('dbSelect')">
           <ng-template matStepLabel>Choose DB</ng-template>
           <app-db [fc]="query.get('dbSelect')"></app-db>
           <div>
@@ -16,7 +16,7 @@
               Next
             </button>
           </div>
-        </mat-step>
+        </mat-step> -->
         <mat-step [stepControl]="query.get('attributes')">
           <ng-template matStepLabel>Add Attributes</ng-template>
           <app-attribute
@@ -55,7 +55,7 @@
             </button>
           </div>
         </mat-step>
-        <mat-step [stepControl]="query.get('distFunct')">
+        <!-- <mat-step [stepControl]="query.get('distFunct')">
           <ng-template matStepLabel>Choose Distance Functions</ng-template>
           <app-distance-func [fc]="query.get('distFunct')"></app-distance-func>
           <div>
@@ -69,7 +69,7 @@
               Next
             </button>
           </div>
-        </mat-step>
+        </mat-step> -->
         <mat-step [stepControl]="query.get('algorithm')">
           <ng-template matStepLabel>Choose Clustering Method</ng-template>
           <app-cluster-method
@@ -96,9 +96,7 @@
           <div>
             <button mat-button matStepperPrevious type="button">Back</button>
             <button mat-button (click)="stepper.reset()">Reset</button>
-            <a mat-button type="submit" (click)="onSubmit()"
-              >Submit</a
-            >
+            <a mat-button type="submit" (click)="onSubmit()">Submit</a>
           </div>
         </mat-step>
       </mat-vertical-stepper>

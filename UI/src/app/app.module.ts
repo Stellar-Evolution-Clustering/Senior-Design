@@ -20,7 +20,6 @@ import { AboutComponent } from './about/about.component';
 import { HomeComponent } from './home/home.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ConfigureGraphComponent } from './query/graph/configure-graph/configure-graph.component';
-import { QueryModule } from './query/query.module';
 
 PlotlyModule.plotlyjs = Plotly;
 

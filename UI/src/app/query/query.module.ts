@@ -13,6 +13,7 @@ import * as Plotly from 'plotly.js/dist/plotly.js';
 import { StepperComponent } from './stepper/stepper.component';
 import { QueryRoutingModule } from './query-routing.module';
 import { HttpClientModule } from '@angular/common/http';
+import { ApiModule } from '../api/api.module';
 
 PlotlyModule.plotlyjs = Plotly;
 

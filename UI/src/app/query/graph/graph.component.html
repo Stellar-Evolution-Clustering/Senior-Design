@@ -1,18 +1,37 @@
 <!-- <plotly-plot [data]="graph.data" [layout]="graph.layout"></plotly-plot> -->
 
-<button mat-raised-button color="primary" (click)="configureGraph()">Configure Graph</button>
+<button mat-raised-button color="primary" (click)="configureGraph()">
+  Configure Graph
+</button>
 
 <div class="graphBlock">
-  <div class="graph">
-    <plotly-plot [data]="graph2D.data" [layout]="graph2D.layout" [hidden]="clusteredData.graphType != GraphTypeEnum.Graph_2D"></plotly-plot>
-    <plotly-plot [data]="graph3D.data" [layout]="graph3D.layout" [hidden]="clusteredData.graphType != GraphTypeEnum.Graph_3D"></plotly-plot>
+  <div class="graph" *ngIf="clusteredData">
+    <plotly-plot
+      [data]="graph2D.data"
+      [layout]="graph2D.layout"
+      [hidden]="clusteredData.graphType != GraphTypeEnum.Graph_2D"
+    ></plotly-plot>
+    <plotly-plot
+      [data]="graph3D.data"
+      [layout]="graph3D.layout"
+      [hidden]="clusteredData.graphType != GraphTypeEnum.Graph_3D"
+    ></plotly-plot>
   </div>
 </div>
 
 <div class="clusterSelect">
-  <div *ngFor="let cluster of selectedClusters; let i = index; trackBy:trackBySelectedCluster">
-    <mat-checkbox matInput [(ngModel)]="selectedClusters[i]"
-                           (ngModelChange)="selectedClustersChanged($event)"
-                  >Cluster {{i + 1}}</mat-checkbox>
+  <div
+    *ngFor="
+      let cluster of selectedClusters;
+      let i = index;
+      trackBy: trackBySelectedCluster
+    "
+  >
+    <mat-checkbox
+      matInput
+      [(ngModel)]="selectedClusters[i]"
+      (ngModelChange)="selectedClustersChanged($event)"
+      >Cluster {{ i + 1 }}</mat-checkbox
+    >
   </div>
 </div>

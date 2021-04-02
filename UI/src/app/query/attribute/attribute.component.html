@@ -4,7 +4,7 @@
 <mat-form-field class="attribute-list">
   <mat-chip-list #chipList aria-label="Attributes:" [multiple]="true">
     <mat-chip
-      *ngFor="let variable of varList"
+      *ngFor="let variable of variables | async"
       [value]="variable"
       [selectable]="true"
       #chip="matChip"
