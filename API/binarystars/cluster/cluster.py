@@ -20,29 +20,16 @@ def get_stars(n_clusters: int=None, n_samples: int=None, eps: float=None, standa
         standardizer = 'standard'
     
     binarystars = BinaryStars.objects.order_by('file_id', 'id', 'time_id').distinct('file_id', 'id')
-    stars_arr = []
-    ids = []
     attribute_list = list(attributes.keys())
-    # bss_att_list = []
     
     # TODO: implement weights soon
     # weights = [attributes[key] for key in attributes]
     
-    for bss in binarystars:
-        clust_att_list = []
-        for attribute in attribute_list:
-            clust_att_list.append(getattr(bss, attribute))
-        ids.append((bss.file_id, bss.id, bss.time_id))
-        stars_arr.append(clust_att_list)
-        
-        # all_att_dict = {}
-        # for att in bss.__dict__:
-        #     if att != '_state':
-        #         all_att_dict[att] = getattr(bss, att)
-        # bss_att_list.append(all_att_dict)
-    
+    stars_arr = [[getattr(bss, attribute) for attribute in attribute_list] for bss in binarystars]
+    ids = [(bss.file_id, bss.id, bss.time_id) for bss in binarystars]
+
     stars_arr = np.array(stars_arr) # convert to numpy array for clustering
-    processed_stars = preprocess_data(data=stars_arr, standardizer=standardizer) # standardize data to make sure all features are treated equally
+    processed_stars = preprocess_data(data=stars_arr, standardizer=standardizer) # standardize data to make sure all attributes are treated equally
     
     clust = None
     if cluster_type == 'kmeans':
@@ -59,15 +46,14 @@ def get_stars(n_clusters: int=None, n_samples: int=None, eps: float=None, standa
             clust = dbscan_cluster(data=processed_stars, eps=eps)
         else:
             clust = dbscan_cluster(data=processed_stars)
-    
     cluster_dict_list = []
     
-    for i in range(len(clust)):
+    for i, item in enumerate(clust):
         cluster_att_dict = {}
-        for j in range(len(attribute_list)):
-            cluster_att_dict[attribute_list[j]] = stars_arr[i][j]
+        for j, att in enumerate(attribute_list):
+            cluster_att_dict[att] = stars_arr[i][j]
         
-        clustered_star = cstar.ClusteredStar(key=ids[i], idx=int(clust[i]), cluster_attributes=cluster_att_dict) #, binarystar=bss_att_list[i])
+        clustered_star = cstar.ClusteredStar(key=ids[i], idx=int(item), cluster_attributes=cluster_att_dict)
         cluster_dict_list.append(clustered_star.to_json())
     
     return cluster_dict_list
@@ -75,5 +61,5 @@ def get_stars(n_clusters: int=None, n_samples: int=None, eps: float=None, standa
 def kmeans_cluster(data: np.ndarray, k: int=3, weights=None) -> np.ndarray:
     return KMeans(n_clusters=k).fit_predict(X=data, sample_weight=weights)
 
-def dbscan_cluster(data: np.ndarray, eps: float=0.5, min_samples: int=5, weights=None) -> np.ndarray:
+def dbscan_cluster(data: np.ndarray, eps: float=0.05, min_samples: int=5, weights=None) -> np.ndarray:
     return DBSCAN(eps=eps, min_samples=min_samples).fit_predict(X=data, sample_weight=weights)

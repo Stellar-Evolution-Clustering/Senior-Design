@@ -1,11 +1,13 @@
 import numpy as np
-from binarystars.models import BinaryStars, Attribute
+from binarystars.models import InterpolatedBinaryStars, BinaryStars
 from django.db.models import Count
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 
 
 def interpolate(xp, fp, num_wanted):
     xp_prime = []
+    if num_wanted == len(xp): # this star has equal amount of rows as the star with the most amount of rows
+        return fp # don't need to interpolate then
     div = num_wanted / len(xp)
 
     for i in xp:
@@ -30,14 +32,15 @@ def interpolate(xp, fp, num_wanted):
 
 def interpolate_all():
     bss = BinaryStars.objects
-    all_objects = bss.all()
     rows = bss.values('id', 'file_id').annotate(rowcount=Count('id'))
     row_counts = rows.order_by('-rowcount')
     num_wanted = row_counts[0]['rowcount']
 
+    int_cols = ['file_id', 'id', 'kstar_1', 'kstar_2', 'sn_1', 'sn_2', 'bin_state', 'merger_type', 'bin_num']
+    
     result = []
+    total_time_id = 1
     for star in row_counts:
-        print("Beginning Star: " + str(star))
         fp = []
         xp = [i for i in range(1, star['rowcount'] + 1)]
         interpolated = []
@@ -57,15 +60,21 @@ def interpolate_all():
             interpolated.append(interpolate(xp, f, num_wanted))
             
         transposed_interpolated = np.array(interpolated).transpose()
+        internal_time = 0
         for t in transposed_interpolated:
-            new_star = BinaryStars()
+            new_star = InterpolatedBinaryStars()
+            time_id = total_time_id + internal_time
+            
             for count, s in enumerate(all_att_strings):
-                setattr(new_star, s, t[count])
+                if s == 'time_id':
+                    setattr(new_star, s, time_id)
+                elif s in int_cols:
+                    setattr(new_star, s, int(t[count]))
+                else:
+                    setattr(new_star, s, t[count])
             result.append(new_star)
-
-
+            internal_time += 1
+        
+        total_time_id += internal_time
     
-
-
-
-
+    # _ = InterpolatedBinaryStars.objects.bulk_create(result)
