@@ -54,6 +54,7 @@ def get_stars(n_clusters: int=None, n_samples: int=None, eps: float=None, standa
         cluster_att_dict = {}
         for j, att in enumerate(attribute_list):
             cluster_att_dict[att] = stars_arr[i][j]
+
         
         clustered_star = cstar.ClusteredStar(key=ids[i], idx=int(item), cluster_attributes=cluster_att_dict)
         cluster_dict_list.append(clustered_star.to_json())
