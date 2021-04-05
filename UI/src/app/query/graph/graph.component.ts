@@ -108,6 +108,9 @@ export class GraphComponent implements OnInit {
         })
       )
       .subscribe((response: ClusterBinaryStar[]) => {
+        if (response[0] === null) {
+          return;
+        }
         this.clusteredData = new ClusteredData(response);
         this.selectedClusters = new Array(this.clusteredData.numClusters);
 
@@ -132,7 +135,10 @@ export class GraphComponent implements OnInit {
 
   configureGraph(): void {
     let dialogRef = this.dialog.open(ConfigureGraphComponent, {
-      data: { attrs: this.clusteredData.getAllAttr(), graphType:  this.clusteredData.graphType},
+      data: {
+        attrs: this.clusteredData.getAllAttr(),
+        graphType: this.clusteredData.graphType,
+      },
     });
 
     dialogRef.afterClosed().subscribe((data) => {
