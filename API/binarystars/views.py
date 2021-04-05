@@ -62,9 +62,25 @@ def binarystars_cluster(request):
         return JsonResponse(clust, safe=False)
     if request.method == 'POST':
         body = JSONParser().parse(request)
-        clust = cluster.get_stars(n_clusters=body[ClusterRequestBody.N_CLUSTERS.value], n_samples=body[ClusterRequestBody.N_SAMPLES.value], 
-                                    eps=body[ClusterRequestBody.EPS.value], attributes=body[ClusterRequestBody.ATTRIBUTES.value],
-                                    standardizer=body[ClusterRequestBody.STANDARDIZER.value], cluster_type=body[ClusterRequestBody.CLUSTER_TYPE.value])
+        clust = None
+        try:
+            if body[ClusterRequestBody.CLUSTER_TYPE.value] == 'kmeans': 
+                # Using Kmeans, don't need to worry about n_samples or eps
+                clust = cluster.get_stars(n_clusters=body[ClusterRequestBody.N_CLUSTERS.value], 
+                                        attributes=body[ClusterRequestBody.ATTRIBUTES.value],
+                                        standardizer=body[ClusterRequestBody.STANDARDIZER.value], 
+                                        cluster_type=body[ClusterRequestBody.CLUSTER_TYPE.value])
+            elif body[ClusterRequestBody.CLUSTER_TYPE.value] == 'dbscan':
+                # since it is dbscan, ignore n_clusters
+                clust = cluster.get_stars(n_samples=body[ClusterRequestBody.N_SAMPLES.value],
+                                        eps=body[ClusterRequestBody.EPS.value],
+                                        attributes=body[ClusterRequestBody.ATTRIBUTES.value],
+                                        standardizer=body[ClusterRequestBody.STANDARDIZER.value], 
+                                        cluster_type=body[ClusterRequestBody.CLUSTER_TYPE.value])
+            else: # didn't provide cluster method, raise error
+                return JsonResponse({"msg": "clustering method was not provided"}, status=status.HTTP_400_BAD_REQUEST)
+        except: # bad request. show error
+            return JsonResponse(clust, status=status.HTTP_400_BAD_REQUEST, safe=False)
         return JsonResponse(clust, status=status.HTTP_200_OK, safe=False)
 
 @api_view(['GET'])

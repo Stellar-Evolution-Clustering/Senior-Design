@@ -25,8 +25,10 @@ def get_stars(n_clusters: int=None, n_samples: int=None, eps: float=None, standa
     # TODO: implement weights soon
     # weights = [attributes[key] for key in attributes]
     
-    stars_arr = [[getattr(bss, attribute) for attribute in attribute_list] for bss in binarystars]
-    ids = [(bss.file_id, bss.id, bss.time_id) for bss in binarystars]
+    
+    
+    stars_arr = [att_vals for att_vals in binarystars.values_list(*attribute_list)]
+    ids = [id_info for id_info in binarystars.values_list('file_id', 'id', 'time_id')]
 
     stars_arr = np.array(stars_arr) # convert to numpy array for clustering
     processed_stars = preprocess_data(data=stars_arr, standardizer=standardizer) # standardize data to make sure all attributes are treated equally
