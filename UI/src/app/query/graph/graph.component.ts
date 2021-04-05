@@ -108,7 +108,7 @@ export class GraphComponent implements OnInit {
         })
       )
       .subscribe((response: ClusterBinaryStar[]) => {
-        if (response[0] === null) {
+        if (response === null) {
           return;
         }
         this.clusteredData = new ClusteredData(response);
