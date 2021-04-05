@@ -55,11 +55,8 @@ def binarystars_attributes(request):
     if request.method == 'GET':
         return JsonResponse(att_serializer.data, safe=False)
 
-@api_view(['GET', 'POST'])
+@api_view(['POST'])
 def binarystars_cluster(request):
-    if request.method == 'GET':
-        clust = cluster.get_stars()
-        return JsonResponse(clust, safe=False)
     if request.method == 'POST':
         body = JSONParser().parse(request)
         clust = None
