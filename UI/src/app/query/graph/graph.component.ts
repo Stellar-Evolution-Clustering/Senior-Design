@@ -42,7 +42,6 @@ export class GraphComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    console.log(this.queryService);
     this.selectedCluster = 'all';
     this.data3D = null;
     this.graph2D = {
@@ -53,8 +52,8 @@ export class GraphComponent implements OnInit {
       data: this.data3D,
       layout: {
         autosize: true,
-        width: window.innerWidth * (1 / 2), //640,
-        height: window.innerHeight * (3 / 4), //480,
+        width: window.innerWidth * 0.7, //640,
+        height: window.innerHeight * 0.7, //480,
         scene: {
           aspectratio: {
             x: 1,
@@ -128,15 +127,12 @@ export class GraphComponent implements OnInit {
         for (let i = 0; i < this.selectedClusters.length; i++) {
           this.selectedClusters[i] = true;
         }
-        console.log(this.clusteredData);
       });
   }
 
   configureGraph(): void {
     let dialogRef = this.dialog.open(ConfigureGraphComponent, {
-      height: '60%',
-      width: '80%',
-      data: { attrs: this.clusteredData.getAllAttr() },
+      data: { attrs: this.clusteredData.getAllAttr(), graphType:  this.clusteredData.graphType},
     });
 
     dialogRef.afterClosed().subscribe((data) => {

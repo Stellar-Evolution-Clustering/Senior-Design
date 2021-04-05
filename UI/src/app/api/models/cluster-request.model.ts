@@ -31,9 +31,7 @@ export function fromQueryParams(params: any): IClusterRequest {
   return {
     attributes: attr,
     cluster_type: params.cluster_type,
-    eps: null,
     n_clusters: 3,
-    n_samples: null,
     standardizer: DataProcessors.Standard,
   };
 }

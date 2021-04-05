@@ -3,8 +3,8 @@
     <mat-form-field appearance="fill">
       <mat-label>Graph Type</mat-label>
       <mat-select [(ngModel)]="graphType" (ngModelChange)="graphSelect($event)">
-        <mat-option value=1>2D Graph</mat-option>
-        <mat-option value=2>3D Graph</mat-option>
+        <mat-option [value]="1">2D Graph</mat-option>
+        <mat-option [value]="2">3D Graph</mat-option>
       </mat-select>
     </mat-form-field>
   </p>
@@ -13,21 +13,19 @@
     <p></p>
     <p *ngFor="let attribute of data['attrs']; let i = index">
       <input matInput [hidden]="true">
-      <mat-checkbox matInput [(ngModel)]="attrsSelected[i]"
-                    (ngModelChange)="attrChecked($event)"
-                    [disabled]="disabledCheckboxes[i]"
-                    >{{attribute}}</mat-checkbox>
+      <mat-checkbox matInput [(ngModel)]="attrsSelected[i]" (ngModelChange)="attrChecked($event)"
+        [disabled]="disabledCheckboxes[i]">{{attribute}}</mat-checkbox>
     </p>
   </mat-form-field>
+</div>
 
-  <button mat-raised-button color="primary" class="cancelButton" (click)="closeDialog()">
+<mat-dialog-actions>
+  <button mat-button mat-dialog-close color="primary" class="cancelButton" (click)="closeDialog()">
     Cancel
   </button>
 
-  <button mat-raised-button color="primary"
-          class="applyButton"
-          [mat-dialog-close]="getAttrList()"
-          [disabled]="canApply">
+  <button mat-button color="primary" class="applyButton" style="margin: 0 auto;" [mat-dialog-close]="getAttrList()"
+    [disabled]="canApply">
     Apply
   </button>
-</div>
+</mat-dialog-actions>
