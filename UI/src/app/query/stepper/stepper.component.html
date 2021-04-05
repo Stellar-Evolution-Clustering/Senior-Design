@@ -1,4 +1,4 @@
-<form [formGroup]="query" (ngSubmit)="onSubmit()">
+<form [formGroup]="query">
   <mat-card>
     <mat-card-title>New Query</mat-card-title>
     <mat-card-content>
@@ -19,38 +19,21 @@
         </mat-step> -->
         <mat-step [stepControl]="query.get('attributes')">
           <ng-template matStepLabel>Add Attributes</ng-template>
-          <app-attribute
-            [formArray]="query.get('attributes')"
-            [variables]="attributes"
-            (selectAttributeEvent)="addAttribute($event)"
-            (deleteAttributeEvent)="deleteAttribute($event)"
-          ></app-attribute>
+          <app-attribute [formArray]="query.get('attributes')" (selectAttributeEvent)="addAttribute($event)"
+            (deleteAttributeEvent)="deleteAttribute($event)"></app-attribute>
           <div>
             <button mat-button matStepperPrevious type="button">Back</button>
-            <button
-              mat-raised-button
-              color="primary"
-              matStepperNext
-              type="button"
-            >
+            <button mat-raised-button color="primary" matStepperNext type="button">
               Next
             </button>
           </div>
         </mat-step>
         <mat-step [stepControl]="query.get('weights')">
           <ng-template matStepLabel>Define Weight</ng-template>
-          <app-weight
-            [weightArray]="query.get('weights')"
-            [attributeArray]="this.attr.controls"
-          ></app-weight>
+          <app-weight [weightArray]="query.get('weights')" [attributeArray]="this.attr.controls"></app-weight>
           <div>
             <button mat-button matStepperPrevious type="button">Back</button>
-            <button
-              mat-raised-button
-              color="primary"
-              matStepperNext
-              type="button"
-            >
+            <button mat-raised-button color="primary" matStepperNext type="button">
               Next
             </button>
           </div>
@@ -72,17 +55,10 @@
         </mat-step> -->
         <mat-step [stepControl]="query.get('algorithm')">
           <ng-template matStepLabel>Choose Clustering Method</ng-template>
-          <app-cluster-method
-            [fc]="query.get('algorithm')"
-          ></app-cluster-method>
+          <app-cluster-method [fc]="query.get('algorithm')"></app-cluster-method>
           <div>
             <button mat-button matStepperPrevious type="button">Back</button>
-            <button
-              mat-raised-button
-              color="primary"
-              matStepperNext
-              type="button"
-            >
+            <button mat-raised-button color="primary" matStepperNext type="button">
               Next
             </button>
           </div>

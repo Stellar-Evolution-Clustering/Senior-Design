@@ -56,6 +56,7 @@ export class StepperComponent implements OnInit {
   }
 
   onSubmit() {
+    console.log('WHAT');
     const queryParams = toQueryPararms(this.buildRequestTemplate());
     console.log(queryParams);
     this.router.navigate(['/query/graph'], { queryParams: queryParams });
