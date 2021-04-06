@@ -1,17 +1,32 @@
 <p>Select which attributes to include in your query:</p>
 <p>(P) = Primary Star</p>
 <p>(S) = Secondary Star</p>
-<mat-form-field class="attribute-list">
-  <mat-chip-list #chipList aria-label="Attributes:" [multiple]="true">
-    <mat-chip
-      *ngFor="let variable of varList"
-      [value]="variable.name"
-      [selectable]="true"
-      #chip="matChip"
-      (click)="chip.selected ? chip.deselect() : chip.select()"
-      (selectionChange)="selected($event)"
-    >
-      {{ variable.display_name }}
-    </mat-chip>
-  </mat-chip-list>
-</mat-form-field>
+<div style="display: flex;" *ngIf="_filteredAttributes">
+  <div style="flex: 1">
+    <h3>({{(_filteredAttributes | async).length}}) Availible Attributes:</h3>
+    <mat-selection-list [(ngModel)]="selectedAvailibleAttributes">
+      <mat-list-option *ngFor="let attribute of _filteredAttributes | async" [value]="attribute">
+        {{attribute.display_name}}
+      </mat-list-option>
+    </mat-selection-list>
+  </div>
+  <div style="flex: 0.5; margin:auto;">
+    <div class="button-container">
+      <button mat-raised-button color="accent" (click)="add($event)">
+        <mat-icon aria-hidden="false" aria-label="Example home icon">arrow_forward</mat-icon>
+      </button>
+    </div>
+    <div class="button-container">
+      <button mat-raised-button color="accent" (click)="remove($event)">
+        <mat-icon aria-hidden="false" aria-label="Example home icon">arrow_back</mat-icon>
+      </button>
+    </div>
+  </div>
+  <div style="flex: 1">
+    <h3>({{formArray.getRawValue().length}}) Selected Attributes:</h3>
+    <mat-selection-list [(ngModel)]="selectedSelectedAttributes">
+      <mat-list-option *ngFor="let attribute of formArray.getRawValue()" [value]="attribute">{{attribute.display_name}}
+      </mat-list-option>
+    </mat-selection-list>
+  </div>
+</div>

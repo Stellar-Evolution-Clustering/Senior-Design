@@ -8,6 +8,8 @@ import { QueryService } from 'src/app/api/query.service';
 import { MaterialModule } from 'src/app/material/material.module';
 
 import { StepperComponent } from './stepper.component';
+import { RouterModule } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
 
 describe('StepperComponent', () => {
   let component: StepperComponent;
@@ -22,7 +24,8 @@ describe('StepperComponent', () => {
         MaterialModule,
         NoopAnimationsModule,
         HttpClientModule,
-        HttpClientTestingModule
+        HttpClientTestingModule,
+        RouterTestingModule
       ],
       providers: [QueryService]
     }).compileComponents();

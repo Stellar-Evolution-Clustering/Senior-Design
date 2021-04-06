@@ -1,9 +1,9 @@
-<form [formGroup]="query" (ngSubmit)="onSubmit()">
+<form [formGroup]="query">
   <mat-card>
     <mat-card-title>New Query</mat-card-title>
     <mat-card-content>
       <mat-vertical-stepper linear #stepper>
-        <mat-step [stepControl]="query.get('dbSelect')">
+        <!-- <mat-step [stepControl]="query.get('dbSelect')">
           <ng-template matStepLabel>Choose DB</ng-template>
           <app-db [fc]="query.get('dbSelect')"></app-db>
           <div>
@@ -16,46 +16,29 @@
               Next
             </button>
           </div>
-        </mat-step>
+        </mat-step> -->
         <mat-step [stepControl]="query.get('attributes')">
           <ng-template matStepLabel>Add Attributes</ng-template>
-          <app-attribute
-            [formArray]="query.get('attributes')"
-            [variables]="attributes"
-            (selectAttributeEvent)="addAttribute($event)"
-            (deleteAttributeEvent)="deleteAttribute($event)"
-          ></app-attribute>
+          <app-attribute [formArray]="query.get('attributes')" (selectAttributeEvent)="addAttribute($event)"
+            (deleteAttributeEvent)="deleteAttribute($event)"></app-attribute>
           <div>
             <button mat-button matStepperPrevious type="button">Back</button>
-            <button
-              mat-raised-button
-              color="primary"
-              matStepperNext
-              type="button"
-            >
+            <button mat-raised-button color="primary" matStepperNext type="button">
               Next
             </button>
           </div>
         </mat-step>
         <mat-step [stepControl]="query.get('weights')">
           <ng-template matStepLabel>Define Weight</ng-template>
-          <app-weight
-            [weightArray]="query.get('weights')"
-            [attributeArray]="this.attr.controls"
-          ></app-weight>
+          <app-weight [weightArray]="query.get('weights')" [attributeArray]="this.attr.controls"></app-weight>
           <div>
             <button mat-button matStepperPrevious type="button">Back</button>
-            <button
-              mat-raised-button
-              color="primary"
-              matStepperNext
-              type="button"
-            >
+            <button mat-raised-button color="primary" matStepperNext type="button">
               Next
             </button>
           </div>
         </mat-step>
-        <mat-step [stepControl]="query.get('distFunct')">
+        <!-- <mat-step [stepControl]="query.get('distFunct')">
           <ng-template matStepLabel>Choose Distance Functions</ng-template>
           <app-distance-func [fc]="query.get('distFunct')"></app-distance-func>
           <div>
@@ -69,20 +52,13 @@
               Next
             </button>
           </div>
-        </mat-step>
+        </mat-step> -->
         <mat-step [stepControl]="query.get('algorithm')">
           <ng-template matStepLabel>Choose Clustering Method</ng-template>
-          <app-cluster-method
-            [fc]="query.get('algorithm')"
-          ></app-cluster-method>
+          <app-cluster-method [fc]="query.get('algorithm')"></app-cluster-method>
           <div>
             <button mat-button matStepperPrevious type="button">Back</button>
-            <button
-              mat-raised-button
-              color="primary"
-              matStepperNext
-              type="button"
-            >
+            <button mat-raised-button color="primary" matStepperNext type="button">
               Next
             </button>
           </div>
@@ -91,14 +67,12 @@
           <ng-template matStepLabel>Review & Submit</ng-template>
           <p>The query to submit:</p>
           <div>
-            {{ query.value | json }}
+            {{ buildRequestTemplate() | json }}
           </div>
           <div>
             <button mat-button matStepperPrevious type="button">Back</button>
             <button mat-button (click)="stepper.reset()">Reset</button>
-            <a mat-button type="submit" [routerLink]="['/query/graph']"
-              >Submit</a
-            >
+            <a mat-button type="submit" (click)="onSubmit()">Submit</a>
           </div>
         </mat-step>
       </mat-vertical-stepper>
