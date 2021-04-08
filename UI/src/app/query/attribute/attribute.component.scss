@@ -5,3 +5,19 @@
 .deleteAttribute {
   float: right;
 }
+
+.attribute-list {
+  width: 100%;
+}
+
+mat-selection-list {
+  height: 300px;
+  overflow-y: scroll;
+}
+
+.button-container {
+  display: flex;
+  padding: 8px;
+  justify-content: center;
+  align-items: center;
+}

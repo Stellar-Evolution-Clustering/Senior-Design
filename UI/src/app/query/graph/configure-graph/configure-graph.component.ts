@@ -10,7 +10,7 @@ import { GraphType } from '../clusteredData';
 })
 export class ConfigureGraphComponent implements OnInit {
 
-  public graphType: number = GraphType.Graph_3D;
+  public graphType: GraphType = GraphType.Graph_3D;
   public canApply: boolean = true;
   public GraphTypeEnum = GraphType;
 
@@ -21,7 +21,7 @@ export class ConfigureGraphComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<ConfigureGraphComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: string[]
+    @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     this.attributes = new Array(data['attrs'].length);
     this.attrsSelected = new Array(data['attrs'].length);
@@ -29,6 +29,13 @@ export class ConfigureGraphComponent implements OnInit {
     for(let i = 0; i < data['attrs'].length; i++){
       this.attributes[i] = data['attrs'][i];
       this.disabledCheckboxes[i] = true;
+    }
+    this.graphType = data.graphType
+    this.numAttrSelected = 0;
+
+    for(let i = 0; i < this.attributes.length; i++){
+      this.disabledCheckboxes[i] = false;
+      this.attrsSelected[i] = false;
     }
   }
 

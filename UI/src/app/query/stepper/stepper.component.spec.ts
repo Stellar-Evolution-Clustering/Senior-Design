@@ -1,9 +1,15 @@
+//import { HttpClient } from '@angular/common/http';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import {HttpClientModule} from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { QueryService } from 'src/app/api/query.service';
 import { MaterialModule } from 'src/app/material/material.module';
 
 import { StepperComponent } from './stepper.component';
+import { RouterModule } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
 
 describe('StepperComponent', () => {
   let component: StepperComponent;
@@ -17,7 +23,11 @@ describe('StepperComponent', () => {
         ReactiveFormsModule,
         MaterialModule,
         NoopAnimationsModule,
+        HttpClientModule,
+        HttpClientTestingModule,
+        RouterTestingModule
       ],
+      providers: [QueryService]
     }).compileComponents();
   });
 
