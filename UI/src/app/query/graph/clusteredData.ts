@@ -105,6 +105,7 @@ export class ClusteredData {
       }
       return data;
     } else if (this.graphType == GraphType.Graph_1D) {
+      var colors: string[] = ['red', 'blue', 'green']; //TODO: what is there's more that three clusters
       for( let i = 0; i < this.numClusters; i++ ){
         data.push(
           { x: [], y: [], type: 'scatter', mode: 'lines+markers', marker: {color: colors[i], size: 2}, name: `Cluster ${i + 1}`}

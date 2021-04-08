@@ -41,11 +41,31 @@ export class GraphComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+
+    this.queryService.getInterpolatedData().subscribe((response) => {
+      console.log("interpolated data");
+      console.log(response);
+    });
+
     this.selectedCluster = 'all';
     this.data3D = null;
     this.graph2D = {
       data: null,
-      layout: { width: 640, height: 480, title: '2D Cluster Visualization' },
+      layout: {
+        width: 640,
+        height: 480,
+        title: '2D Cluster Visualization',
+        xaxis: {
+          title: '',
+          type: 'linear',
+          zeroline: false,
+        },
+        yaxis: {
+          title: '',
+          type: 'linear',
+          zeroline: false,
+        },
+      },
     };
     this.graph3D = {
       data: this.data3D,
@@ -107,6 +127,8 @@ export class GraphComponent implements OnInit {
         })
       )
       .subscribe((response: ClusterBinaryStar[]) => {
+        console.log('API response');
+        console.log(response);
         if (response === null) {
           return;
         }
@@ -138,10 +160,25 @@ export class GraphComponent implements OnInit {
       this.clusteredData.graphType = data['graphType'];
       this.clusteredData.setSelectedAttributes(data['attrs']);
 
-      if (this.clusteredData.graphType == GraphType.Graph_2D || this.clusteredData.graphType == GraphType.Graph_1D) {
+      if (this.clusteredData.graphType == GraphType.Graph_2D) {
         this.graph2D['data'] = this.clusteredData.getGraphData();
+
+        //Label axis
+        this.graph2D.layout.xaxis.title = this.clusteredData.selectedAttributes[0];
+        this.graph2D.layout.yaxis.title = this.clusteredData.selectedAttributes[1];
       } else if (this.clusteredData.graphType == GraphType.Graph_3D) {
         this.graph3D['data'] = this.clusteredData.getGraphData();
+
+        //Label axis
+        this.graph3D.layout.scene.xaxis.title = this.clusteredData.selectedAttributes[0];
+        this.graph3D.layout.scene.yaxis.title = this.clusteredData.selectedAttributes[1];
+        this.graph3D.layout.scene.zaxis.title = this.clusteredData.selectedAttributes[2];
+      } else if ( this.clusteredData.graphType == GraphType.Graph_1D ) {
+        this.graph2D['data'] = this.clusteredData.getGraphData();
+
+        //Label axis
+        this.graph2D.layout.xaxis.title = 'time';
+        this.graph2D.layout.yaxis.title = this.clusteredData.selectedAttributes[0];
       }
     });
   }
