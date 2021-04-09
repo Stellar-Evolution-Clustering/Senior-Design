@@ -32,7 +32,6 @@ export class GraphComponent implements OnInit {
 
   private data3D: any;
   public clusteredData: ClusteredData;
-  public selectedClusters: boolean[];
   public GraphTypeEnum = GraphType;
 
   constructor(
@@ -42,11 +41,31 @@ export class GraphComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+
+    this.queryService.getInterpolatedData().subscribe((response) => {
+      console.log("interpolated data");
+      console.log(response);
+    });
+
     this.selectedCluster = 'all';
     this.data3D = null;
     this.graph2D = {
       data: null,
-      layout: { width: 640, height: 480, title: '2D Cluster Visualization' },
+      layout: {
+        width: 640,
+        height: 480,
+        title: '2D Cluster Visualization',
+        xaxis: {
+          title: '',
+          type: 'linear',
+          zeroline: false,
+        },
+        yaxis: {
+          title: '',
+          type: 'linear',
+          zeroline: false,
+        },
+      },
     };
     this.graph3D = {
       data: this.data3D,
@@ -108,11 +127,12 @@ export class GraphComponent implements OnInit {
         })
       )
       .subscribe((response: ClusterBinaryStar[]) => {
+        console.log('API response');
+        console.log(response);
         if (response === null) {
           return;
         }
         this.clusteredData = new ClusteredData(response);
-        this.selectedClusters = new Array(this.clusteredData.numClusters);
 
         //Set to 3D graph by default
         this.clusteredData.graphType = GraphType.Graph_3D;
@@ -125,11 +145,6 @@ export class GraphComponent implements OnInit {
         this.graph3D.layout.scene.xaxis.title = this.clusteredData.selectedAttributes[0];
         this.graph3D.layout.scene.yaxis.title = this.clusteredData.selectedAttributes[1];
         this.graph3D.layout.scene.zaxis.title = this.clusteredData.selectedAttributes[2];
-
-        //Show all clusters by default
-        for (let i = 0; i < this.selectedClusters.length; i++) {
-          this.selectedClusters[i] = true;
-        }
       });
   }
 
@@ -147,35 +162,24 @@ export class GraphComponent implements OnInit {
 
       if (this.clusteredData.graphType == GraphType.Graph_2D) {
         this.graph2D['data'] = this.clusteredData.getGraphData();
+
+        //Label axis
+        this.graph2D.layout.xaxis.title = this.clusteredData.selectedAttributes[0];
+        this.graph2D.layout.yaxis.title = this.clusteredData.selectedAttributes[1];
       } else if (this.clusteredData.graphType == GraphType.Graph_3D) {
         this.graph3D['data'] = this.clusteredData.getGraphData();
-      }
 
-      for (let i = 0; i < this.selectedClusters.length; i++) {
-        this.selectedClusters[i] = true;
+        //Label axis
+        this.graph3D.layout.scene.xaxis.title = this.clusteredData.selectedAttributes[0];
+        this.graph3D.layout.scene.yaxis.title = this.clusteredData.selectedAttributes[1];
+        this.graph3D.layout.scene.zaxis.title = this.clusteredData.selectedAttributes[2];
+      } else if ( this.clusteredData.graphType == GraphType.Graph_1D ) {
+        this.graph2D['data'] = this.clusteredData.getGraphData();
+
+        //Label axis
+        this.graph2D.layout.xaxis.title = 'time';
+        this.graph2D.layout.yaxis.title = this.clusteredData.selectedAttributes[0];
       }
     });
-  }
-
-  trackBySelectedCluster(index: number, cluster: any): number {
-    return index;
-  }
-
-  selectedClustersChanged(event) {
-    for (let i = 0; i < this.clusteredData.numClusters; i++) {
-      if (!this.selectedClusters[i]) {
-        if (this.clusteredData.graphType == GraphType.Graph_2D) {
-          this.graph2D['data'][i].visible = false;
-        } else if (this.clusteredData.graphType == GraphType.Graph_3D) {
-          this.graph3D['data'][i].visible = false;
-        }
-      } else {
-        if (this.clusteredData.graphType == GraphType.Graph_2D) {
-          this.graph2D['data'][i].visible = true;
-        } else if (this.clusteredData.graphType == GraphType.Graph_3D) {
-          this.graph3D['data'][i].visible = true;
-        }
-      }
-    }
   }
 }

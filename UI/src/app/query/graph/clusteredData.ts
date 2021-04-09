@@ -70,7 +70,6 @@ export class ClusteredData {
       }
       for (let j = 0; j < this.jsonData.length; j++) {
         var clusterNum = this.jsonData[j]['cluster_idx'];
-
         data[clusterNum].x.push(
           this.jsonData[j]['cluster_attributes'][this.selectedAttributes[0]]
         );
@@ -106,10 +105,24 @@ export class ClusteredData {
       }
       return data;
     } else if (this.graphType == GraphType.Graph_1D) {
-      //TODO: graph just one attribute over time
-      // x - time
-      // y - attribute
-      //TODO: Possibly a 3d one also, x is time y,z are two attributes
+      var colors: string[] = ['red', 'blue', 'green']; //TODO: what is there's more that three clusters
+      for( let i = 0; i < this.numClusters; i++ ){
+        data.push(
+          { x: [], y: [], type: 'scatter', mode: 'lines+markers', marker: {color: colors[i], size: 2}, name: `Cluster ${i + 1}`}
+        );
+      }
+
+      for( let j = 0; j < this.jsonData.length; j++ ){
+        var clusterNum = this.jsonData[j]["cluster_idx"];
+        // x - time
+        data[clusterNum].x.push(this.jsonData[j]["key"][2]);
+        // data[0].x.push(j);
+        // y - attribute
+        data[clusterNum].y.push(this.jsonData[j]["cluster_attributes"][this.selectedAttributes[0]]);
+        // data[0].y.push(j);
+      }
+
+      return data;
     }
     return null;
   }

@@ -3,7 +3,7 @@
 # from django.shortcuts import render
 
 from django.http.response import JsonResponse
-from rest_framework.parsers import JSONParser 
+from rest_framework.parsers import JSONParser
 from rest_framework import status
 
 from binarystars.models import BinaryStars, Attribute
@@ -29,7 +29,7 @@ class ClusterRequestBody(enum.Enum):
 def binarystars_list(request):
     if request.method == 'GET':
         binarystars = BinaryStars.objects.all()[:10]
-        
+
         binarystar_serializer = BinaryStarsSerializer(binarystars, many=True)
         return JsonResponse(binarystar_serializer.data, safe=False)
     elif request.method == 'POST':
@@ -37,16 +37,16 @@ def binarystars_list(request):
         binarystars_serializer = BinaryStarsSerializer(data=binarystars_data)
         if binarystars_serializer.is_valid():
             binarystars_serializer.save()
-            return JsonResponse(binarystars_serializer.data, status=status.HTTP_201_CREATED) 
+            return JsonResponse(binarystars_serializer.data, status=status.HTTP_201_CREATED)
         return JsonResponse(binarystars_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET', 'PUT', 'DELETE'])
 def binarystars_detail(request, pk):
     binarystar = BinaryStars.objects.get(pk=pk)
 
-    if request.method == 'GET': 
-        binarystar_serializer = BinaryStarsSerializer(binarystar) 
-        return JsonResponse(binarystar_serializer.data, safe=False) 
+    if request.method == 'GET':
+        binarystar_serializer = BinaryStarsSerializer(binarystar)
+        return JsonResponse(binarystar_serializer.data, safe=False)
 
 @api_view(['GET'])
 def binarystars_attributes(request):
@@ -63,9 +63,9 @@ def binarystars_cluster(request):
         if body[ClusterRequestBody.CLUSTER_TYPE.value] == 'kmeans':
             try:
                 # Using Kmeans, don't need to worry about n_samples or eps
-                clust = cluster.get_stars(n_clusters=body[ClusterRequestBody.N_CLUSTERS.value], 
+                clust = cluster.get_stars(n_clusters=body[ClusterRequestBody.N_CLUSTERS.value],
                                         attributes=body[ClusterRequestBody.ATTRIBUTES.value],
-                                        standardizer=body[ClusterRequestBody.STANDARDIZER.value], 
+                                        standardizer=body[ClusterRequestBody.STANDARDIZER.value],
                                         cluster_type=body[ClusterRequestBody.CLUSTER_TYPE.value])
             except: # improper information provided to request...
                 return JsonResponse({"msg": "BAD REQUEST"}, status=status.HTTP_400_BAD_REQUEST)
@@ -75,7 +75,7 @@ def binarystars_cluster(request):
                 clust = cluster.get_stars(n_samples=body[ClusterRequestBody.N_SAMPLES.value],
                                         eps=body[ClusterRequestBody.EPS.value],
                                         attributes=body[ClusterRequestBody.ATTRIBUTES.value],
-                                        standardizer=body[ClusterRequestBody.STANDARDIZER.value], 
+                                        standardizer=body[ClusterRequestBody.STANDARDIZER.value],
                                         cluster_type=body[ClusterRequestBody.CLUSTER_TYPE.value])
             except: # improper information provided to request...
                 return JsonResponse({"msg": "BAD REQUEST"}, status=status.HTTP_400_BAD_REQUEST)

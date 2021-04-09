@@ -65,6 +65,11 @@ export class ConfigureGraphComponent implements OnInit {
           this.disableUncheckedBoxes(true);
           this.canApply = false;
         }
+      } else if ( this.graphType == GraphType.Graph_1D ){
+        if( this.numAttrSelected == 1 ){
+          this.disableUncheckedBoxes(true);
+          this.canApply = false;
+        }
       }
     } else {
       this.numAttrSelected--;
@@ -77,6 +82,11 @@ export class ConfigureGraphComponent implements OnInit {
         }
       } else if ( this.graphType == GraphType.Graph_3D ){
         if( this.numAttrSelected == 2 ){
+          this.disableUncheckedBoxes(false);
+          this.canApply = true;
+        }
+      } else if ( this.graphType == GraphType.Graph_1D ){
+        if( this.numAttrSelected == 0 ){
           this.disableUncheckedBoxes(false);
           this.canApply = true;
         }
