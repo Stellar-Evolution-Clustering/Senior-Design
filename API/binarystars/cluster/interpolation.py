@@ -50,6 +50,7 @@ def interpolate_all():
         starlist = bss.filter(id=starid, file_id=starfile).order_by('id')
         all_att_strings = [str(att) for att in starlist[0].__dict__ if att != "_state"]
 
+        # fp = [[float(getattr(s, att)) for s in starlist] for att in all_att_strings]
         for att in all_att_strings:
             current_att = []
             for s in starlist:
@@ -58,6 +59,7 @@ def interpolate_all():
         
         for f in fp:
             interpolated.append(interpolate(xp, f, num_wanted))
+        # interpolated = [interpolate(xp, f, num_wanted) for f in fp]
             
         transposed_interpolated = np.array(interpolated).transpose()
         internal_time = 0
