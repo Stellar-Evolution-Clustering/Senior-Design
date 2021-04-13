@@ -21,11 +21,7 @@ def get_stars(n_clusters: int=None, n_samples: int=None, eps: float=None, standa
     
     binarystars = BinaryStars.objects.order_by('file_id', 'id', 'time_id').distinct('file_id', 'id')
     attribute_list = list(attributes.keys())
-    
-    # TODO: implement weights soon
-    # weights = [attributes[key] for key in attributes]
-    
-    
+    weights = np.array([attributes[key] for key in attributes])
     
     stars_arr = [att_vals for att_vals in binarystars.values_list(*attribute_list)]
     ids = [id_info for id_info in binarystars.values_list('file_id', 'id', 'time_id')]
@@ -33,6 +29,9 @@ def get_stars(n_clusters: int=None, n_samples: int=None, eps: float=None, standa
     stars_arr = np.array(stars_arr) # convert to numpy array for clustering
     processed_stars = preprocess_data(data=stars_arr, standardizer=standardizer) # standardize data to make sure all attributes are treated equally
     
+    # Multiplies columns of p_stars by each weight. First column needs first weight and nth column needs nth weight.
+    processed_stars *= weights
+
     clust = None
     if cluster_type == 'kmeans':
         if n_clusters:
@@ -61,8 +60,8 @@ def get_stars(n_clusters: int=None, n_samples: int=None, eps: float=None, standa
     
     return cluster_dict_list
 
-def kmeans_cluster(data: np.ndarray, k: int=3, weights=None) -> np.ndarray:
-    return KMeans(n_clusters=k).fit_predict(X=data, sample_weight=weights)
+def kmeans_cluster(data: np.ndarray, k: int=3) -> np.ndarray:
+    return KMeans(n_clusters=k).fit_predict(X=data)
 
-def dbscan_cluster(data: np.ndarray, eps: float=0.05, min_samples: int=5, weights=None) -> np.ndarray:
-    return DBSCAN(eps=eps, min_samples=min_samples).fit_predict(X=data, sample_weight=weights)
+def dbscan_cluster(data: np.ndarray, eps: float=0.05, min_samples: int=5) -> np.ndarray:
+    return DBSCAN(eps=eps, min_samples=min_samples).fit_predict(X=data)
