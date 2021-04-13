@@ -34,12 +34,9 @@ def interpolate_all():
 
     int_cols = ['file_id', 'id', 'kstar_1', 'kstar_2', 'sn_1', 'sn_2', 'bin_state', 'merger_type', 'bin_num']
     
-    # result = []
     total_time_id = 1
     for star in row_counts:
         xp = [i for i in range(1, star['rowcount'] + 1)]
-        # interpolated = []
-        # fp = []
         
         starid = star['id']
         starfile = star['file_id']
@@ -47,16 +44,6 @@ def interpolate_all():
         all_att_strings = [str(att) for att in starlist[0].__dict__ if att != "_state"]
 
         fp = [[float(getattr(s, att)) for s in starlist] for att in all_att_strings]
-        
-        # for att in all_att_strings:
-        #     current_att = []
-        #     for s in starlist:
-        #         current_att.append(float(getattr(s, str(att))))
-        #     fp.append(current_att)
-        
-        # for f in fp:
-        #     interpolated.append(interpolate(xp, f, num_wanted))
-        
         interpolated = [interpolate(xp, f, num_wanted) for f in fp]
         
         transposed_interpolated = np.array(interpolated).transpose()
@@ -77,7 +64,4 @@ def interpolate_all():
             internal_time += 1
         
         total_time_id += internal_time
-        _ = InterpolatedBinaryStars.objects.bulk_create(result)
-        # why not this... should be faster. Writing less data to db at a time...
-    
-    # _ = InterpolatedBinaryStars.objects.bulk_create(result) # instead of this...?
+        _ = InterpolatedBinaryStars.objects.bulk_create(result) # save to db

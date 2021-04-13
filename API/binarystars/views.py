@@ -85,7 +85,8 @@ def binarystars_cluster(request):
 
 @api_view(['GET'])
 def interpolate_data(request):
-    #I'm thinking in the future this can be a POST request that takes a DB name
+    # I'm thinking in the future this can be a POST request that takes a DB name
+    # This will take a very long time
     if request.method == 'GET':
         interpolate_all()
-        return JsonResponse("", status=status.HTTP_200_OK, safe=False)
+        return JsonResponse("stars successfully interpolated", status=status.HTTP_200_OK, safe=False)
