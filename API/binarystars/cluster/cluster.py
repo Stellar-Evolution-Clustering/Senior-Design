@@ -1,4 +1,4 @@
-from binarystars.models import BinaryStars
+from binarystars.models import InterpolatedBinaryStars
 import numpy as np
 from sklearn.cluster import KMeans, DBSCAN
 from sklearn import preprocessing
@@ -19,7 +19,7 @@ def get_stars(n_clusters: int=None, n_samples: int=None, eps: float=None, standa
     if not standardizer:
         standardizer = 'standard'
     
-    binarystars = BinaryStars.objects.order_by('file_id', 'id', 'time_id').distinct('file_id', 'id')
+    binarystars = InterpolatedBinaryStars.objects.order_by('file_id', 'id', 'time_id').distinct('file_id', 'id')
     attribute_list = list(attributes.keys())
     weights = np.array([attributes[key] for key in attributes])
     

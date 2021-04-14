@@ -6,8 +6,8 @@ from django.http.response import JsonResponse
 from rest_framework.parsers import JSONParser
 from rest_framework import status
 
-from binarystars.models import BinaryStars, Attribute
-from binarystars.serializers import BinaryStarsSerializer, AttributeSerializer
+from binarystars.models import BinaryStars, Attribute, InterpolatedBinaryStars
+from binarystars.serializers import BinaryStarsSerializer, AttributeSerializer, InterpolatedBinaryStarsSerializer
 from rest_framework.decorators import api_view
 from binarystars.cluster.interpolation import interpolate_all
 
@@ -42,10 +42,10 @@ def binarystars_list(request):
 
 @api_view(['GET', 'PUT', 'DELETE'])
 def binarystars_detail(request, pk):
-    binarystar = BinaryStars.objects.get(pk=pk)
+    binarystar = InterpolatedBinaryStars.objects.get(pk=pk)
 
     if request.method == 'GET':
-        binarystar_serializer = BinaryStarsSerializer(binarystar)
+        binarystar_serializer = InterpolatedBinaryStarsSerializer(binarystar)
         return JsonResponse(binarystar_serializer.data, safe=False)
 
 @api_view(['GET'])
@@ -83,10 +83,15 @@ def binarystars_cluster(request):
             return JsonResponse({"msg": "clustering method was not provided"}, status=status.HTTP_400_BAD_REQUEST)
         return JsonResponse(clust, status=status.HTTP_200_OK, safe=False)
 
+# add time clustering here? could also add to other endpoint as a body param... will ask the boys
+
 @api_view(['GET'])
 def interpolate_data(request):
     # I'm thinking in the future this can be a POST request that takes a DB name
     # This will take a very long time
     if request.method == 'GET':
-        interpolate_all()
-        return JsonResponse("stars successfully interpolated", status=status.HTTP_200_OK, safe=False)
+        if InterpolatedBinaryStars.objects.get(pk=1):
+            return JsonResponse("stars have already been interpolated for this database", status=status.HTTP_200_OK, safe=False)
+        else:
+            interpolate_all()
+            return JsonResponse("stars successfully interpolated", status=status.HTTP_200_OK, safe=False)
