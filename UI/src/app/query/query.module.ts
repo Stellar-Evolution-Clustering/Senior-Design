@@ -14,6 +14,7 @@ import { StepperComponent } from './stepper/stepper.component';
 import { QueryRoutingModule } from './query-routing.module';
 import { HttpClientModule } from '@angular/common/http';
 import { ApiModule } from '../api/api.module';
+import { QuerySummaryComponent } from './stepper/query-summary/query-summary.component';
 
 PlotlyModule.plotlyjs = Plotly;
 
@@ -26,6 +27,7 @@ PlotlyModule.plotlyjs = Plotly;
     WeightComponent,
     DistanceFuncComponent,
     ClusterMethodComponent,
+    QuerySummaryComponent,
   ],
   imports: [
     CommonModule,

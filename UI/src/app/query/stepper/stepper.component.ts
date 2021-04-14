@@ -10,6 +10,7 @@ import {
   toQueryPararms,
 } from 'src/app/api/models/cluster-request.model';
 import { Router } from '@angular/router';
+import { build$ } from 'protractor/built/element';
 
 @Component({
   selector: 'app-stepper',
@@ -17,7 +18,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./stepper.component.scss'],
 })
 export class StepperComponent implements OnInit {
-  attributes: Observable<Attribute[]>;
+  //attributes: Observable<Attribute[]>;
 
   query = this.fb.group({
     dbSelect: ['', Validators.required],
@@ -27,6 +28,8 @@ export class StepperComponent implements OnInit {
     algorithm: ['', Validators.required],
   });
 
+  querySummary: IClusterRequest = this.buildRequestTemplate();
+
   constructor(
     private fb: FormBuilder,
     private queryService: QueryService,
@@ -34,7 +37,7 @@ export class StepperComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.attributes = this.queryService.getAttributes();
+    //this.attributes = this.queryService.getAttributes();
   }
 
   buildRequestTemplate(): IClusterRequest {
@@ -53,6 +56,20 @@ export class StepperComponent implements OnInit {
       standardizer: DataProcessors.Standard,
       attributes: attributes,
     };
+  }
+
+  buildAttributeDisplayArr(): any[] {
+    //used to pass display names and weights to the query summary
+    var attributes: any[] = [];
+    
+    for (let index = 0; index < this.attr.length; index++) {
+      var cur = {
+            name: this.attr.controls[index].value.display_name, 
+            weight: this.weigh.controls[index].value
+      };
+      attributes.push(cur);
+    }
+    return attributes;
   }
 
   onSubmit() {
@@ -90,3 +107,4 @@ export class StepperComponent implements OnInit {
     return this.query.get('weights') as FormArray;
   }
 }
+//TODO disable next buttons if current step's form is not complete/valid

@@ -1,11 +1,11 @@
-<p>Select which attributes to include in your query:</p>
-<p>(P) = Primary Star</p>
-<p>(S) = Secondary Star</p>
-<div style="display: flex;" *ngIf="_filteredAttributes">
+<h4>Select which attributes to include in your query:</h4>
+<span>(P) = Primary Star</span>
+<span>(S) = Secondary Star</span>
+<div style="display: flex; margin: 10px auto auto;" *ngIf="_filteredAttributes">
   <div style="flex: 1">
-    <h3>({{(_filteredAttributes | async).length}}) Availible Attributes:</h3>
+    <h4>({{(_filteredAttributes | async).length}}) Availible Attributes:</h4>
     <mat-selection-list [(ngModel)]="selectedAvailibleAttributes">
-      <mat-list-option *ngFor="let attribute of _filteredAttributes | async" [value]="attribute">
+      <mat-list-option class="list-item" *ngFor="let attribute of _filteredAttributes | async" [value]="attribute">
         {{attribute.display_name}}
       </mat-list-option>
     </mat-selection-list>
@@ -23,8 +23,8 @@
     </div>
   </div>
   <div style="flex: 1">
-    <h3>({{formArray.getRawValue().length}}) Selected Attributes:</h3>
-    <mat-selection-list [(ngModel)]="selectedSelectedAttributes">
+    <h4>({{formArray.getRawValue().length}}) Selected Attributes:</h4>
+    <mat-selection-list class="list-item" [(ngModel)]="selectedSelectedAttributes">
       <mat-list-option *ngFor="let attribute of formArray.getRawValue()" [value]="attribute">{{attribute.display_name}}
       </mat-list-option>
     </mat-selection-list>

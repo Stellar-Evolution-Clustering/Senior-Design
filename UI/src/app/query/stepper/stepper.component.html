@@ -58,17 +58,14 @@
           <app-cluster-method [fc]="query.get('algorithm')"></app-cluster-method>
           <div>
             <button mat-button matStepperPrevious type="button">Back</button>
-            <button mat-raised-button color="primary" matStepperNext type="button">
+            <button mat-raised-button color="primary" matStepperNext type="button" (click)="this.querySummary = buildRequestTemplate();">
               Next
             </button>
           </div>
         </mat-step>
         <mat-step>
           <ng-template matStepLabel>Review & Submit</ng-template>
-          <p>The query to submit:</p>
-          <div>
-            {{ buildRequestTemplate() | json }}
-          </div>
+          <app-query-summary [request]="this.querySummary" [attributeTable]="buildAttributeDisplayArr()"></app-query-summary>
           <div>
             <button mat-button matStepperPrevious type="button">Back</button>
             <button mat-button (click)="stepper.reset()">Reset</button>

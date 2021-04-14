@@ -1,0 +1,49 @@
+.summaryTable {
+  display: flex;
+  flex-flow: row wrap;
+  width: 100%; /* set the container width*/
+  overflow: visible;
+  align-content: space-between;
+  justify-content: flex-start;
+}
+  
+.param-label {
+  flex: 0 0 40%;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  flex-grow: 1;
+}
+.value{
+  margin-left: auto;
+  text-align: left;
+  flex: 0 0 60%;
+  font-size: 80%;
+}
+
+.method-param-block {
+  flex: 0 0 100%;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: flex-start;
+  font-size: 80%;
+  > span {
+    margin-left: 2.5%;
+    text-align: left;
+    font-size: 80%;
+  }
+  > mat-divider {
+    margin-left: 5%;
+    margin-right: 5%;
+  }
+}
+
+table {
+  column-gap: normal;
+  width: 100%;
+}
+
+.table-card {
+  max-height: 250px;
+  overflow: auto;
+  width: 75%;
+}
