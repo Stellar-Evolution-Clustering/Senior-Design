@@ -24,8 +24,9 @@
   </div>
   <div style="flex: 1">
     <h4>({{formArray.getRawValue().length}}) Selected Attributes:</h4>
-    <mat-selection-list class="list-item" [(ngModel)]="selectedSelectedAttributes">
-      <mat-list-option *ngFor="let attribute of formArray.getRawValue()" [value]="attribute">{{attribute.display_name}}
+    <mat-selection-list [(ngModel)]="selectedSelectedAttributes">
+      <mat-list-option class="list-item" *ngFor="let attribute of formArray.getRawValue()" [value]="attribute">
+        {{attribute.display_name}}
       </mat-list-option>
     </mat-selection-list>
   </div>

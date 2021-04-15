@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormArray, Validators } from '@angular/forms';
+import { FormBuilder, FormArray, Validators, AbstractControl, ValidatorFn } from '@angular/forms';
 import { QueryService } from '../../api/query.service';
 import { Observable } from 'rxjs';
 import { Attribute } from '../../api/models/attribute.model';
@@ -11,6 +11,7 @@ import {
 } from 'src/app/api/models/cluster-request.model';
 import { Router } from '@angular/router';
 import { build$ } from 'protractor/built/element';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-stepper',
@@ -23,12 +24,13 @@ export class StepperComponent implements OnInit {
   query = this.fb.group({
     dbSelect: ['', Validators.required],
     attributes: this.fb.array([], Validators.required),
-    weights: this.fb.array([]), //replace with custom validator to check that weights are valid values? (i.e. no out of bounds values and ensureing that all weights add up to 1.00?)
+    weights: this.fb.array([], [emptyWeights()]), //replace with custom validator to check that weights are valid values? (i.e. no out of bounds values and ensureing that all weights add up to 1.00?)
     distFunct: ['', Validators.required],
     algorithm: ['', Validators.required],
   });
 
   querySummary: IClusterRequest = this.buildRequestTemplate();
+  isWeightStepComplete: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -42,10 +44,10 @@ export class StepperComponent implements OnInit {
 
   buildRequestTemplate(): IClusterRequest {
     var attributes = {};
-    for (let index = 0; index < this.attr.length; index++) {
+    for (let index = 0; index < this.attributes.length; index++) {
       attributes[
-        this.attr.controls[index].value.database_name
-      ] = this.weigh.controls[index].value;
+        this.attributes.controls[index].value.database_name
+      ] = this.weights.controls[index].value;
     }
 
     return <IClusterRequest>{
@@ -62,10 +64,10 @@ export class StepperComponent implements OnInit {
     //used to pass display names and weights to the query summary
     var attributes: any[] = [];
     
-    for (let index = 0; index < this.attr.length; index++) {
+    for (let index = 0; index < this.attributes.length; index++) {
       var cur = {
-            name: this.attr.controls[index].value.display_name, 
-            weight: this.weigh.controls[index].value
+            name: this.attributes.controls[index].value.display_name, 
+            weight: this.weights.controls[index].value
       };
       attributes.push(cur);
     }
@@ -80,15 +82,16 @@ export class StepperComponent implements OnInit {
   }
 
   addAttribute(attribute: Attribute): void {
-    this.attr.push(this.fb.control(attribute)); //push the attribute to the attribute array
-    this.weigh.push(this.fb.control('', Validators.required));
+    this.attributes.push(this.fb.control(attribute)); //push the attribute to the attribute array
+    this.weights.push(this.fb.control(null, [Validators.required, Validators.compose([Validators.min(0), Validators.max(100)])]));
+    //for now, using perecent values (if user enters 12.34, it will be read as 12.34% or 0.1234)
   }
 
   deleteAttribute(attribute: Attribute): void {
-    for (let index = 0; index < this.attr.length; index++) {
-      if (this.attr.controls[index].value == attribute) {
-        this.attr.removeAt(index);
-        this.weigh.removeAt(index);
+    for (let index = 0; index < this.attributes.length; index++) {
+      if (this.attributes.controls[index].value == attribute) {
+        this.attributes.removeAt(index);
+        this.weights.removeAt(index);
         break;
       }
     }
@@ -96,15 +99,44 @@ export class StepperComponent implements OnInit {
 
   print(): void {
     console.info('Here');
-    console.info(this.query.value);
+    console.info(this.weights.errors);
+    console.info(this.weights.valid);
   }
 
-  get attr(): FormArray {
+  get attributes(): FormArray {
     return this.query.get('attributes') as FormArray;
   }
 
-  get weigh(): FormArray {
+  get weights(): FormArray {
     return this.query.get('weights') as FormArray;
   }
 }
-//TODO disable next buttons if current step's form is not complete/valid
+
+export function emptyWeights(): ValidatorFn {
+  return (control: AbstractControl): {[key: string]: any} | null => {
+    let isComplete = true;
+    for (let index = 0; index < control.value.length; index++) {
+      if (!control.value[index]) isComplete = false;
+    }
+    return isComplete ? null : {emptyWeights: {value: control.value}};
+  };
+}
+
+export function validWeightTotal(snackBar: MatSnackBar): ValidatorFn {
+  return (control: AbstractControl): {[key: string]: any} | null => {
+    let total = 0;
+    for (let index = 0; index < control.value.length; index++) {
+      if (!control.value[index]) total += control.value[index];
+    }
+    if (total == 100) {
+      return null;
+    } else {
+      const msg = "All weights values must add up to 100";
+      const action = "Dismiss";
+      snackBar.open(msg, action, {
+        duration: 3000,
+      });
+      return {validWeightTotal: {value: control.value}}
+    }
+  };
+}

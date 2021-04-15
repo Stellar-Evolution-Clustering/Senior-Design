@@ -10,9 +10,11 @@
 </mat-card> -->
 
 <p>Define the weights of your selected attributes:</p>
-<div *ngFor="let att of attributeArray; index as i">
-  <mat-form-field>
-    <mat-label>{{ att.value.display_name }}</mat-label>
-    <input matInput type="number" [formControl]="weightArray.at(i)" />
-  </mat-form-field>
+<div class="weight-list">
+  <div *ngFor="let att of attributeArray; index as i">
+    <mat-form-field>
+      <mat-label>{{ att.value.display_name }}</mat-label>
+      <input matInput type="number" [formControl]="weightArray.at(i)" rquired/>
+    </mat-form-field>
+  </div>
 </div>

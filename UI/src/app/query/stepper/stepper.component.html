@@ -23,17 +23,17 @@
             (deleteAttributeEvent)="deleteAttribute($event)"></app-attribute>
           <div>
             <button mat-button matStepperPrevious type="button">Back</button>
-            <button mat-raised-button color="primary" matStepperNext type="button">
+            <button mat-raised-button color="primary" matStepperNext type="button" [disabled]="query.get('attributes').errors?.required">
               Next
             </button>
           </div>
         </mat-step>
-        <mat-step [stepControl]="query.get('weights')">
+        <mat-step [stepControl]="query.get('weights')" #weightStep>
           <ng-template matStepLabel>Define Weight</ng-template>
-          <app-weight [weightArray]="query.get('weights')" [attributeArray]="this.attr.controls"></app-weight>
+          <app-weight [weightArray]="query.get('weights')" [attributeArray]="this.attributes.controls"></app-weight>
           <div>
             <button mat-button matStepperPrevious type="button">Back</button>
-            <button mat-raised-button color="primary" matStepperNext type="button">
+            <button mat-raised-button color="primary" matStepperNext type="button" [disabled]="query.get('weights').errors?.emptyWeights">
               Next
             </button>
           </div>
@@ -58,7 +58,10 @@
           <app-cluster-method [fc]="query.get('algorithm')"></app-cluster-method>
           <div>
             <button mat-button matStepperPrevious type="button">Back</button>
-            <button mat-raised-button color="primary" matStepperNext type="button" (click)="this.querySummary = buildRequestTemplate();">
+            <button mat-raised-button color="primary"
+                    matStepperNext type="button"
+                    (click)="this.querySummary = buildRequestTemplate();"
+                    [disabled]="query.get('algorithm').errors?.required">
               Next
             </button>
           </div>
