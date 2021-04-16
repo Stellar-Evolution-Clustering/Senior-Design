@@ -12,7 +12,6 @@ export class WeightComponent implements OnInit {
   @Input() weightArray: FormArray;
   @Input() attributeArray: FormControl[];
 
-  @Input() allowEmptyInput: FormControl;
   @Output() allowEmptyInputEvent = new EventEmitter<boolean>();
 
   constructor() { }

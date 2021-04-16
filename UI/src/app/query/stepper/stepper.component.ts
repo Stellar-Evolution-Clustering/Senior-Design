@@ -21,12 +21,12 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 export class StepperComponent implements OnInit {
   //attributes: Observable<Attribute[]>;
   querySummary: IClusterRequest;
-  allowEmptyInput: FormControl = new FormControl(false);
+  allowEmptyInput: boolean = false;//FormControl = new FormControl(false);
 
   public query: FormGroup = this.fb.group({
     dbSelect: ['', Validators.required],
     attributes: this.fb.array([], Validators.required),
-    weights: this.fb.array([], [emptyWeights(), validWeightTotal(this.allowEmptyInput.value), ]), //{ validators: [emptyWeights(), validWeightTotal(this.snack), ], updateOn: 'blur'}
+    weights: this.fb.array([], [emptyWeights(), validWeightTotal(this.allowEmptyInput), ]), //{ validators: [emptyWeights(), validWeightTotal(this.snack), ], updateOn: 'blur'}
     distFunct: ['', Validators.required],
     algorithm: ['', Validators.required],
   });
@@ -100,22 +100,29 @@ export class StepperComponent implements OnInit {
   }
 
   needToShowSnackBar() {
-    if (this.weights.errors?.validWeightTotal) {
-      const msg = "All weights values must add up to 100!!";
-      const action = "Dismiss";
-      this.snack.open(msg, action, {
-        duration: 3000,
-      });
+    const action = "Dismiss";
+    let msg = ""
+    if (this.weights.errors?.distributeWeight) {
+      msg = "Could not assign empty inputs a value!! Current input already equals 100.";
+    } else if (this.weights.errors?.validWeightTotal) {
+      msg = "All weights values must add up to 100!!";
+    } else {
+      return;
     }
+
+    this.snack.open(msg, action, {
+      duration: 3000,
+    });
   }
 
   changeInputMode(event: boolean) {
-    event ? this.weights.clearValidators() : this.weights.setValidators([emptyWeights(), validWeightTotal(this.allowEmptyInput.value), ]);
+    //event ? this.weights.clearValidators() : this.weights.setValidators([emptyWeights(), validWeightTotal(this.allowEmptyInput.value), ]);
+    this.allowEmptyInput = event;
     if (event) {
       this.weights.clearValidators();
-      this.weights.setValidators(validWeightTotal(this.allowEmptyInput.value));
+      this.weights.setValidators(validWeightTotal(this.allowEmptyInput));
     } else {
-      this.weights.setValidators([emptyWeights(), validWeightTotal(this.allowEmptyInput.value), ]);
+      this.weights.setValidators([emptyWeights(), validWeightTotal(this.allowEmptyInput), ]);
     }
     for (let index = 0; index < this.weights.length; index++) {
       let element = this.weights.at(index);
@@ -148,13 +155,20 @@ export class StepperComponent implements OnInit {
   }
 }
 
+export function hasEmpty(array: FormArray): boolean {
+  let result = false;
+    for (let index = 0; index < array.value.length; index++) {
+      if (!array.value[index]) result = true;
+    }
+    return result;
+}
 export function emptyWeights(): ValidatorFn {
   return (control: AbstractControl): {[key: string]: any} | null => {
-    let isComplete = true;
+    /* let isComplete = true;
     for (let index = 0; index < control.value.length; index++) {
       if (!control.value[index]) isComplete = false;
-    }
-    return isComplete ? null : {emptyWeights: {value: control.value}};
+    } */
+    return hasEmpty(control as FormArray) ? {emptyWeights: {value: control.value}} : null;
   };
 }
 
@@ -164,12 +178,22 @@ export function validWeightTotal(allowEmpty: boolean): ValidatorFn {
     for (let index = 0; index < control.value.length; index++) {
       if (control.value[index]) total += control.value[index];
     }
+    let empty = hasEmpty(control as FormArray);
     if (!allowEmpty && total == 100) {
+      //If empty inputs are not allowed then total weight must always equal 100
       return null;
     } else if (allowEmpty && total <= 100) {
+      //If empty inputs are allowed and there are empty inputs present then total weight must be less than 100, to allow for the distrubtion of remaining weight
+      if (empty && total == 100) {
+        //If there are empty inputs but the total is already equal to 100, then input is invalid
+        return {distributeWeight: {value: control.value}};
+      } else if (!empty && total != 100) {
+        //If there aren't empty inputs, then total weight must still equal 100
+        return {validWeightTotal: {value: control.value}};
+      }
       return null;
     } else {
-      return {validWeightTotal: {value: control.value}}
+      return {validWeightTotal: {value: control.value}};
     }
   };
 }
