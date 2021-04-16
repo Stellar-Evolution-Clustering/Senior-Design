@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormArray, Validators, AbstractControl, ValidatorFn } from '@angular/forms';
+import { FormBuilder, FormArray, Validators, AbstractControl, ValidatorFn, FormGroup, FormControl } from '@angular/forms';
 import { QueryService } from '../../api/query.service';
 import { Observable } from 'rxjs';
 import { Attribute } from '../../api/models/attribute.model';
@@ -20,22 +20,24 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class StepperComponent implements OnInit {
   //attributes: Observable<Attribute[]>;
+  querySummary: IClusterRequest;
+  allowEmptyInput: FormControl = new FormControl(false);
 
-  query = this.fb.group({
+  public query: FormGroup = this.fb.group({
     dbSelect: ['', Validators.required],
     attributes: this.fb.array([], Validators.required),
-    weights: this.fb.array([], [emptyWeights()]), //replace with custom validator to check that weights are valid values? (i.e. no out of bounds values and ensureing that all weights add up to 1.00?)
+    weights: this.fb.array([], [emptyWeights(), validWeightTotal(this.allowEmptyInput.value), ]), //{ validators: [emptyWeights(), validWeightTotal(this.snack), ], updateOn: 'blur'}
     distFunct: ['', Validators.required],
     algorithm: ['', Validators.required],
   });
 
-  querySummary: IClusterRequest = this.buildRequestTemplate();
-  isWeightStepComplete: boolean = false;
+  //TODO: Need to distribute remaining weight among empty inputs when allowEmptyInput is true
 
   constructor(
     private fb: FormBuilder,
     private queryService: QueryService,
-    private router: Router
+    private router: Router,
+    private snack: MatSnackBar
   ) {}
 
   ngOnInit() {
@@ -66,7 +68,7 @@ export class StepperComponent implements OnInit {
     
     for (let index = 0; index < this.attributes.length; index++) {
       var cur = {
-            name: this.attributes.controls[index].value.display_name, 
+            name: this.attributes.controls[index].value?.display_name, 
             weight: this.weights.controls[index].value
       };
       attributes.push(cur);
@@ -97,6 +99,37 @@ export class StepperComponent implements OnInit {
     }
   }
 
+  needToShowSnackBar() {
+    if (this.weights.errors?.validWeightTotal) {
+      const msg = "All weights values must add up to 100!!";
+      const action = "Dismiss";
+      this.snack.open(msg, action, {
+        duration: 3000,
+      });
+    }
+  }
+
+  changeInputMode(event: boolean) {
+    event ? this.weights.clearValidators() : this.weights.setValidators([emptyWeights(), validWeightTotal(this.allowEmptyInput.value), ]);
+    if (event) {
+      this.weights.clearValidators();
+      this.weights.setValidators(validWeightTotal(this.allowEmptyInput.value));
+    } else {
+      this.weights.setValidators([emptyWeights(), validWeightTotal(this.allowEmptyInput.value), ]);
+    }
+    for (let index = 0; index < this.weights.length; index++) {
+      let element = this.weights.at(index);
+      if (event) {
+        element.clearValidators();
+        element.setValidators([Validators.min(0), Validators.max(100)]);
+      } else {
+        element.setValidators([Validators.required, Validators.compose([Validators.min(0), Validators.max(100)])]);
+      }
+      element.updateValueAndValidity();
+    }
+    this.weights.updateValueAndValidity();
+  }
+
   print(): void {
     console.info('Here');
     console.info(this.weights.errors);
@@ -104,11 +137,14 @@ export class StepperComponent implements OnInit {
   }
 
   get attributes(): FormArray {
-    return this.query.get('attributes') as FormArray;
+    return this.query?.get('attributes') as FormArray;
   }
 
   get weights(): FormArray {
-    return this.query.get('weights') as FormArray;
+    return this.query?.get('weights') as FormArray;
+  }
+  get isWeightStepComplete(): boolean {
+    return !this.allowEmptyInput && this.query.get('weights').errors?.emptyWeights;
   }
 }
 
@@ -122,20 +158,17 @@ export function emptyWeights(): ValidatorFn {
   };
 }
 
-export function validWeightTotal(snackBar: MatSnackBar): ValidatorFn {
+export function validWeightTotal(allowEmpty: boolean): ValidatorFn {
   return (control: AbstractControl): {[key: string]: any} | null => {
     let total = 0;
     for (let index = 0; index < control.value.length; index++) {
-      if (!control.value[index]) total += control.value[index];
+      if (control.value[index]) total += control.value[index];
     }
-    if (total == 100) {
+    if (!allowEmpty && total == 100) {
+      return null;
+    } else if (allowEmpty && total <= 100) {
       return null;
     } else {
-      const msg = "All weights values must add up to 100";
-      const action = "Dismiss";
-      snackBar.open(msg, action, {
-        duration: 3000,
-      });
       return {validWeightTotal: {value: control.value}}
     }
   };

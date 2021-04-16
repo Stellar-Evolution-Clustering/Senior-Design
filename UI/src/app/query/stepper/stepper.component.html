@@ -30,10 +30,10 @@
         </mat-step>
         <mat-step [stepControl]="query.get('weights')" #weightStep>
           <ng-template matStepLabel>Define Weight</ng-template>
-          <app-weight [weightArray]="query.get('weights')" [attributeArray]="this.attributes.controls"></app-weight>
+          <app-weight [weightArray]="query.get('weights')" [attributeArray]="this.attributes.controls" (allowEmptyInputEvent)="changeInputMode($event)" [allowEmptyInput]="allowEmptyInput"></app-weight>
           <div>
             <button mat-button matStepperPrevious type="button">Back</button>
-            <button mat-raised-button color="primary" matStepperNext type="button" [disabled]="query.get('weights').errors?.emptyWeights">
+            <button mat-raised-button color="primary" matStepperNext type="button" (click)="needToShowSnackBar()" [disabled]="!this.allowEmptyInput.value && query.get('weights').errors?.emptyWeights">
               Next
             </button>
           </div>

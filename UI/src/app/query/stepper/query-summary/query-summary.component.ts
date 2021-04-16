@@ -23,17 +23,17 @@ export class QuerySummaryComponent implements OnInit {
   }
 
   get usingDBScan() : boolean {
-    return this.request.cluster_type == ClusterType.DBScan;
+    return this.request?.cluster_type == ClusterType.DBScan;
   }
 
   getRequestParam(param: string) : any {
     switch (param) {
       case "n_clusters":
-        return this.request.n_clusters == null ? 0 : this.request.n_clusters;
+        return this.request?.n_clusters == null ? 0 : this.request.n_clusters;
       case "n_samples":
-        return this.request.n_samples == null ? 0 : this.request.n_samples;
+        return this.request?.n_samples == null ? 0 : this.request.n_samples;
       case "eps":
-        return this.request.eps == null ? 0 : this.request.eps;
+        return this.request?.eps == null ? 0 : this.request.eps;
       case "standardizer":
         return this.standardizer;
       case "cluster_type":
@@ -44,7 +44,7 @@ export class QuerySummaryComponent implements OnInit {
   }
 
   get clusterMethod(): string {
-    switch (this.request.cluster_type) {
+    switch (this.request?.cluster_type) {
       case ClusterType.DBScan:
         return "DBScan";
       case ClusterType.KMeans:
@@ -55,12 +55,13 @@ export class QuerySummaryComponent implements OnInit {
   }
 
   get standardizer(): string {
-    switch (this.request.standardizer) {
+    switch (this.request?.standardizer) {
       case DataProcessors.MinMax:
         return "MinMax";
       case DataProcessors.ABS:
         return "ABS";
       case DataProcessors.Standard:
+      default:
         return "Standard";
     }
   }
