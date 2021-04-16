@@ -41,12 +41,6 @@ export class GraphComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-
-    this.queryService.getInterpolatedData().subscribe((response) => {
-      console.log("interpolated data");
-      console.log(response);
-    });
-
     this.selectedCluster = 'all';
     this.data3D = null;
     this.graph2D = {

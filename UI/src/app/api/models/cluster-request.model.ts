@@ -5,6 +5,7 @@ export interface IClusterRequest {
   standardizer?: DataProcessors; //Optional for data processing
   cluster_type: ClusterType; //Cluster type is required
   attributes: any; // { 'db_name': weight.00 }
+  time_steps: number; // Specifies the number of time steps to cluster
 }
 
 export function toQueryPararms(request: IClusterRequest): any {
@@ -17,6 +18,7 @@ export function toQueryPararms(request: IClusterRequest): any {
   params['eps'] = request.eps;
   params['n_samples'] = request.n_samples;
   params['standardizer'] = request.standardizer;
+  params['time_steps'] = request.time_steps;
 
   return params;
 }
@@ -33,6 +35,7 @@ export function fromQueryParams(params: any): IClusterRequest {
     cluster_type: params.cluster_type,
     n_clusters: 3,
     standardizer: DataProcessors.Standard,
+    time_steps: +params.time_steps,
   };
 }
 
