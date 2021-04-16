@@ -1,4 +1,4 @@
-from django.db.models import F, Q
+from django.db.models import F
 from binarystars.models import InterpolatedBinaryStars
 import numpy as np
 from sklearn.cluster import KMeans, DBSCAN
@@ -22,12 +22,15 @@ def get_stars(n_clusters: int=None, n_samples: int=None, eps: float=None, standa
     if not standardizer:
         standardizer = 'standard'
     
-    binarystars = InterpolatedBinaryStars.objects.annotate(time_id_mod=(F('time_id') - 1) % MAX_ROWS).filter(time_id_mod__range=(0, time_steps - 1)).order_by('time_id')
+    binarystars = InterpolatedBinaryStars.objects.annotate(time_id_mod=(F('time_id') - 1) % MAX_ROWS).filter(
+                                                            time_id_mod__range=(0, time_steps - 1)).order_by('time_id')
     
     attribute_list = list(attributes.keys())
     weights = np.array([attributes[key] for key in attributes])
     
     clustered_times = {}
+    # cluster multiple times. Each time step will line up between the stars!! Yay!
+    # when 'time_steps' is large, this will be slow!!
     for i in range(time_steps):
         bss = binarystars[i::time_steps]
         clustered_times[i] = cluster_stars(stars=bss, attributes=attribute_list, weights=weights, 
@@ -36,11 +39,10 @@ def get_stars(n_clusters: int=None, n_samples: int=None, eps: float=None, standa
     
     return clustered_times
 
-
+# perform clustering here
 def cluster_stars(stars, attributes, weights, cluster_type, n_clusters, standardizer, n_samples, eps) -> list:
     
     stars_arr = [[getattr(star, att) for att in attributes] for star in stars]
-    # stars_arr = [att_vals for att_vals in stars.values_list(*attributes)]
     ids = [(getattr(star, 'file_id'), getattr(star, 'id'), getattr(star, 'time_id')) for star in stars]
 
     stars_arr = np.array(stars_arr) # convert to numpy array for clustering
@@ -71,7 +73,7 @@ def cluster_stars(stars, attributes, weights, cluster_type, n_clusters, standard
         cluster_att_dict = {}
         for j, att in enumerate(attributes):
             cluster_att_dict[att] = stars_arr[i][j]
-        
+
         clustered_star = cstar.ClusteredStar(key=ids[i], idx=int(item), cluster_attributes=cluster_att_dict)
         cluster_dict_list.append(clustered_star.to_json())
     
