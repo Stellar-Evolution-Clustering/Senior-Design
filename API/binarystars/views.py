@@ -1,7 +1,6 @@
 # Create your views here.
 
 # from django.shortcuts import render
-
 from django.http.response import JsonResponse
 from rest_framework.parsers import JSONParser
 from rest_framework import status
@@ -13,7 +12,6 @@ from binarystars.cluster.interpolation import interpolate_all
 
 import binarystars.cluster.cluster as cluster
 import enum
-import json
 
 class ClusterRequestBody(enum.Enum):
     N_CLUSTERS = 'n_clusters'
@@ -22,8 +20,7 @@ class ClusterRequestBody(enum.Enum):
     STANDARDIZER = 'standardizer'
     CLUSTER_TYPE = 'cluster_type'
     ATTRIBUTES = 'attributes'
-    # Not sure if these should be here... or if they should be defined at all.
-    # If they should be defined, I think we either put them in cluster.py or in a new file entirely
+    TIME_STEPS = 'time_steps'
 
 @api_view(['GET', 'POST', 'DELETE'])
 def binarystars_list(request):
@@ -66,7 +63,8 @@ def binarystars_cluster(request):
                 clust = cluster.get_stars(n_clusters=body[ClusterRequestBody.N_CLUSTERS.value],
                                         attributes=body[ClusterRequestBody.ATTRIBUTES.value],
                                         standardizer=body[ClusterRequestBody.STANDARDIZER.value],
-                                        cluster_type=body[ClusterRequestBody.CLUSTER_TYPE.value])
+                                        cluster_type=body[ClusterRequestBody.CLUSTER_TYPE.value],
+                                        time_steps=body[ClusterRequestBody.TIME_STEPS.value])
             except: # improper information provided to request...
                 return JsonResponse({"msg": "BAD REQUEST"}, status=status.HTTP_400_BAD_REQUEST)
         elif body[ClusterRequestBody.CLUSTER_TYPE.value] == 'dbscan':
@@ -76,14 +74,13 @@ def binarystars_cluster(request):
                                         eps=body[ClusterRequestBody.EPS.value],
                                         attributes=body[ClusterRequestBody.ATTRIBUTES.value],
                                         standardizer=body[ClusterRequestBody.STANDARDIZER.value],
-                                        cluster_type=body[ClusterRequestBody.CLUSTER_TYPE.value])
+                                        cluster_type=body[ClusterRequestBody.CLUSTER_TYPE.value],
+                                        time_steps=body[ClusterRequestBody.TIME_STEPS.value])
             except: # improper information provided to request...
                 return JsonResponse({"msg": "BAD REQUEST"}, status=status.HTTP_400_BAD_REQUEST)
         else: # didn't provide cluster method, raise error
             return JsonResponse({"msg": "clustering method was not provided"}, status=status.HTTP_400_BAD_REQUEST)
         return JsonResponse(clust, status=status.HTTP_200_OK, safe=False)
-
-# add time clustering here? could also add to other endpoint as a body param... will ask the boys
 
 @api_view(['GET'])
 def interpolate_data(request):
