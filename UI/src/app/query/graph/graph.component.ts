@@ -56,12 +56,22 @@ export class GraphComponent implements OnInit {
         height: 480,
         title: '2D Cluster Visualization',
         xaxis: {
-          title: '',
+          title: {
+            text: '',
+            font: {
+              size: 20,
+            }
+          },
           type: 'linear',
           zeroline: false,
         },
         yaxis: {
-          title: '',
+          title: {
+            text: '',
+            font: {
+              size: 20,
+            }
+          },
           type: 'linear',
           zeroline: false,
         },
@@ -97,17 +107,32 @@ export class GraphComponent implements OnInit {
             },
           },
           xaxis: {
-            title: '',
+            title: {
+              text: '',
+              font: {
+                size: 20,
+              }
+            },
             type: 'linear',
             zeroline: false,
           },
           yaxis: {
-            title: '',
+            title: {
+              text: '',
+              font: {
+                size: 20,
+              }
+            },
             type: 'linear',
             zeroline: false,
           },
           zaxis: {
-            title: '',
+            title: {
+              text: '',
+              font: {
+                size: 20,
+              }
+            },
             type: 'linear',
             zeroline: false,
           },
@@ -142,9 +167,9 @@ export class GraphComponent implements OnInit {
         this.graph3D['data'] = this.clusteredData.getGraphData();
 
         //Label axis
-        this.graph3D.layout.scene.xaxis.title = this.clusteredData.selectedAttributes[0];
-        this.graph3D.layout.scene.yaxis.title = this.clusteredData.selectedAttributes[1];
-        this.graph3D.layout.scene.zaxis.title = this.clusteredData.selectedAttributes[2];
+        this.graph3D.layout.scene.xaxis.title.text = this.clusteredData.selectedAttributes[0];
+        this.graph3D.layout.scene.yaxis.title.text = this.clusteredData.selectedAttributes[1];
+        this.graph3D.layout.scene.zaxis.title.text = this.clusteredData.selectedAttributes[2];
       });
   }
 
@@ -164,21 +189,21 @@ export class GraphComponent implements OnInit {
         this.graph2D['data'] = this.clusteredData.getGraphData();
 
         //Label axis
-        this.graph2D.layout.xaxis.title = this.clusteredData.selectedAttributes[0];
-        this.graph2D.layout.yaxis.title = this.clusteredData.selectedAttributes[1];
+        this.graph2D.layout.xaxis.title.text = this.clusteredData.selectedAttributes[0];
+        this.graph2D.layout.yaxis.title.text = this.clusteredData.selectedAttributes[1];
       } else if (this.clusteredData.graphType == GraphType.Graph_3D) {
         this.graph3D['data'] = this.clusteredData.getGraphData();
 
         //Label axis
-        this.graph3D.layout.scene.xaxis.title = this.clusteredData.selectedAttributes[0];
-        this.graph3D.layout.scene.yaxis.title = this.clusteredData.selectedAttributes[1];
-        this.graph3D.layout.scene.zaxis.title = this.clusteredData.selectedAttributes[2];
+        this.graph3D.layout.scene.xaxis.title.text = this.clusteredData.selectedAttributes[0];
+        this.graph3D.layout.scene.yaxis.title.text = this.clusteredData.selectedAttributes[1];
+        this.graph3D.layout.scene.zaxis.title.text = this.clusteredData.selectedAttributes[2];
       } else if ( this.clusteredData.graphType == GraphType.Graph_1D ) {
         this.graph2D['data'] = this.clusteredData.getGraphData();
 
         //Label axis
-        this.graph2D.layout.xaxis.title = 'time';
-        this.graph2D.layout.yaxis.title = this.clusteredData.selectedAttributes[0];
+        this.graph2D.layout.xaxis.title.text = 'time';
+        this.graph2D.layout.yaxis.title.text = this.clusteredData.selectedAttributes[0];
       }
     });
   }
