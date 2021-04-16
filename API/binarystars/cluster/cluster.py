@@ -5,7 +5,7 @@ from sklearn.cluster import KMeans, DBSCAN
 from sklearn import preprocessing
 import binarystars.cluster.clusteredstar as cstar
 
-MAX_ROWS = 1001
+MAX_ROWS = 1001 # might have to change this to be a calculation like what is done in interpolate.py
 
 DATA_PROCESSORS = {
     "minmax": preprocessing.MinMaxScaler(),
@@ -32,7 +32,7 @@ def get_stars(n_clusters: int=None, n_samples: int=None, eps: float=None, standa
     # cluster multiple times. Each time step will line up between the stars!! Yay!
     # when 'time_steps' is large, this will be slow!!
     for i in range(time_steps):
-        bss = binarystars[i::time_steps]
+        bss = binarystars[i::time_steps] # slice QuerySet by time_step value so we get the right stars
         clustered_times[i] = cluster_stars(stars=bss, attributes=attribute_list, weights=weights, 
                                             cluster_type=cluster_type, n_clusters=n_clusters, standardizer=standardizer,
                                             n_samples=n_samples, eps=eps)
@@ -42,6 +42,7 @@ def get_stars(n_clusters: int=None, n_samples: int=None, eps: float=None, standa
 # perform clustering here
 def cluster_stars(stars, attributes, weights, cluster_type, n_clusters, standardizer, n_samples, eps) -> list:
     
+    # can't use values_list any more because these aren't QuerySets, they are lists
     stars_arr = [[getattr(star, att) for att in attributes] for star in stars]
     ids = [(getattr(star, 'file_id'), getattr(star, 'id'), getattr(star, 'time_id')) for star in stars]
 
