@@ -1,17 +1,86 @@
-<p>About page describes our team</p>
-<br/>
-<p>points to our senior design page and such</p>
+<h1>Stellar-Evolution-Clustering | About Clustering and the Developement Team</h1>
 
+<div>
+  <h2>About Clustering Technology</h2>
+  <div>
+    <p>
+      Clustering is a data analysis tool that finds similarities between data points. Clusters are defined so that two points within a cluster are closely related and
+      any two points in different clusters are not related. By applying clustering on large data sets, we can better organize the data, and even inferences based on
+      the supplied patterns. Real world application may be to identify spam emails, specialize advertisements, or in our case analyze stellar evolutions.
+    </p>
+    <img class="image" src="assets/images/cluster_explaination.png" alt="Home Page"/>
+    <p>This application utilizes two clustering algorithms, K-means and DBScan.</p>
+    <h3><strong>K-means</strong></h3>
+    <p>
+      The K-means clustering algorithm works by explicitly picking the number of clusters. Each cluster is represented by a centroid. K-means is an iterative algorithm;
+      with each iteration of the algorithm, the clusters are refined. Centroid positions are arbitrarily determined at the beginning of the algorithm. With each iteration,
+      points are assigned to the nearest cluster centroid. Next, using the mean of all points in a cluster, the centroid's position is recalculated to minimize the distance
+      from every point to the centroid. This is one iteration. After some number of iteration (can be determined by the elbow method), the clusters cannot be refined any more
+      and the algorithm terminates.
+    </p>
+    <p>Pros</p>
+    <p>&ensp;- One of the most efficient clustering algorithms</p>
+    <p>Cons</p>
+    <p>&ensp;- The number of clusters must be predetermined</p>
+    <p>&ensp;- Data with nonuniform density or unusual patterns can distupt clustering</p>
+    <img class="image" src="assets/images/kmeans_example.PNG" alt="Home Page"/>
+    <h3><strong>DBScan</strong></h3>
+    <p>
+      The DBScan clustering algorithm works by explicitly providing a neighbor distance (i.e. eps). The eps is the maximum distance that a point can be another point
+      in a cluster, in order to be considered part of that cluster (i.e. the average density of a cluster). If eps is too small, then no clusters will form; if eps is
+      too large, then there will be one large cluster, so it is important to estimate this value accurately. The algorithm starts by taking a single point and adding
+      points within the eps to its cluster. Once no more points are in eps distance from any point in the cluster a new unclustered point is selected and a new cluster
+      is constructed. This process repeats until all point are assigned to a cluster. If a cluster contains a abnormally low number of points, the those points may be
+      marked as outliers.
+    </p>
+    <p>Pros</p>
+    <p>&ensp;- Can detect outliers</p>
+    <p>&ensp;- Works well with unique data patterns and shapes</p>
+    <p>Cons</p>
+    <p>&ensp;- If the density of clusters is greatly varied, the algorithm performs poorly</p>
+    <img class="image" src="assets/images/dbscan_example.PNG" alt="Home Page"/>
+  </div>
+</div>
 
+<div>
+  <h2>About the Stellar Databases</h2>
+  <div>
+    <p>1. </p>
+  </div>
+  <!--
 
+  List the 2
+  Explain attributes
+  Explain time
 
+  -->
+</div>
 
-<!-- TODO - Explain the technology  -->
-<!--
-<p>Help Page that describes each step in the clustering process</p>
-<br/>
-<p>About the DBs</p>
-<p>What are attributes?</p>
-<p>What are weight function for?</p>
-<p>What are distance functions?</p>
-<p>What are the cluster functions (dbscan and kmeans)</p> -->
+<div>
+  <h2>The Development Team</h2>
+  <div>
+    <p>1. </p>
+  </div>
+
+  <!--
+
+  The following application has been developed by an ISU Senior Design team
+  Link to our website
+
+  -->
+</div>
+
+<div>
+  <h2>References</h2>
+  <div>
+    <p>1. </p>
+  </div>
+
+  <!--
+
+  link to dbs
+  link to clustering method explainations
+  Research Papers?
+
+  -->
+</div>
