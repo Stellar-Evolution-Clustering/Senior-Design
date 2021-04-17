@@ -45,10 +45,31 @@
 <div>
   <h2>About the Stellar Databases</h2>
   <div>
-    <p>1. </p>
+    <p>
+      There are two available databases to be clustered with in this application. The databases contain data for roughly 3,000 stars. This data is organized by attributes.
+      Attributes are single measurements from a star such as the Luminosity, Mass, or Helium concentration. The following is a list of available attributes:
+    </p>
+    <table>
+      <tr>
+        <th>tphys</th> <th>kstar_1   <th>mass0_1</th>   <th>mass_1</th>    <th>lumin_1</th>   <th>rad_1</th>   <th>teff_1</th>    <th>massc_1</th>   <th>radc_1</th>    <th>menv_1</th>    <th>renv_1</th>    <th>epoch_1</th>   <th>ospin_1</th>   <th>deltam_1</th>
+      </tr>
+      <tr>
+        <th>rrol_1</th>  <th>kstar_2</th>   <th>mass0_2</th>   <th>mass_2</th>    <th>lumin_2</th>   <th>rad_2</th>   <th>teff_2</th>    <th>massc_2</th>   <th>radc_2</th>    <th>menv_2</th>    <th>renv_2</th>    <th>epoch_2</th>   <th>ospin_2</th>   <th>deltam_2</th>
+      </tr>
+      <tr>
+        <th>rrol_2</th><th>porb</th> <th>sep</th>      <th>ecc</th>      <th>b_0_1</th>  <th>b_0_2</th>  <th>snkick_1</th> <th>snkick_2</th> <th>vsys_final</th> <th>sntheta_final</th> <th>sn_1</th>     <th>sn_2</th>     <th>bin_state</th> <th>merger_type</th>
+      </tr>
+      <tr>
+        <th>bin_num</th>  <th>time_id</th>
+      </tr>
+    </table>
+    <p>
+      The last attribute is an important one, time_id. The databases have been interpolated so that every star has the same amount of time_ids. Previously this was not true,
+      so comparing two stars with varying time steps was not possible. With the same amount of time steps, stars can be accurately clustered.
+    </p>
   </div>
   <!--
-
+  TODO -> This probably needs to be updated | also add the database names if possible
   List the 2
   Explain attributes
   Explain time
@@ -59,25 +80,25 @@
 <div>
   <h2>The Development Team</h2>
   <div>
-    <p>1. </p>
+    <p>
+      This appliation was designed by an ISU senior design team in the 2020-2021 school year. The group members include Adam Corpstein, Willis Knox, Joel Holm,
+      Ethan Vander Wiel, Becker Mathie, and Philip Payne. The following is a link to our senior design page.
+      <a href="http://sdmay21-30.sd.ece.iastate.edu/">http://sdmay21-30.sd.ece.iastate.edu/</a>
+      We extend our thanks to our professor Dr. Trajcevski, his grad student Xu Teng, and Prabin Giri for their help with this project.
+    </p>
+    <img class="image" src="assets/images/isu.jpg" alt="ISU"/>
   </div>
-
-  <!--
-
-  The following application has been developed by an ISU Senior Design team
-  Link to our website
-
-  -->
 </div>
 
 <div>
   <h2>References</h2>
   <div>
-    <p>1. </p>
+    <p><a href="https://realpython.com/k-means-clustering-python/">https://realpython.com/k-means-clustering-python/</a></p>
+    <p><a href="https://scikit-learn.org/stable/modules/generated/sklearn.cluster.DBSCAN.html">https://scikit-learn.org/stable/modules/generated/sklearn.cluster.DBSCAN.html</a></p>
   </div>
 
   <!--
-
+  TODO -> Add to this maybe ?
   link to dbs
   link to clustering method explainations
   Research Papers?
