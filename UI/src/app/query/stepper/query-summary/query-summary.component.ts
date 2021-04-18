@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
-import { IClusterRequest, ClusterType, DataProcessors, } from 'src/app/api/models/cluster-request.model';
+import { IClusterRequest, ClusterType, DataProcessors, Database } from 'src/app/api/models/cluster-request.model';
 
 @Component({
   selector: 'app-query-summary',
@@ -19,7 +19,7 @@ export class QuerySummaryComponent implements OnInit {
    }
 
   ngOnInit(): void {
-    console.log(this.request);
+    //console.log(this.request);
   }
 
   get usingDBScan() : boolean {
@@ -35,20 +35,22 @@ export class QuerySummaryComponent implements OnInit {
       case "eps":
         return this.request?.eps == null ? 0 : this.request.eps;
       case "standardizer":
-        return this.standardizer;
+        return this.request?.standardizer == null ? "Standard" : this.standardizer;
       case "cluster_type":
-        return this.clusterMethod;
+        return this.request?.cluster_type == null ? "Undefined" : this.clusterMethod;
+      case "database":
+        return this.request?.database == null ? "Undefined" : this.request.database;
       default:
-        break;
+        return "Undefined";
     }
   }
 
   get clusterMethod(): string {
     switch (this.request?.cluster_type) {
       case ClusterType.DBScan:
-        return "DBScan";
+        return ClusterType.d_DBScan;
       case ClusterType.KMeans:
-        return "K-Means";
+        return ClusterType.d_KMeans;
       default:
         return "Undefined"
     }
@@ -57,12 +59,13 @@ export class QuerySummaryComponent implements OnInit {
   get standardizer(): string {
     switch (this.request?.standardizer) {
       case DataProcessors.MinMax:
-        return "MinMax";
+        return DataProcessors.d_MinMax;
       case DataProcessors.ABS:
-        return "ABS";
+        return DataProcessors.d_ABS;
       case DataProcessors.Standard:
+        return DataProcessors.d_Standard;
       default:
-        return "Standard";
+        return "Undefined";
     }
   }
 }

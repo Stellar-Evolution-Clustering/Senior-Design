@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { Attribute } from '../../api/models/attribute.model';
 import {
   ClusterType,
+  Database,
   DataProcessors,
   IClusterRequest,
   toQueryPararms,
@@ -19,19 +20,21 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   styleUrls: ['./stepper.component.scss'],
 })
 export class StepperComponent implements OnInit {
-  //attributes: Observable<Attribute[]>;
-  querySummary: IClusterRequest;
-  allowEmptyInput: boolean = false;//FormControl = new FormControl(false);
+  request: IClusterRequest;
+  allowEmptyInput: boolean = false;
 
   public query: FormGroup = this.fb.group({
-    dbSelect: ['', Validators.required],
+    dbSelect: [null, Validators.required],
     attributes: this.fb.array([], Validators.required),
-    weights: this.fb.array([], [emptyWeights(), validWeightTotal(this.allowEmptyInput), ]), //{ validators: [emptyWeights(), validWeightTotal(this.snack), ], updateOn: 'blur'}
-    distFunct: ['', Validators.required],
-    algorithm: ['', Validators.required],
+    weights: this.fb.array([], [emptyWeights(), validWeightTotal(this.allowEmptyInput), ]),
+    //distFunct: ['', Validators.required],
+    algorithm: [null, Validators.required],
+    n_clusters: [null, Validators.required],
+    n_samples: [null, Validators.required],
+    eps: [null, Validators.required],
+    standardizer: [DataProcessors.Standard],
+    temporal_val: [null, Validators.required],
   });
-
-  //TODO: Need to distribute remaining weight among empty inputs when allowEmptyInput is true
 
   constructor(
     private fb: FormBuilder,
@@ -45,35 +48,68 @@ export class StepperComponent implements OnInit {
   }
 
   buildRequestTemplate(): IClusterRequest {
+    let empty = {};
+    if (this.allowEmptyInput && hasEmpty(this.weights)) {
+      empty = this.distributeWeights(); //distribute the remaining weight if empty input is allowed and there are empty inputs
+    }
     var attributes = {};
     for (let index = 0; index < this.attributes.length; index++) {
-      attributes[
-        this.attributes.controls[index].value.database_name
-      ] = this.weights.controls[index].value;
+      let at = this.attributes.controls[index].value.database_name;
+      if (empty[at]) {
+        this.weights.controls[index].setValue(empty[at]);
+        this.weights.controls[index].updateValueAndValidity();//update the actual form control value
+      } 
+      attributes[at] = this.weights.controls[index].value; 
     }
-
-    return <IClusterRequest>{
+    this.request = <IClusterRequest>{
       cluster_type: this.query.get('algorithm').value as ClusterType,
-      n_clusters: null,
-      eps: null,
-      n_samples: null,
-      standardizer: DataProcessors.Standard,
+      n_clusters: this.query.get('n_clusters').value,
+      eps: this.query.get('eps').value,
+      n_samples: this.query.get('n_samples').value,
+      standardizer: this.query.get('standardizer').value as DataProcessors,
       attributes: attributes,
+      //database: this.query.get('dbSelect').value as Database,
+      //temporal_val: this.query.get('temporal_val').value,
     };
+    return this.request;
   }
 
   buildAttributeDisplayArr(): any[] {
     //used to pass display names and weights to the query summary
+
     var attributes: any[] = [];
-    
+
     for (let index = 0; index < this.attributes.length; index++) {
-      var cur = {
-            name: this.attributes.controls[index].value?.display_name, 
-            weight: this.weights.controls[index].value
-      };
+      let at = this.attributes.controls[index].value.database_name;
+      let cur = {
+        name: this.attributes.controls[index].value?.display_name, 
+        weight: this.request?.attributes[at]
+  };
       attributes.push(cur);
     }
     return attributes;
+  }
+
+  distributeWeights(): any {
+    let total = 0;
+    let empty = {};
+    let count = 0;
+    for (let index = 0; index < this.weights.value.length; index++) {
+      if (this.weights.value[index]) {
+        total += this.weights.value[index];
+      } else {
+        empty[this.attributes.controls[index].value.database_name] = 0;
+        count++;
+      }
+    }
+    if (total < 100) {
+      let remaining = 100 - total;
+      for (const key in empty) {
+        empty[key] = remaining / count;
+        
+      }
+    }
+    return empty;
   }
 
   onSubmit() {
@@ -85,7 +121,12 @@ export class StepperComponent implements OnInit {
 
   addAttribute(attribute: Attribute): void {
     this.attributes.push(this.fb.control(attribute)); //push the attribute to the attribute array
-    this.weights.push(this.fb.control(null, [Validators.required, Validators.compose([Validators.min(0), Validators.max(100)])]));
+    
+    if (this.allowEmptyInput) {
+      this.weights.push(this.fb.control(null, [Validators.min(0), Validators.max(100)]));
+    } else {
+      this.weights.push(this.fb.control(null, [Validators.required, Validators.compose([Validators.min(0), Validators.max(100)])]));
+    }
     //for now, using perecent values (if user enters 12.34, it will be read as 12.34% or 0.1234)
   }
 
@@ -116,7 +157,6 @@ export class StepperComponent implements OnInit {
   }
 
   changeInputMode(event: boolean) {
-    //event ? this.weights.clearValidators() : this.weights.setValidators([emptyWeights(), validWeightTotal(this.allowEmptyInput.value), ]);
     this.allowEmptyInput = event;
     if (event) {
       this.weights.clearValidators();
@@ -138,9 +178,11 @@ export class StepperComponent implements OnInit {
   }
 
   print(): void {
-    console.info('Here');
-    console.info(this.weights.errors);
-    console.info(this.weights.valid);
+    console.info('Query Form Data:');
+    console.info(this.query.value);
+    console.info('Status: ' + this.query.status);
+    console.info('Request Info: ');
+    console.info(this.request);
   }
 
   get attributes(): FormArray {

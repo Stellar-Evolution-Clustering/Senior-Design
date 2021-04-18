@@ -3,7 +3,7 @@
     <mat-card-title>New Query</mat-card-title>
     <mat-card-content>
       <mat-vertical-stepper linear #stepper>
-        <!-- <mat-step [stepControl]="query.get('dbSelect')">
+        <mat-step [stepControl]="query.get('dbSelect')">
           <ng-template matStepLabel>Choose DB</ng-template>
           <app-db [fc]="query.get('dbSelect')"></app-db>
           <div>
@@ -16,7 +16,7 @@
               Next
             </button>
           </div>
-        </mat-step> -->
+        </mat-step>
         <mat-step [stepControl]="query.get('attributes')">
           <ng-template matStepLabel>Add Attributes</ng-template>
           <app-attribute [formArray]="query.get('attributes')" (selectAttributeEvent)="addAttribute($event)"
@@ -60,15 +60,30 @@
             <button mat-button matStepperPrevious type="button">Back</button>
             <button mat-raised-button color="primary"
                     matStepperNext type="button"
-                    (click)="this.querySummary = buildRequestTemplate();"
                     [disabled]="query.get('algorithm').errors?.required">
               Next
             </button>
           </div>
         </mat-step>
         <mat-step>
+          <ng-template matStepLabel>Set Parameters & Data Processor</ng-template>
+          <app-clusterparams></app-clusterparams>
+          <div>
+            <button mat-button matStepperPrevious type="button">Back</button>
+            <button 
+            mat-raised-button 
+            matStepperNext 
+            color="primary" 
+            (click)="this.request = buildRequestTemplate(); print();" 
+            matStepperNext type="button" 
+            [disabled]="false">
+              Next
+            </button>
+          </div>
+        </mat-step>
+        <mat-step>
           <ng-template matStepLabel>Review & Submit</ng-template>
-          <app-query-summary [request]="this.querySummary" [attributeTable]="buildAttributeDisplayArr()"></app-query-summary>
+          <app-query-summary [request]="this.request" [attributeTable]="buildAttributeDisplayArr()"></app-query-summary>
           <div>
             <button mat-button matStepperPrevious type="button">Back</button>
             <button mat-button (click)="stepper.reset()">Reset</button>

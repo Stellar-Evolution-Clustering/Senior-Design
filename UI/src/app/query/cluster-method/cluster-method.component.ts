@@ -9,15 +9,9 @@ import { ClusterType } from 'src/app/api/models/cluster-request.model';
 })
 export class ClusterMethodComponent implements OnInit {
 
-  algorithms : ClusteringMethod[] = [
-    {
-      displayName: "K-Means",
-      type: ClusterType.KMeans
-    },
-    {
-      displayName: "DBScan",
-      type: ClusterType.DBScan
-    }
+  algorithms = [ 
+    { name: ClusterType.d_KMeans, value: ClusterType.KMeans}, 
+    { name: ClusterType.d_DBScan, value: ClusterType.DBScan}
   ];
   
   @Input() fc: FormControl;
@@ -26,9 +20,4 @@ export class ClusterMethodComponent implements OnInit {
 
   ngOnInit(): void {
   }
-}
-
-export interface ClusteringMethod {
-  displayName: string;
-  type: ClusterType;
 }

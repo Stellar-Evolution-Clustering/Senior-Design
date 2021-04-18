@@ -1,6 +1,9 @@
 <h3>The query to submit:</h3>
 
 <div class="summaryTable">
+    <strong class="param-label">Database:</strong>
+    <span class="value">{{getRequestParam("database")}}</span>
+
     <strong class="param-label">Clustering Method:</strong>
     <span class="value">{{getRequestParam("cluster_type")}}</span>
 
@@ -33,5 +36,8 @@
             </table>
         </div>
     </div>
+
+    <strong class="param-label">Temporal Values:</strong>
+    <span class="value">{{getRequestParam("temporal_val")}}</span>
 </div>
 

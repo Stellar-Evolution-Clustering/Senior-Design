@@ -15,6 +15,7 @@ import { QueryRoutingModule } from './query-routing.module';
 import { HttpClientModule } from '@angular/common/http';
 import { ApiModule } from '../api/api.module';
 import { QuerySummaryComponent } from './stepper/query-summary/query-summary.component';
+import { ClusterparamsComponent } from './clusterparams/clusterparams.component';
 
 PlotlyModule.plotlyjs = Plotly;
 
@@ -28,6 +29,7 @@ PlotlyModule.plotlyjs = Plotly;
     DistanceFuncComponent,
     ClusterMethodComponent,
     QuerySummaryComponent,
+    ClusterparamsComponent,
   ],
   imports: [
     CommonModule,

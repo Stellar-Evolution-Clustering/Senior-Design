@@ -27,7 +27,7 @@ export class QueryService {
   getAttributes(): Observable<Attribute[]> {
     return this.http.get<String[]>(`${this.backendUrl}/attributes`).pipe(
       tap((_) => console.log('sending query to backend')),
-      catchError(this.handleError<any>('getTestQuery', null))
+      catchError(this.handleError<any>('getAttributes', null))
     );
   }
 
@@ -45,7 +45,7 @@ export class QueryService {
       .post<ClusterBinaryStar>(`${this.backendUrl}/cluster`, body)
       .pipe(
         tap((_) => console.log('posting query to backend')),
-        catchError(this.handleError<any>('getTestQuery', null))
+        catchError(this.handleError<any>('postQuery', null))
       );
   }
 
