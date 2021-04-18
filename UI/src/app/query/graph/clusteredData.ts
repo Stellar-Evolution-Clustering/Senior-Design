@@ -55,8 +55,18 @@ export class ClusteredData {
    */
   getGraphData(): any {
     var data = [];
+
+    //generate colors
+    var colors: string[] = new Array(this.numClusters);
+    for(let i = 0; i < this.numClusters; i++) {
+      //0 - 200 to get darker colors
+      var r = Math.floor(Math.random() * 200);
+      var g = Math.floor(Math.random() * 200);
+      var b = Math.floor(Math.random() * 200);
+      colors[i] = 'rgb(' + String(r) +  ', ' + String(g) + ', ' + String(b) + ')';
+    }
+
     if (this.graphType == GraphType.Graph_2D) {
-      var colors: string[] = ['red', 'blue', 'green']; //TODO: what is there's more that three clusters, it breaks
       for (let i = 0; i < this.numClusters; i++) {
         data.push({
           x: [],
@@ -79,7 +89,6 @@ export class ClusteredData {
       }
       return data;
     } else if (this.graphType == GraphType.Graph_3D) {
-      var colors: string[] = ['red', 'blue', 'green']; //TODO: what is there's more that three clusters
       for (let i = 0; i < 3; i++) {
         data.push({
           x: [],
@@ -105,7 +114,6 @@ export class ClusteredData {
       }
       return data;
     } else if (this.graphType == GraphType.Graph_1D) {
-      var colors: string[] = ['red', 'blue', 'green']; //TODO: what is there's more that three clusters
       for( let i = 0; i < this.numClusters; i++ ){
         data.push(
           { x: [], y: [], type: 'scatter', mode: 'lines+markers', marker: {color: colors[i], size: 2}, name: `Cluster ${i + 1}`}
