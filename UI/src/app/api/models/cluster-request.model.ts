@@ -5,6 +5,8 @@ export interface IClusterRequest {
   standardizer?: DataProcessors; //Optional for data processing
   cluster_type: ClusterType; //Cluster type is required
   attributes: any; // { 'db_name': weight.00 }
+  database?: Database;//Should make this and temporal_val non-null once it's working on backend
+  temporal_val?: any;
 }
 
 export function toQueryPararms(request: IClusterRequest): any {
@@ -17,7 +19,9 @@ export function toQueryPararms(request: IClusterRequest): any {
   params['eps'] = request.eps;
   params['n_samples'] = request.n_samples;
   params['standardizer'] = request.standardizer;
-
+  /*params['database'] = request.database;
+  params['temporal_val'] = null;*/
+  //Leaving these commented out until it's implemented on the backend
   return params;
 }
 
@@ -33,16 +37,29 @@ export function fromQueryParams(params: any): IClusterRequest {
     cluster_type: params.cluster_type,
     n_clusters: 3,
     standardizer: DataProcessors.Standard,
+    //database: Database.COSMIC,
+    //temporal_val: null,
   };
 }
 
 export enum ClusterType {
   DBScan = 'dbscan',
   KMeans = 'kmeans',
+  d_DBScan = 'DBScan',
+  d_KMeans = 'K-Means',
 }
 
 export enum DataProcessors {
   MinMax = 'minmax',
   ABS = 'abs',
   Standard = 'standard',
+  d_MinMax = 'MinMax',
+  d_ABS = 'ABS',
+  d_Standard = 'Standard',
+}
+
+export enum Database {
+  COSMIC = 'COSMIC',
+  DB2 = 'Database #2',
+  DB3 = 'Database #3'
 }

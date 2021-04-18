@@ -1,0 +1,43 @@
+<h3>The query to submit:</h3>
+
+<div class="summaryTable">
+    <strong class="param-label">Database:</strong>
+    <span class="value">{{getRequestParam("database")}}</span>
+
+    <strong class="param-label">Clustering Method:</strong>
+    <span class="value">{{getRequestParam("cluster_type")}}</span>
+
+    <div class="method-param-block" *ngIf="!usingDBScan">
+        <strong>Number of Clusters:</strong>
+        <span>{{getRequestParam("n_clusters")}}</span>
+    </div>
+
+    <div class="method-param-block" *ngIf="usingDBScan">
+        <strong>Number of Samples:</strong>
+        <span>{{getRequestParam("n_samples")}}</span>
+        <mat-divider vertical></mat-divider>
+        <strong>EPS:</strong>
+        <span>{{getRequestParam("eps")}}</span>
+    </div>
+
+    <strong class="param-label">Standardizer:</strong>
+    <span class="value">{{getRequestParam("standardizer")}}</span>
+
+    <strong class="param-label">Selected Attributes:</strong>
+    <div class="value">
+        <div class="table-card mat-elevation-z4">
+            <table mat-table [dataSource]="attributeTable">
+                <mat-text-column name="name" headerText="Attribute Name"></mat-text-column>
+                <mat-text-column name="weight" headerText="Weight"></mat-text-column>
+        
+                <tr mat-header-row *matHeaderRowDef="columnsToDisplay; sticky: true"></tr>
+                <tr mat-row *matRowDef="let row; columns: columnsToDisplay;"></tr>
+        
+            </table>
+        </div>
+    </div>
+
+    <strong class="param-label">Temporal Values:</strong>
+    <span class="value">{{getRequestParam("temporal_val")}}</span>
+</div>
+

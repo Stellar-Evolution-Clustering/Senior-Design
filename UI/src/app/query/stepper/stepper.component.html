@@ -3,7 +3,7 @@
     <mat-card-title>New Query</mat-card-title>
     <mat-card-content>
       <mat-vertical-stepper linear #stepper>
-        <!-- <mat-step [stepControl]="query.get('dbSelect')">
+        <mat-step [stepControl]="query.get('dbSelect')">
           <ng-template matStepLabel>Choose DB</ng-template>
           <app-db [fc]="query.get('dbSelect')"></app-db>
           <div>
@@ -16,24 +16,24 @@
               Next
             </button>
           </div>
-        </mat-step> -->
+        </mat-step>
         <mat-step [stepControl]="query.get('attributes')">
           <ng-template matStepLabel>Add Attributes</ng-template>
           <app-attribute [formArray]="query.get('attributes')" (selectAttributeEvent)="addAttribute($event)"
             (deleteAttributeEvent)="deleteAttribute($event)"></app-attribute>
           <div>
             <button mat-button matStepperPrevious type="button">Back</button>
-            <button mat-raised-button color="primary" matStepperNext type="button">
+            <button mat-raised-button color="primary" matStepperNext type="button" [disabled]="query.get('attributes').errors?.required">
               Next
             </button>
           </div>
         </mat-step>
-        <mat-step [stepControl]="query.get('weights')">
+        <mat-step [stepControl]="query.get('weights')" #weightStep>
           <ng-template matStepLabel>Define Weight</ng-template>
-          <app-weight [weightArray]="query.get('weights')" [attributeArray]="this.attr.controls"></app-weight>
+          <app-weight [weightArray]="query.get('weights')" [attributeArray]="this.attributes.controls" (allowEmptyInputEvent)="changeInputMode($event)" ></app-weight><!-- [allowEmptyInput]="allowEmptyInput" -->
           <div>
             <button mat-button matStepperPrevious type="button">Back</button>
-            <button mat-raised-button color="primary" matStepperNext type="button">
+            <button mat-raised-button color="primary" matStepperNext type="button" (click)="needToShowSnackBar()" [disabled]="!this.allowEmptyInput && query.get('weights').errors?.emptyWeights">
               Next
             </button>
           </div>
@@ -58,17 +58,32 @@
           <app-cluster-method [fc]="query.get('algorithm')"></app-cluster-method>
           <div>
             <button mat-button matStepperPrevious type="button">Back</button>
-            <button mat-raised-button color="primary" matStepperNext type="button">
+            <button mat-raised-button color="primary"
+                    matStepperNext type="button"
+                    [disabled]="query.get('algorithm').errors?.required">
+              Next
+            </button>
+          </div>
+        </mat-step>
+        <mat-step>
+          <ng-template matStepLabel>Set Parameters & Data Processor</ng-template>
+          <app-clusterparams></app-clusterparams>
+          <div>
+            <button mat-button matStepperPrevious type="button">Back</button>
+            <button 
+            mat-raised-button 
+            matStepperNext 
+            color="primary" 
+            (click)="this.request = buildRequestTemplate(); print();" 
+            matStepperNext type="button" 
+            [disabled]="false">
               Next
             </button>
           </div>
         </mat-step>
         <mat-step>
           <ng-template matStepLabel>Review & Submit</ng-template>
-          <p>The query to submit:</p>
-          <div>
-            {{ buildRequestTemplate() | json }}
-          </div>
+          <app-query-summary [request]="this.request" [attributeTable]="buildAttributeDisplayArr()"></app-query-summary>
           <div>
             <button mat-button matStepperPrevious type="button">Back</button>
             <button mat-button (click)="stepper.reset()">Reset</button>
