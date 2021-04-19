@@ -35,14 +35,14 @@ export function fromQueryParams(params: any): IClusterRequest {
   } */
   //console.log(params);
   return {
-    attributes: params.attributes,
-    cluster_type: params.cluster_type,
-    eps: params.eps,
-    n_samples: params.n_samples,
-    n_clusters: params.n_clusters,
-    standardizer: params.standardizer,
-    database: params.database,
-    temporal_val: params.temporal_val,
+    attributes: params?.attributes,
+    cluster_type: params?.cluster_type,
+    eps: params?.eps,
+    n_samples: params?.n_samples,
+    n_clusters: params?.n_clusters,
+    standardizer: params?.standardizer,
+    database: params?.database,
+    temporal_val: params?.temporal_val,
   };
 }
 
