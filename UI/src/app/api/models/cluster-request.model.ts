@@ -11,34 +11,38 @@ export interface IClusterRequest {
 
 export function toQueryPararms(request: IClusterRequest): any {
   var params = {};
-  for (let attributeKey of Object.keys(request.attributes)) {
-    params[attributeKey] = request.attributes[attributeKey];
-  }
+
   params['cluster_type'] = request.cluster_type;
   params['n_clusters'] = request.n_clusters;
   params['eps'] = request.eps;
   params['n_samples'] = request.n_samples;
   params['standardizer'] = request.standardizer;
-  /*params['database'] = request.database;
-  params['temporal_val'] = null;*/
-  //Leaving these commented out until it's implemented on the backend
+  params['attributes'] = request.attributes;
+  params['database'] = request.database;
+  params['temporal_val'] = null;
+  /*console.log("HEY!!!");
+  console.log(attr);
+  console.log(params);*/
   return params;
 }
 
 export function fromQueryParams(params: any): IClusterRequest {
-  const attr = {};
+  /* const attr = {};
   for (let key of Object.keys(params)) {
     if (!isNaN(params[key])) {
       attr[key] = params[key];
     }
-  }
+  } */
+  //console.log(params);
   return {
-    attributes: attr,
+    attributes: params.attributes,
     cluster_type: params.cluster_type,
-    n_clusters: 3,
-    standardizer: DataProcessors.Standard,
-    //database: Database.COSMIC,
-    //temporal_val: null,
+    eps: params.eps,
+    n_samples: params.n_samples,
+    n_clusters: params.n_clusters,
+    standardizer: params.standardizer,
+    database: params.database,
+    temporal_val: params.temporal_val,
   };
 }
 

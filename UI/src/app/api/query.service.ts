@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { Attribute } from './models/attribute.model';
@@ -15,7 +15,14 @@ import { ClusterBinaryStar } from './models/clustered-binary-star.model';
 export class QueryService {
   private backendUrl = environment.apiUrl;
 
+  private paramSource = new BehaviorSubject(null);
+  currentParams = this.paramSource.asObservable();
+
   constructor(private http: HttpClient) {}
+
+  setRequestParams(params: any) {
+    this.paramSource.next(params);
+  }
 
   getTestQuery(): Observable<any> {
     return this.http.get<any>(`${this.backendUrl}/cluster`).pipe(

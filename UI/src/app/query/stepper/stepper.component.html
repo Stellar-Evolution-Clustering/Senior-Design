@@ -67,7 +67,14 @@
         </mat-step>
         <mat-step>
           <ng-template matStepLabel>Set Parameters & Data Processor</ng-template>
-          <app-clusterparams></app-clusterparams>
+          <app-clusterparams 
+            [clusterControl]="query.get('n_clusters')" 
+            [sampleControl]="query.get('n_samples')"
+            [epsControl]="query.get('eps')" 
+            [standardizerControl]="query.get('standardizer')"
+            [clusterType]="query.get('algorithm').value">
+          
+          </app-clusterparams>
           <div>
             <button mat-button matStepperPrevious type="button">Back</button>
             <button 

@@ -29,9 +29,9 @@ export class StepperComponent implements OnInit {
     weights: this.fb.array([], [emptyWeights(), validWeightTotal(this.allowEmptyInput), ]),
     //distFunct: ['', Validators.required],
     algorithm: [null, Validators.required],
-    n_clusters: [null, Validators.required],
-    n_samples: [null, Validators.required],
-    eps: [null, Validators.required],
+    n_clusters: [null, [Validators.required, Validators.min(0)]],
+    n_samples: [null, [Validators.required, Validators.min(0)]],
+    eps: [null, [Validators.required, Validators.min(0)]],
     standardizer: [DataProcessors.Standard],
     temporal_val: [null, Validators.required],
   });
@@ -44,7 +44,7 @@ export class StepperComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    //this.attributes = this.queryService.getAttributes();
+    this.queryService.currentParams.subscribe( params => {});
   }
 
   buildRequestTemplate(): IClusterRequest {
@@ -59,7 +59,7 @@ export class StepperComponent implements OnInit {
         this.weights.controls[index].setValue(empty[at]);
         this.weights.controls[index].updateValueAndValidity();//update the actual form control value
       } 
-      attributes[at] = this.weights.controls[index].value; 
+      attributes[at] = this.weights.controls[index].value / 100; 
     }
     this.request = <IClusterRequest>{
       cluster_type: this.query.get('algorithm').value as ClusterType,
@@ -68,8 +68,8 @@ export class StepperComponent implements OnInit {
       n_samples: this.query.get('n_samples').value,
       standardizer: this.query.get('standardizer').value as DataProcessors,
       attributes: attributes,
-      //database: this.query.get('dbSelect').value as Database,
-      //temporal_val: this.query.get('temporal_val').value,
+      database: this.query.get('dbSelect').value as Database,
+      temporal_val: this.query.get('temporal_val').value,
     };
     return this.request;
   }
@@ -116,7 +116,8 @@ export class StepperComponent implements OnInit {
     console.log('WHAT');
     const queryParams = toQueryPararms(this.buildRequestTemplate());
     console.log(queryParams);
-    this.router.navigate(['/query/graph'], { queryParams: queryParams });
+    this.queryService.setRequestParams(queryParams);
+    this.router.navigate(['/query/graph']/* , { queryParams: queryParams } */);
   }
 
   addAttribute(attribute: Attribute): void {
@@ -178,9 +179,9 @@ export class StepperComponent implements OnInit {
   }
 
   print(): void {
-    console.info('Query Form Data:');
+    /* console.info('Query Form Data:');
     console.info(this.query.value);
-    console.info('Status: ' + this.query.status);
+    console.info('Status: ' + this.query.status); */
     console.info('Request Info: ');
     console.info(this.request);
   }

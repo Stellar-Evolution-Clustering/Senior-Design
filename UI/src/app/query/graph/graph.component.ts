@@ -41,7 +41,7 @@ export class GraphComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-
+    this.queryService.currentParams.subscribe( params => { console.log(params); });
     this.queryService.getInterpolatedData().subscribe((response) => {
       console.log("interpolated data");
       console.log(response);
@@ -119,7 +119,9 @@ export class GraphComponent implements OnInit {
   }
 
   getBackendDataTest(): void {
-    this.route.queryParams
+    //console.log();
+    //console.log(this.route.snapshot.queryParams);
+    this.queryService.currentParams
       .pipe(
         map(fromQueryParams),
         concatMap((body: IClusterRequest) => {

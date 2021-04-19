@@ -1,1 +1,33 @@
-<p>clusterparams works!</p>
+<h3>Set Additional Clustering Parameters:</h3>
+<div [ngSwitch]="clusterType">
+    <div *ngSwitchCase="'dbscan'">
+        <mat-form-field>
+            <mat-label>Number of Samples</mat-label>
+            <input matInput type="number" [formControl]="sampleControl"/>
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>EPS</mat-label>
+            <input matInput type="number" [formControl]="epsControl"/>
+        </mat-form-field>
+    </div>
+    
+    <div *ngSwitchCase="'kmeans'">
+        <mat-form-field>
+            <mat-label>Number of Clusters</mat-label>
+            <input matInput type="number" [formControl]="clusterControl"/>
+        </mat-form-field>
+    </div>
+</div>
+
+
+<mat-divider></mat-divider>
+
+<h3>Select a Data Processor:</h3>
+<mat-form-field appearance="standard">
+    <mat-label>Data Processor</mat-label>
+    <mat-select [formControl]="standardizerControl">
+        <mat-option *ngFor="let stan of standardizers" [value]="stan.value">
+            {{ stan.name }}
+        </mat-option>
+    </mat-select>
+</mat-form-field>
