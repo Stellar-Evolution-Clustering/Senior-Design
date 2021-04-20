@@ -1,8 +1,11 @@
-from binarystars.models import BinaryStars
+from django.db.models import F
+from binarystars.models import InterpolatedBinaryStars
 import numpy as np
 from sklearn.cluster import KMeans, DBSCAN
 from sklearn import preprocessing
 import binarystars.cluster.clusteredstar as cstar
+
+MAX_ROWS = 1001 # might have to change this to be a calculation like what is done in interpolate.py
 
 DATA_PROCESSORS = {
     "minmax": preprocessing.MinMaxScaler(),
@@ -14,24 +17,41 @@ def preprocess_data(data: np.ndarray, standardizer: str) -> np.ndarray:
     return DATA_PROCESSORS[standardizer].fit_transform(data)
 
 def get_stars(n_clusters: int=None, n_samples: int=None, eps: float=None, standardizer: str=None, 
-                cluster_type: str=None, attributes: dict=None) -> list:
+                cluster_type: str=None, attributes: dict=None, time_steps: int=1) -> dict:
     
     if not standardizer:
         standardizer = 'standard'
     
-    binarystars = BinaryStars.objects.order_by('file_id', 'id', 'time_id').distinct('file_id', 'id')
+    binarystars = InterpolatedBinaryStars.objects.annotate(time_id_mod=(F('time_id') - 1) % MAX_ROWS).filter(
+                                                            time_id_mod__range=(0, time_steps - 1)).order_by('time_id')
+    
     attribute_list = list(attributes.keys())
     weights = np.array([attributes[key] for key in attributes])
     
-    stars_arr = [att_vals for att_vals in binarystars.values_list(*attribute_list)]
-    ids = [id_info for id_info in binarystars.values_list('file_id', 'id', 'time_id')]
+    clustered_times = {}
+    # cluster multiple times. Each time step will line up between the stars!! Yay!
+    # when 'time_steps' is large, this will be slow!!
+    for i in range(time_steps):
+        bss = binarystars[i::time_steps] # slice QuerySet by time_step value so we get the right stars
+        clustered_times[i] = cluster_stars(stars=bss, attributes=attribute_list, weights=weights, 
+                                            cluster_type=cluster_type, n_clusters=n_clusters, standardizer=standardizer,
+                                            n_samples=n_samples, eps=eps)
+    
+    return clustered_times
+
+# perform clustering here
+def cluster_stars(stars, attributes, weights, cluster_type, n_clusters, standardizer, n_samples, eps) -> list:
+    
+    # can't use values_list any more because these aren't QuerySets, they are lists
+    stars_arr = [[getattr(star, att) for att in attributes] for star in stars]
+    ids = [(getattr(star, 'file_id'), getattr(star, 'id'), getattr(star, 'time_id')) for star in stars]
 
     stars_arr = np.array(stars_arr) # convert to numpy array for clustering
     processed_stars = preprocess_data(data=stars_arr, standardizer=standardizer) # standardize data to make sure all attributes are treated equally
     
     # Multiplies columns of p_stars by each weight. First column needs first weight and nth column needs nth weight.
     processed_stars *= weights
-
+    
     clust = None
     if cluster_type == 'kmeans':
         if n_clusters:
@@ -47,14 +67,14 @@ def get_stars(n_clusters: int=None, n_samples: int=None, eps: float=None, standa
             clust = dbscan_cluster(data=processed_stars, eps=eps)
         else:
             clust = dbscan_cluster(data=processed_stars)
+    
     cluster_dict_list = []
     
     for i, item in enumerate(clust):
         cluster_att_dict = {}
-        for j, att in enumerate(attribute_list):
+        for j, att in enumerate(attributes):
             cluster_att_dict[att] = stars_arr[i][j]
 
-        
         clustered_star = cstar.ClusteredStar(key=ids[i], idx=int(item), cluster_attributes=cluster_att_dict)
         cluster_dict_list.append(clustered_star.to_json())
     
