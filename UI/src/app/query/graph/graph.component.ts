@@ -50,7 +50,7 @@ export class GraphComponent implements OnInit {
       layout: {
         width: 640,
         height: 480,
-        title: '2D Cluster Visualization',
+        title: '1 Attribute Visualization',
         xaxis: {
           title: {
             text: '',
@@ -133,7 +133,7 @@ export class GraphComponent implements OnInit {
             zeroline: false,
           },
         },
-        title: '3D Cluster Visualization',
+        title: '2 Attribute Visualization',
       },
     };
     this.getBackendDataTest();
@@ -155,17 +155,7 @@ export class GraphComponent implements OnInit {
           return;
         }
         this.clusteredData = new ClusteredData(response);
-
-        //Set to 1D graph by default
-        this.clusteredData.graphType = GraphType.Graph_1D;
-        this.clusteredData.setSelectedAttributes(
-          this.clusteredData.getAllAttr()
-        );
-        this.graph2D['data'] = this.clusteredData.getGraphData();
-
-        //Label axis
-        this.graph3D.layout.scene.xaxis.title.text = 'time';
-        this.graph3D.layout.scene.yaxis.title.text = this.clusteredData.selectedAttributes[0];
+        this.set3DGraph();
       });
   }
 
@@ -181,26 +171,32 @@ export class GraphComponent implements OnInit {
       this.clusteredData.graphType = data['graphType'];
       this.clusteredData.setSelectedAttributes(data['attrs']);
 
-      if (this.clusteredData.graphType == GraphType.Graph_2D) {
-        this.graph2D['data'] = this.clusteredData.getGraphData();
+      // if (this.clusteredData.graphType == GraphType.Graph_2D) {
+      //   this.graph2D['data'] = this.clusteredData.getGraphData();
+      //
+      //   //Label axis
+      //   this.graph2D.layout.xaxis.title.text = this.clusteredData.selectedAttributes[0];
+      //   this.graph2D.layout.yaxis.title.text = this.clusteredData.selectedAttributes[1];
+      // } else
 
-        //Label axis
-        this.graph2D.layout.xaxis.title.text = this.clusteredData.selectedAttributes[0];
-        this.graph2D.layout.yaxis.title.text = this.clusteredData.selectedAttributes[1];
-      } else if (this.clusteredData.graphType == GraphType.Graph_3D) {
-        this.graph3D['data'] = this.clusteredData.getGraphData();
-
-        //Label axis
-        this.graph3D.layout.scene.xaxis.title.text = this.clusteredData.selectedAttributes[0];
-        this.graph3D.layout.scene.yaxis.title.text = this.clusteredData.selectedAttributes[1];
-        this.graph3D.layout.scene.zaxis.title.text = this.clusteredData.selectedAttributes[2];
-      } else if ( this.clusteredData.graphType == GraphType.Graph_1D ) {
-        this.graph2D['data'] = this.clusteredData.getGraphData();
-
-        //Label axis
-        this.graph2D.layout.xaxis.title.text = 'time';
-        this.graph2D.layout.yaxis.title.text = this.clusteredData.selectedAttributes[0];
+      if (this.clusteredData.graphType == GraphType.Graph_2_Attr) {
+        this.set3DGraph();
+      } else if ( this.clusteredData.graphType == GraphType.Graph_1_Attr ) {
+        this.set2DGraph()
       }
     });
+  }
+
+  set3DGraph() {
+    this.graph3D['data'] = this.clusteredData.getGraphData();
+    this.graph3D.layout.scene.xaxis.title.text = 'time';
+    this.graph3D.layout.scene.yaxis.title.text = this.clusteredData.selectedAttributes[0];
+    this.graph3D.layout.scene.zaxis.title.text = this.clusteredData.selectedAttributes[1];
+  }
+
+  set2DGraph() {
+    this.graph2D['data'] = this.clusteredData.getGraphData();
+    this.graph2D.layout.xaxis.title.text = 'time';
+    this.graph2D.layout.yaxis.title.text = this.clusteredData.selectedAttributes[0];
   }
 }

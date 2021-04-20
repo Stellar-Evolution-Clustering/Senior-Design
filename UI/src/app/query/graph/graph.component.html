@@ -15,9 +15,9 @@
   <div class="graphBlock">
     <div class="graph" *ngIf="clusteredData">
       <plotly-plot [data]="graph2D.data" [layout]="graph2D.layout"
-        [hidden]="(clusteredData.graphType != GraphTypeEnum.Graph_2D) && (clusteredData.graphType != GraphTypeEnum.Graph_1D)"></plotly-plot>
+        [hidden]="clusteredData.graphType != GraphTypeEnum.Graph_1_Attr"></plotly-plot>
       <plotly-plot [data]="graph3D.data" [layout]="graph3D.layout"
-        [hidden]="clusteredData.graphType != GraphTypeEnum.Graph_3D"></plotly-plot>
+        [hidden]="clusteredData.graphType != GraphTypeEnum.Graph_2_Attr"></plotly-plot>
     </div>
   </div>
 </mat-card>
