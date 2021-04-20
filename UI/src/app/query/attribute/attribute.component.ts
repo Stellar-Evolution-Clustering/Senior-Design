@@ -21,8 +21,7 @@ export class AttributeComponent implements OnInit {
   _filteredAttributes: Observable<Attribute[]>;
 
   constructor(private queryService: QueryService) {
-    //TODO: Don't allow duplicate attributes
-    //TODO: Make a search box to help navigate large attribute lists
+    //TODO: Make a search box to help navigate large attribute lists?
   }
 
   ngOnInit(): void {
@@ -41,14 +40,6 @@ export class AttributeComponent implements OnInit {
 
   trackByAtt(index: number, att: any): number {
     return index;
-  }
-
-  selected(event: MatChipSelectionChange): void {
-    if (event.selected) {
-      this.selectAttributeEvent.emit(event.source.value);
-    } else {
-      this.deleteAttributeEvent.emit(event.source.value);
-    }
   }
 
   remove(event: any) {

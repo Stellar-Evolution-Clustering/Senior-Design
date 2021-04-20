@@ -1,18 +1,19 @@
-.addLabel {
-  padding: 20px;
-}
-
-.deleteAttribute {
-  float: right;
-}
-
-.attribute-list {
-  width: 100%;
-}
-
 mat-selection-list {
-  height: 300px;
-  overflow-y: scroll;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+span {
+  margin: 0 10px 5px 0;
+  font-size: smaller;
+}
+
+h4 {
+  margin: auto auto 5px;
+}
+
+.list-item {
+  font-size: small;
 }
 
 .button-container {

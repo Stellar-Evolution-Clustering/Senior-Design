@@ -3,7 +3,7 @@
 <mat-form-field appearance="fill">
   <mat-label>Database</mat-label>
   <mat-select [formControl]="fc" required>
-    <mat-option *ngFor="let db of dbs" value="db">
+    <mat-option *ngFor="let db of dbs" [value]="db">
       {{db}}
     </mat-option>
   </mat-select>
