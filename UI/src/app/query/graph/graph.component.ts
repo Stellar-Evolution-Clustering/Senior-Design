@@ -14,7 +14,7 @@ import {
 } from 'src/app/api/models/cluster-request.model';
 import { ActivatedRoute } from '@angular/router';
 import { concatMap, flatMap, map, mergeMap, tap } from 'rxjs/operators';
-import { ClusterBinaryStar } from 'src/app/api/models/clustered-binary-star.model';
+import { ClusterBinaryStar, ClusterBinaryStarTimesteps } from 'src/app/api/models/clustered-binary-star.model';
 
 // PlotlyModule.plotlyjs = Plotly;
 
@@ -33,6 +33,8 @@ export class GraphComponent implements OnInit {
   private data3D: any;
   public clusteredData: ClusteredData;
   public GraphTypeEnum = GraphType;
+
+  public badRequest: boolean = false;
 
   constructor(
     private queryService: QueryService,
@@ -145,25 +147,25 @@ export class GraphComponent implements OnInit {
           return this.queryService.postQuery(body);
         })
       )
-      .subscribe((response: ClusterBinaryStar[]) => {
+      .subscribe((response: ClusterBinaryStarTimesteps) => {
         console.log('API response');
         console.log(response);
         if (response === null) {
+          this.badRequest = true;
           return;
         }
         this.clusteredData = new ClusteredData(response);
 
-        //Set to 3D graph by default
-        this.clusteredData.graphType = GraphType.Graph_3D;
+        //Set to 1D graph by default
+        this.clusteredData.graphType = GraphType.Graph_1D;
         this.clusteredData.setSelectedAttributes(
           this.clusteredData.getAllAttr()
         );
-        this.graph3D['data'] = this.clusteredData.getGraphData();
+        this.graph2D['data'] = this.clusteredData.getGraphData();
 
         //Label axis
-        this.graph3D.layout.scene.xaxis.title.text = this.clusteredData.selectedAttributes[0];
-        this.graph3D.layout.scene.yaxis.title.text = this.clusteredData.selectedAttributes[1];
-        this.graph3D.layout.scene.zaxis.title.text = this.clusteredData.selectedAttributes[2];
+        this.graph3D.layout.scene.xaxis.title.text = 'time';
+        this.graph3D.layout.scene.yaxis.title.text = this.clusteredData.selectedAttributes[0];
       });
   }
 

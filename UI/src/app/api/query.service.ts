@@ -9,7 +9,7 @@ import {
   DataProcessors,
   IClusterRequest,
 } from './models/cluster-request.model';
-import { ClusterBinaryStar } from './models/clustered-binary-star.model';
+import { ClusterBinaryStar, ClusterBinaryStarTimesteps } from './models/clustered-binary-star.model';
 
 @Injectable()
 export class QueryService {
@@ -39,13 +39,13 @@ export class QueryService {
     //   );
     // }
 
-  postQuery(body: IClusterRequest): Observable<ClusterBinaryStar[]> {
+  postQuery(body: IClusterRequest): Observable<ClusterBinaryStarTimesteps> {
     return this.http
       .post<ClusterBinaryStar>(`${this.backendUrl}/cluster`, body)
       .pipe(
         tap((_) => console.log('posting query to backend')),
         tap((_) => console.log(body)),
-        catchError(this.handleError<any>('getTestQuery', null))
+        catchError(this.handleError<any>('postQuery failed', null))
       );
   }
 

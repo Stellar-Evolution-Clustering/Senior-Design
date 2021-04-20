@@ -4,8 +4,8 @@ export interface IClusterRequest {
   eps?: number; // Need if doing cluster_type = DBScan
   standardizer?: DataProcessors; //Optional for data processing
   cluster_type: ClusterType; //Cluster type is required
-  attributes: any; // { 'db_name': weight.00 }
   time_steps: number; // Specifies the number of time steps to cluster
+  attributes: any; // { 'db_name': weight.00 }
 }
 
 export function toQueryPararms(request: IClusterRequest): any {
@@ -26,8 +26,8 @@ export function toQueryPararms(request: IClusterRequest): any {
 export function fromQueryParams(params: any): IClusterRequest {
   const attr = {};
   for (let key of Object.keys(params)) {
-    if (!isNaN(params[key])) {
-      attr[key] = params[key];
+    if (!isNaN(params[key]) && key != "time_steps") {
+      attr[key] = +params[key];
     }
   }
   return {

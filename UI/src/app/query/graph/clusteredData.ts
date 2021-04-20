@@ -1,4 +1,4 @@
-import { ClusterBinaryStar } from 'src/app/api/models/clustered-binary-star.model';
+import { ClusterBinaryStar, ClusterBinaryStarTimesteps } from 'src/app/api/models/clustered-binary-star.model';
 
 export enum GraphType {
   Graph_1D,
@@ -16,22 +16,22 @@ export class ClusteredData {
   attributes: string[];
   public selectedAttributes: string[];
 
-  jsonData: ClusterBinaryStar[];
+  jsonData: ClusterBinaryStar[][];
   public graphType: GraphType = 0;
 
-  constructor(jsonData: ClusterBinaryStar[]) {
-    this.jsonData = jsonData;
+  constructor(jsonData: ClusterBinaryStarTimesteps) {
+    this.jsonData = jsonData["timesteps"];
 
-    let attrs = Object.keys(jsonData[0]['cluster_attributes']);
+    let attrs = Object.keys(this.jsonData[0][0]['cluster_attributes']);
     this.attributes = new Array(attrs.length);
     for (let i = 0; i < attrs.length; i++) {
       this.attributes[i] = attrs[i];
     }
 
     this.numClusters = 0;
-    for (let i = 0; i < jsonData.length; i++) {
-      if (jsonData[i]['cluster_idx'] > this.numClusters) {
-        this.numClusters = jsonData[i]['cluster_idx'];
+    for (let i = 0; i < this.jsonData[0].length; i++) {
+      if (this.jsonData[0][i]['cluster_idx'] > this.numClusters) {
+        this.numClusters = this.jsonData[0][i]['cluster_idx'];
       }
     }
     this.numClusters++;
@@ -116,19 +116,27 @@ export class ClusteredData {
     } else if (this.graphType == GraphType.Graph_1D) {
       for( let i = 0; i < this.numClusters; i++ ){
         data.push(
-          { x: [], y: [], type: 'scatter', mode: 'lines+markers', marker: {color: colors[i], size: 2}, name: `Cluster ${i + 1}`}
+          { x: [], y: [], type: 'scatter', mode: 'markers', marker: {color: colors[i], size: 4}, name: `Cluster ${i + 1}`}
         );
       }
 
-      for( let j = 0; j < this.jsonData.length; j++ ){
-        var clusterNum = this.jsonData[j]["cluster_idx"];
-        // x - time
-        data[clusterNum].x.push(this.jsonData[j]["key"][2]);
-        // data[0].x.push(j);
-        // y - attribute
-        data[clusterNum].y.push(this.jsonData[j]["cluster_attributes"][this.selectedAttributes[0]]);
-        // data[0].y.push(j);
+      //TODO - this is terribly slow to test with
+        // so either fake data
+        // or if its possible to create a 2D graph for each attribute in the background or during the inital loading time
+          //could possibly even load in one time step at a time
+      for( let h = 0; h < this.jsonData.length; h++ ){
+        console.log(`timestep ${h} generated`);
+        for( let j = 0; j < this.jsonData[h].length; j++ ){
+          var clusterNum = this.jsonData[h][j]["cluster_idx"];
+          // x - time
+          data[clusterNum].x.push(h);
+          // data[0].x.push(j);
+          // y - attribute
+          data[clusterNum].y.push(this.jsonData[h][j]["cluster_attributes"][this.selectedAttributes[0]]);
+          // data[0].y.push(j);
+        }
       }
+
 
       return data;
     }

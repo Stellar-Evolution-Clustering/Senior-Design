@@ -4,8 +4,12 @@
     Configure Graph
   </button>
 
-  <div style="width: 100%;" *ngIf="!clusteredData">
+  <div style="width: 100%;" *ngIf="!clusteredData && !badRequest">
     <mat-spinner style="margin: 0 auto;" color="accent"></mat-spinner>
+  </div>
+
+  <div *ngIf="badRequest">
+    Bad Request, check the url for misformatted parameters
   </div>
 
   <div class="graphBlock">

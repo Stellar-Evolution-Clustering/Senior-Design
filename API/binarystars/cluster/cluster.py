@@ -28,14 +28,14 @@ def get_stars(n_clusters: int=None, n_samples: int=None, eps: float=None, standa
     attribute_list = list(attributes.keys())
     weights = np.array([attributes[key] for key in attributes])
 
-    clustered_times = {}
+    clustered_times = {'timesteps': []}
     # cluster multiple times. Each time step will line up between the stars!! Yay!
     # when 'time_steps' is large, this will be slow!!
     for i in range(time_steps):
         bss = binarystars[i::time_steps] # slice QuerySet by time_step value so we get the right stars
-        clustered_times[i] = cluster_stars(stars=bss, attributes=attribute_list, weights=weights,
+        clustered_times['timesteps'].append(cluster_stars(stars=bss, attributes=attribute_list, weights=weights,
                                             cluster_type=cluster_type, n_clusters=n_clusters, standardizer=standardizer,
-                                            n_samples=n_samples, eps=eps)
+                                            n_samples=n_samples, eps=eps))
 
     return clustered_times
 
