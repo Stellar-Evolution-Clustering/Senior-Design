@@ -68,31 +68,7 @@ export class ClusteredData {
       var b = Math.floor(Math.random() * 200);
       colors[i] = 'rgb(' + String(r) +  ', ' + String(g) + ', ' + String(b) + ')';
     }
-
-    // if (this.graphType == GraphType.Graph_2D) {
-    //   for (let i = 0; i < this.numClusters; i++) {
-    //     data.push({
-    //       x: [],
-    //       y: [],
-    //       type: 'scatter',
-    //       mode: 'markers',
-    //       marker: { color: colors[i], size: 2 },
-    //       name: `Cluster ${i + 1}`,
-    //       visible: true,
-    //     });
-    //   }
-    //   for (let j = 0; j < this.jsonData.length; j++) {
-    //     var clusterNum = this.jsonData[j]['cluster_idx'];
-    //     data[clusterNum].x.push(
-    //       this.jsonData[j]['cluster_attributes'][this.selectedAttributes[0]]
-    //     );
-    //     data[clusterNum].y.push(
-    //       this.jsonData[j]['cluster_attributes'][this.selectedAttributes[1]]
-    //     );
-    //   }
-    //   return data;
-    // } else
-
+    
     if (this.graphType == GraphType.Graph_2_Attr) {
       for (let i = 0; i < 3; i++) {
         data.push({

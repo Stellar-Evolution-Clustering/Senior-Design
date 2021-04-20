@@ -16,10 +16,6 @@ import { ActivatedRoute } from '@angular/router';
 import { concatMap, flatMap, map, mergeMap, tap } from 'rxjs/operators';
 import { ClusterBinaryStar, ClusterBinaryStarTimesteps } from 'src/app/api/models/clustered-binary-star.model';
 
-// PlotlyModule.plotlyjs = Plotly;
-
-//TODO: Loading screen during query, or hide 2d graph while loading
-
 @Component({
   selector: 'app-graph',
   templateUrl: './graph.component.html',
@@ -50,6 +46,7 @@ export class GraphComponent implements OnInit {
       layout: {
         width: 640,
         height: 480,
+        hovermode: false,
         title: '1 Attribute Visualization',
         xaxis: {
           title: {
@@ -77,6 +74,7 @@ export class GraphComponent implements OnInit {
       data: this.data3D,
       layout: {
         autosize: true,
+        hovermode: false,
         width: window.innerWidth * 0.7, //640,
         height: window.innerHeight * 0.7, //480,
         scene: {
@@ -170,15 +168,6 @@ export class GraphComponent implements OnInit {
     dialogRef.afterClosed().subscribe((data) => {
       this.clusteredData.graphType = data['graphType'];
       this.clusteredData.setSelectedAttributes(data['attrs']);
-
-      // if (this.clusteredData.graphType == GraphType.Graph_2D) {
-      //   this.graph2D['data'] = this.clusteredData.getGraphData();
-      //
-      //   //Label axis
-      //   this.graph2D.layout.xaxis.title.text = this.clusteredData.selectedAttributes[0];
-      //   this.graph2D.layout.yaxis.title.text = this.clusteredData.selectedAttributes[1];
-      // } else
-
       if (this.clusteredData.graphType == GraphType.Graph_2_Attr) {
         this.set3DGraph();
       } else if ( this.clusteredData.graphType == GraphType.Graph_1_Attr ) {

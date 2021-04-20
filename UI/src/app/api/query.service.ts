@@ -30,15 +30,7 @@ export class QueryService {
       catchError(this.handleError<any>('getTestQuery', null))
     );
   }
-
-  // I think this is a one time thing ? not to be used by the UI
-    // getInterpolatedData(): Observable<any> {
-    //   return this.http.get<any>(`${this.backendUrl}/interpolate`).pipe(
-    //     tap((_) => console.log('getting interpolated data')),
-    //     catchError(this.handleError<any>('getTestQuery', null))
-    //   );
-    // }
-
+  
   postQuery(body: IClusterRequest): Observable<ClusterBinaryStarTimesteps> {
     return this.http
       .post<ClusterBinaryStar>(`${this.backendUrl}/cluster`, body)
