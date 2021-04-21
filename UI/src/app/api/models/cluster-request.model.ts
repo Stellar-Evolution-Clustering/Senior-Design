@@ -11,6 +11,9 @@ export interface IClusterRequest {
 
 export function toQueryPararms(request: IClusterRequest): any {
   var params = {};
+  for (let attributeKey of Object.keys(request.attributes)) {
+    params[attributeKey] = request.attributes[attributeKey];
+  }
 
   params['cluster_type'] = request.cluster_type;
   params['n_clusters'] = request.n_clusters;
@@ -20,22 +23,20 @@ export function toQueryPararms(request: IClusterRequest): any {
   params['attributes'] = request.attributes;
   params['database'] = request.database;
   params['temporal_val'] = null;
-  /*console.log("HEY!!!");
-  console.log(attr);
-  console.log(params);*/
+
   return params;
 }
 
 export function fromQueryParams(params: any): IClusterRequest {
-  /* const attr = {};
+  const attr = {};
   for (let key of Object.keys(params)) {
     if (!isNaN(params[key])) {
       attr[key] = params[key];
     }
-  } */
-  //console.log(params);
+  }
+
   return {
-    attributes: params?.attributes,
+    attributes: attr,
     cluster_type: params?.cluster_type,
     eps: params?.eps,
     n_samples: params?.n_samples,

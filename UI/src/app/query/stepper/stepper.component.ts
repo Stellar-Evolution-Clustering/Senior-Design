@@ -44,7 +44,7 @@ export class StepperComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.queryService.currentParams.subscribe( params => {});
+    
   }
 
   buildRequestTemplate(): IClusterRequest {
@@ -116,8 +116,7 @@ export class StepperComponent implements OnInit {
     console.log('WHAT');
     const queryParams = toQueryPararms(this.buildRequestTemplate());
     console.log(queryParams);
-    this.queryService.setRequestParams(queryParams);
-    this.router.navigate(['/query/graph']/* , { queryParams: queryParams } */);
+    this.router.navigate(['/query/graph'] , { queryParams: queryParams } );
   }
 
   addAttribute(attribute: Attribute): void {
