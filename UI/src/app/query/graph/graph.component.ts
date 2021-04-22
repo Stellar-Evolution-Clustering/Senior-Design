@@ -1,20 +1,12 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
-import { QueryService } from '../../api/query.service';
-import { ClusteredData } from './clusteredData';
-import { ConfigureGraphComponent } from './configure-graph/configure-graph.component';
-import { GraphType } from './clusteredData';
-
-import * as Plotly from 'plotly.js/dist/plotly.js';
+import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import {
-  ClusterType,
-  DataProcessors,
-  fromQueryParams,
-  IClusterRequest,
-} from 'src/app/api/models/cluster-request.model';
 import { ActivatedRoute } from '@angular/router';
-import { concatMap, flatMap, map, mergeMap, tap } from 'rxjs/operators';
+import { concatMap } from 'rxjs/operators';
+import { IClusterRequest } from 'src/app/api/models/cluster-request.model';
 import { ClusterBinaryStar } from 'src/app/api/models/clustered-binary-star.model';
+import { QueryService } from '../../api/query.service';
+import { ClusteredData, GraphType } from './clusteredData';
+import { ConfigureGraphComponent } from './configure-graph/configure-graph.component';
 
 // PlotlyModule.plotlyjs = Plotly;
 
@@ -42,7 +34,7 @@ export class GraphComponent implements OnInit {
 
   ngOnInit(): void {
     this.queryService.getInterpolatedData().subscribe((response) => {
-      console.log("interpolated data");
+      console.log('interpolated data');
       console.log(response);
     });
 
@@ -120,7 +112,9 @@ export class GraphComponent implements OnInit {
   getBackendDataTest(): void {
     this.route.queryParams
       .pipe(
-        map(fromQueryParams),
+        concatMap((queryParams) =>
+          this.queryService.fromQueryParamsAsync(queryParams)
+        ),
         concatMap((body: IClusterRequest) => {
           return this.queryService.postQuery(body);
         })
@@ -172,7 +166,7 @@ export class GraphComponent implements OnInit {
         this.graph3D.layout.scene.xaxis.title = this.clusteredData.selectedAttributes[0];
         this.graph3D.layout.scene.yaxis.title = this.clusteredData.selectedAttributes[1];
         this.graph3D.layout.scene.zaxis.title = this.clusteredData.selectedAttributes[2];
-      } else if ( this.clusteredData.graphType == GraphType.Graph_1D ) {
+      } else if (this.clusteredData.graphType == GraphType.Graph_1D) {
         this.graph2D['data'] = this.clusteredData.getGraphData();
 
         //Label axis
