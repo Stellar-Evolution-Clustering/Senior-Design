@@ -4,16 +4,20 @@
     Configure Graph
   </button>
 
-  <div style="width: 100%;" *ngIf="!clusteredData">
+  <div style="width: 100%;" *ngIf="!clusteredData && !badRequest">
     <mat-spinner style="margin: 0 auto;" color="accent"></mat-spinner>
+  </div>
+
+  <div *ngIf="badRequest">
+    Bad Request, check the url for misformatted parameters
   </div>
 
   <div class="graphBlock">
     <div class="graph" *ngIf="clusteredData">
       <plotly-plot [data]="graph2D.data" [layout]="graph2D.layout"
-        [hidden]="(clusteredData.graphType != GraphTypeEnum.Graph_2D) && (clusteredData.graphType != GraphTypeEnum.Graph_1D)"></plotly-plot>
+        [hidden]="clusteredData.graphType != GraphTypeEnum.Graph_1_Attr"></plotly-plot>
       <plotly-plot [data]="graph3D.data" [layout]="graph3D.layout"
-        [hidden]="clusteredData.graphType != GraphTypeEnum.Graph_3D"></plotly-plot>
+        [hidden]="clusteredData.graphType != GraphTypeEnum.Graph_2_Attr"></plotly-plot>
     </div>
   </div>
 </mat-card>

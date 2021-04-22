@@ -2,15 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { concatMap } from 'rxjs/operators';
+import { ClusterBinaryStar, ClusterBinaryStarTimesteps } from 'src/app/api/models/clustered-binary-star.model';
 import { IClusterRequest } from 'src/app/api/models/cluster-request.model';
-import { ClusterBinaryStar } from 'src/app/api/models/clustered-binary-star.model';
 import { QueryService } from '../../api/query.service';
 import { ClusteredData, GraphType } from './clusteredData';
 import { ConfigureGraphComponent } from './configure-graph/configure-graph.component';
-
-// PlotlyModule.plotlyjs = Plotly;
-
-//TODO: Loading screen during query, or hide 2d graph while loading
 
 @Component({
   selector: 'app-graph',
@@ -26,6 +22,8 @@ export class GraphComponent implements OnInit {
   public clusteredData: ClusteredData;
   public GraphTypeEnum = GraphType;
 
+  public badRequest: boolean = false;
+
   constructor(
     private queryService: QueryService,
     private dialog: MatDialog,
@@ -33,11 +31,6 @@ export class GraphComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.queryService.getInterpolatedData().subscribe((response) => {
-      console.log('interpolated data');
-      console.log(response);
-    });
-
     this.selectedCluster = 'all';
     this.data3D = null;
     this.graph2D = {
@@ -45,14 +38,25 @@ export class GraphComponent implements OnInit {
       layout: {
         width: 640,
         height: 480,
-        title: '2D Cluster Visualization',
+        hovermode: false,
+        title: '1 Attribute Visualization',
         xaxis: {
-          title: '',
+          title: {
+            text: '',
+            font: {
+              size: 20,
+            }
+          },
           type: 'linear',
           zeroline: false,
         },
         yaxis: {
-          title: '',
+          title: {
+            text: '',
+            font: {
+              size: 20,
+            }
+          },
           type: 'linear',
           zeroline: false,
         },
@@ -62,6 +66,7 @@ export class GraphComponent implements OnInit {
       data: this.data3D,
       layout: {
         autosize: true,
+        hovermode: false,
         width: window.innerWidth * 0.7, //640,
         height: window.innerHeight * 0.7, //480,
         scene: {
@@ -88,22 +93,37 @@ export class GraphComponent implements OnInit {
             },
           },
           xaxis: {
-            title: '',
+            title: {
+              text: '',
+              font: {
+                size: 20,
+              }
+            },
             type: 'linear',
             zeroline: false,
           },
           yaxis: {
-            title: '',
+            title: {
+              text: '',
+              font: {
+                size: 20,
+              }
+            },
             type: 'linear',
             zeroline: false,
           },
           zaxis: {
-            title: '',
+            title: {
+              text: '',
+              font: {
+                size: 20,
+              }
+            },
             type: 'linear',
             zeroline: false,
           },
         },
-        title: '3D Cluster Visualization',
+        title: '2 Attribute Visualization',
       },
     };
     this.getBackendDataTest();
@@ -119,25 +139,15 @@ export class GraphComponent implements OnInit {
           return this.queryService.postQuery(body);
         })
       )
-      .subscribe((response: ClusterBinaryStar[]) => {
+      .subscribe((response: ClusterBinaryStarTimesteps) => {
         console.log('API response');
         console.log(response);
         if (response === null) {
+          this.badRequest = true;
           return;
         }
         this.clusteredData = new ClusteredData(response);
-
-        //Set to 3D graph by default
-        this.clusteredData.graphType = GraphType.Graph_3D;
-        this.clusteredData.setSelectedAttributes(
-          this.clusteredData.getAllAttr()
-        );
-        this.graph3D['data'] = this.clusteredData.getGraphData();
-
-        //Label axis
-        this.graph3D.layout.scene.xaxis.title = this.clusteredData.selectedAttributes[0];
-        this.graph3D.layout.scene.yaxis.title = this.clusteredData.selectedAttributes[1];
-        this.graph3D.layout.scene.zaxis.title = this.clusteredData.selectedAttributes[2];
+        this.set3DGraph();
       });
   }
 
@@ -152,27 +162,24 @@ export class GraphComponent implements OnInit {
     dialogRef.afterClosed().subscribe((data) => {
       this.clusteredData.graphType = data['graphType'];
       this.clusteredData.setSelectedAttributes(data['attrs']);
-
-      if (this.clusteredData.graphType == GraphType.Graph_2D) {
-        this.graph2D['data'] = this.clusteredData.getGraphData();
-
-        //Label axis
-        this.graph2D.layout.xaxis.title = this.clusteredData.selectedAttributes[0];
-        this.graph2D.layout.yaxis.title = this.clusteredData.selectedAttributes[1];
-      } else if (this.clusteredData.graphType == GraphType.Graph_3D) {
-        this.graph3D['data'] = this.clusteredData.getGraphData();
-
-        //Label axis
-        this.graph3D.layout.scene.xaxis.title = this.clusteredData.selectedAttributes[0];
-        this.graph3D.layout.scene.yaxis.title = this.clusteredData.selectedAttributes[1];
-        this.graph3D.layout.scene.zaxis.title = this.clusteredData.selectedAttributes[2];
-      } else if (this.clusteredData.graphType == GraphType.Graph_1D) {
-        this.graph2D['data'] = this.clusteredData.getGraphData();
-
-        //Label axis
-        this.graph2D.layout.xaxis.title = 'time';
-        this.graph2D.layout.yaxis.title = this.clusteredData.selectedAttributes[0];
+      if (this.clusteredData.graphType == GraphType.Graph_2_Attr) {
+        this.set3DGraph();
+      } else if ( this.clusteredData.graphType == GraphType.Graph_1_Attr ) {
+        this.set2DGraph()
       }
     });
+  }
+
+  set3DGraph() {
+    this.graph3D['data'] = this.clusteredData.getGraphData();
+    this.graph3D.layout.scene.xaxis.title.text = 'time';
+    this.graph3D.layout.scene.yaxis.title.text = this.clusteredData.selectedAttributes[0];
+    this.graph3D.layout.scene.zaxis.title.text = this.clusteredData.selectedAttributes[1];
+  }
+
+  set2DGraph() {
+    this.graph2D['data'] = this.clusteredData.getGraphData();
+    this.graph2D.layout.xaxis.title.text = 'time';
+    this.graph2D.layout.yaxis.title.text = this.clusteredData.selectedAttributes[0];
   }
 }

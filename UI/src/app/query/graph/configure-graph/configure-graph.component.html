@@ -3,9 +3,8 @@
     <mat-form-field appearance="fill">
       <mat-label>Graph Type</mat-label>
       <mat-select [(ngModel)]="graphType" (ngModelChange)="graphSelect($event)">
-        <mat-option [value]="0">One Attribute over Time</mat-option>
-        <mat-option [value]="1">2D Graph</mat-option>
-        <mat-option [value]="2">3D Graph</mat-option>
+        <mat-option [value]="0">1 Attribute</mat-option>
+        <mat-option [value]="1">2 Attributes</mat-option>
       </mat-select>
     </mat-form-field>
   </p>
