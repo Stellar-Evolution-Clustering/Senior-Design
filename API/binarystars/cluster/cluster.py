@@ -1,7 +1,6 @@
 from django.db.models import F
 from binarystars.models import InterpolatedBinaryStars
 import numpy as np
-import math
 from random import randint
 from sklearn.cluster import KMeans, DBSCAN
 from sklearn import preprocessing
@@ -21,13 +20,14 @@ def preprocess_data(data: np.ndarray, standardizer: str) -> np.ndarray:
     return DATA_PROCESSORS[standardizer].fit_transform(data)
 
 def get_stars(n_clusters: int=None, n_samples: int=None, eps: float=None, standardizer: str=None,
-                cluster_type: str=None, attributes: dict=None, time_steps: int=1) -> list:
+                cluster_type: str=None, attributes: dict=None, time_steps: int=1, start_ts: int=0) -> list:
 
     if not standardizer:
         standardizer = 'standard'
 
+    end_ts = start_ts + time_steps
     binarystars = InterpolatedBinaryStars.objects.annotate(time_id_mod=(F('time_id') - 1) % MAX_ROWS).filter(
-                                                            time_id_mod__range=(0, time_steps - 1)).order_by('time_id')
+                                                            time_id_mod__range=(start_ts, end_ts - 1)).order_by('time_id')
 
     attribute_list = list(attributes.keys())
     weights = np.array([attributes[key] for key in attributes])
@@ -60,9 +60,9 @@ def cluster_stars(stars, attributes, weights, cluster_type, n_clusters, standard
     clust = None
     if cluster_type == 'kmeans':
         if n_clusters:
-            clust = kmeans_cluster(data=processed_stars, k=n_clusters)
+            clust = kmeans_cluster(data=processed_stars, k=n_clusters, seed=seed)
         else:
-            clust = kmeans_cluster(data=processed_stars)
+            clust = kmeans_cluster(data=processed_stars, seed=seed)
     elif cluster_type == 'dbscan':
         if n_samples and eps:
             clust = dbscan_cluster(data=processed_stars, min_samples=n_samples, eps=eps)
@@ -85,7 +85,7 @@ def cluster_stars(stars, attributes, weights, cluster_type, n_clusters, standard
 
     return cluster_dict_list
 
-def kmeans_cluster(data: np.ndarray, k: int=3, seed: int=1) -> np.ndarray:
+def kmeans_cluster(data: np.ndarray, seed: int, k: int=3) -> np.ndarray:
     return KMeans(n_clusters=k, random_state=seed).fit_predict(X=data)
 
 def dbscan_cluster(data: np.ndarray, eps: float=0.05, min_samples: int=5) -> np.ndarray:
