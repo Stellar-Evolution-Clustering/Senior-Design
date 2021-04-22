@@ -1,11 +1,15 @@
 from django.db.models import F
 from binarystars.models import InterpolatedBinaryStars
 import numpy as np
+import math
+from random import randint
 from sklearn.cluster import KMeans, DBSCAN
 from sklearn import preprocessing
 import binarystars.cluster.clusteredstar as cstar
 
 MAX_ROWS = 1001 # might have to change this to be a calculation like what is done in interpolate.py
+LOWER_SEED_BOUND = 1
+UPPER_SEED_BOUND = 2147483648 # 2^31
 
 DATA_PROCESSORS = {
     "minmax": preprocessing.MinMaxScaler(),
@@ -17,7 +21,7 @@ def preprocess_data(data: np.ndarray, standardizer: str) -> np.ndarray:
     return DATA_PROCESSORS[standardizer].fit_transform(data)
 
 def get_stars(n_clusters: int=None, n_samples: int=None, eps: float=None, standardizer: str=None,
-                cluster_type: str=None, attributes: dict=None, time_steps: int=1) -> dict:
+                cluster_type: str=None, attributes: dict=None, time_steps: int=1) -> list:
 
     if not standardizer:
         standardizer = 'standard'
@@ -28,6 +32,7 @@ def get_stars(n_clusters: int=None, n_samples: int=None, eps: float=None, standa
     attribute_list = list(attributes.keys())
     weights = np.array([attributes[key] for key in attributes])
 
+    seed = randint(LOWER_SEED_BOUND, UPPER_SEED_BOUND)
     clustered_times = {'timesteps': []}
     # cluster multiple times. Each time step will line up between the stars!! Yay!
     # when 'time_steps' is large, this will be slow!!
@@ -35,12 +40,12 @@ def get_stars(n_clusters: int=None, n_samples: int=None, eps: float=None, standa
         bss = binarystars[i::time_steps] # slice QuerySet by time_step value so we get the right stars
         clustered_times['timesteps'].append(cluster_stars(stars=bss, attributes=attribute_list, weights=weights,
                                             cluster_type=cluster_type, n_clusters=n_clusters, standardizer=standardizer,
-                                            n_samples=n_samples, eps=eps))
+                                            n_samples=n_samples, eps=eps, seed=seed))
 
     return clustered_times
 
 # perform clustering here
-def cluster_stars(stars, attributes, weights, cluster_type, n_clusters, standardizer, n_samples, eps) -> list:
+def cluster_stars(stars, attributes, weights, cluster_type, n_clusters, standardizer, n_samples, eps, seed) -> list:
 
     # can't use values_list any more because these aren't QuerySets, they are lists
     stars_arr = [[getattr(star, att) for att in attributes] for star in stars]
@@ -80,8 +85,8 @@ def cluster_stars(stars, attributes, weights, cluster_type, n_clusters, standard
 
     return cluster_dict_list
 
-def kmeans_cluster(data: np.ndarray, k: int=3) -> np.ndarray:
-    return KMeans(n_clusters=k).fit_predict(X=data)
+def kmeans_cluster(data: np.ndarray, k: int=3, seed: int=1) -> np.ndarray:
+    return KMeans(n_clusters=k, random_state=seed).fit_predict(X=data)
 
 def dbscan_cluster(data: np.ndarray, eps: float=0.05, min_samples: int=5) -> np.ndarray:
     return DBSCAN(eps=eps, min_samples=min_samples).fit_predict(X=data)
