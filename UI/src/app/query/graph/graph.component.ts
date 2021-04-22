@@ -1,20 +1,12 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
-import { QueryService } from '../../api/query.service';
-import { ClusteredData } from './clusteredData';
-import { ConfigureGraphComponent } from './configure-graph/configure-graph.component';
-import { GraphType } from './clusteredData';
-
-import * as Plotly from 'plotly.js/dist/plotly.js';
+import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import {
-  ClusterType,
-  DataProcessors,
-  fromQueryParams,
-  IClusterRequest,
-} from 'src/app/api/models/cluster-request.model';
 import { ActivatedRoute } from '@angular/router';
-import { concatMap, flatMap, map, mergeMap, tap } from 'rxjs/operators';
+import { concatMap } from 'rxjs/operators';
 import { ClusterBinaryStar, ClusterBinaryStarTimesteps } from 'src/app/api/models/clustered-binary-star.model';
+import { IClusterRequest } from 'src/app/api/models/cluster-request.model';
+import { QueryService } from '../../api/query.service';
+import { ClusteredData, GraphType } from './clusteredData';
+import { ConfigureGraphComponent } from './configure-graph/configure-graph.component';
 
 @Component({
   selector: 'app-graph',
@@ -140,7 +132,9 @@ export class GraphComponent implements OnInit {
   getBackendDataTest(): void {
     this.route.queryParams
       .pipe(
-        map(fromQueryParams),
+        concatMap((queryParams) =>
+          this.queryService.fromQueryParamsAsync(queryParams)
+        ),
         concatMap((body: IClusterRequest) => {
           return this.queryService.postQuery(body);
         })

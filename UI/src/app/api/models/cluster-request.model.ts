@@ -6,46 +6,28 @@ export interface IClusterRequest {
   cluster_type: ClusterType; //Cluster type is required
   time_steps: number; // Specifies the number of time steps to cluster
   attributes: any; // { 'db_name': weight.00 }
-}
-
-export function toQueryPararms(request: IClusterRequest): any {
-  var params = {};
-  for (let attributeKey of Object.keys(request.attributes)) {
-    params[attributeKey] = request.attributes[attributeKey];
-  }
-  params['cluster_type'] = request.cluster_type;
-  params['n_clusters'] = request.n_clusters;
-  params['eps'] = request.eps;
-  params['n_samples'] = request.n_samples;
-  params['standardizer'] = request.standardizer;
-  params['time_steps'] = request.time_steps;
-
-  return params;
-}
-
-export function fromQueryParams(params: any): IClusterRequest {
-  const attr = {};
-  for (let key of Object.keys(params)) {
-    if (!isNaN(params[key]) && key != "time_steps") {
-      attr[key] = +params[key];
-    }
-  }
-  return {
-    attributes: attr,
-    cluster_type: params.cluster_type,
-    n_clusters: 3,
-    standardizer: DataProcessors.Standard,
-    time_steps: +params.time_steps,
-  };
+  database?: Database; //Should make this and temporal_val non-null once it's working on backend
+  temporal_val?: any;
 }
 
 export enum ClusterType {
   DBScan = 'dbscan',
   KMeans = 'kmeans',
+  d_DBScan = 'DBScan',
+  d_KMeans = 'K-Means',
 }
 
 export enum DataProcessors {
   MinMax = 'minmax',
   ABS = 'abs',
   Standard = 'standard',
+  d_MinMax = 'MinMax',
+  d_ABS = 'ABS',
+  d_Standard = 'Standard',
+}
+
+export enum Database {
+  COSMIC = 'COSMIC',
+  DB2 = 'Database #2',
+  DB3 = 'Database #3',
 }

@@ -68,9 +68,9 @@ export class ClusteredData {
       var b = Math.floor(Math.random() * 200);
       colors[i] = 'rgb(' + String(r) +  ', ' + String(g) + ', ' + String(b) + ')';
     }
-    
+
     if (this.graphType == GraphType.Graph_2_Attr) {
-      for (let i = 0; i < 3; i++) {
+      for (let i = 0; i < this.numClusters; i++) {
         data.push({
           x: [],
           y: [],
