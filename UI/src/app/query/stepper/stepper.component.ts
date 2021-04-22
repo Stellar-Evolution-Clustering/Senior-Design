@@ -1,18 +1,22 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormArray, Validators, AbstractControl, ValidatorFn, FormGroup, FormControl } from '@angular/forms';
-import { QueryService } from '../../api/query.service';
-import { Observable } from 'rxjs';
-import { Attribute } from '../../api/models/attribute.model';
+import {
+  AbstractControl,
+  FormArray,
+  FormBuilder,
+  FormGroup,
+  ValidatorFn,
+  Validators,
+} from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
 import {
   ClusterType,
   Database,
   DataProcessors,
   IClusterRequest,
-  toQueryPararms,
 } from 'src/app/api/models/cluster-request.model';
-import { Router } from '@angular/router';
-import { build$ } from 'protractor/built/element';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { Attribute } from '../../api/models/attribute.model';
+import { QueryService } from '../../api/query.service';
 
 @Component({
   selector: 'app-stepper',
@@ -26,7 +30,10 @@ export class StepperComponent implements OnInit {
   public query: FormGroup = this.fb.group({
     dbSelect: [null, Validators.required],
     attributes: this.fb.array([], Validators.required),
-    weights: this.fb.array([], [emptyWeights(), validWeightTotal(this.allowEmptyInput), ]),
+    weights: this.fb.array(
+      [],
+      [emptyWeights(), validWeightTotal(this.allowEmptyInput)]
+    ),
     //distFunct: ['', Validators.required],
     algorithm: [null, Validators.required],
     n_clusters: [null, [Validators.required, Validators.min(0)]],
@@ -43,9 +50,7 @@ export class StepperComponent implements OnInit {
     private snack: MatSnackBar
   ) {}
 
-  ngOnInit() {
-    
-  }
+  ngOnInit() {}
 
   buildRequestTemplate(): IClusterRequest {
     let empty = {};
@@ -57,9 +62,9 @@ export class StepperComponent implements OnInit {
       let at = this.attributes.controls[index].value.database_name;
       if (empty[at]) {
         this.weights.controls[index].setValue(empty[at]);
-        this.weights.controls[index].updateValueAndValidity();//update the actual form control value
-      } 
-      attributes[at] = this.weights.controls[index].value / 100; 
+        this.weights.controls[index].updateValueAndValidity(); //update the actual form control value
+      }
+      attributes[at] = this.weights.controls[index].value / 100;
     }
     this.request = <IClusterRequest>{
       cluster_type: this.query.get('algorithm').value as ClusterType,
@@ -82,9 +87,9 @@ export class StepperComponent implements OnInit {
     for (let index = 0; index < this.attributes.length; index++) {
       let at = this.attributes.controls[index].value.database_name;
       let cur = {
-        name: this.attributes.controls[index].value?.display_name, 
-        weight: this.request?.attributes[at]
-  };
+        name: this.attributes.controls[index].value?.display_name,
+        weight: this.request?.attributes[at],
+      };
       attributes.push(cur);
     }
     return attributes;
@@ -106,26 +111,32 @@ export class StepperComponent implements OnInit {
       let remaining = 100 - total;
       for (const key in empty) {
         empty[key] = remaining / count;
-        
       }
     }
     return empty;
   }
 
   onSubmit() {
-    console.log('WHAT');
-    const queryParams = toQueryPararms(this.buildRequestTemplate());
-    console.log(queryParams);
-    this.router.navigate(['/query/graph'] , { queryParams: queryParams } );
+    const queryParams = this.queryService.toQueryPararms(
+      this.buildRequestTemplate()
+    );
+    this.router.navigate(['/query/graph'], { queryParams: queryParams });
   }
 
   addAttribute(attribute: Attribute): void {
     this.attributes.push(this.fb.control(attribute)); //push the attribute to the attribute array
-    
+
     if (this.allowEmptyInput) {
-      this.weights.push(this.fb.control(null, [Validators.min(0), Validators.max(100)]));
+      this.weights.push(
+        this.fb.control(null, [Validators.min(0), Validators.max(100)])
+      );
     } else {
-      this.weights.push(this.fb.control(null, [Validators.required, Validators.compose([Validators.min(0), Validators.max(100)])]));
+      this.weights.push(
+        this.fb.control(null, [
+          Validators.required,
+          Validators.compose([Validators.min(0), Validators.max(100)]),
+        ])
+      );
     }
     //for now, using perecent values (if user enters 12.34, it will be read as 12.34% or 0.1234)
   }
@@ -141,12 +152,13 @@ export class StepperComponent implements OnInit {
   }
 
   needToShowSnackBar() {
-    const action = "Dismiss";
-    let msg = ""
+    const action = 'Dismiss';
+    let msg = '';
     if (this.weights.errors?.distributeWeight) {
-      msg = "Could not assign empty inputs a value!! Current input already equals 100.";
+      msg =
+        'Could not assign empty inputs a value!! Current input already equals 100.';
     } else if (this.weights.errors?.validWeightTotal) {
-      msg = "All weights values must add up to 100!!";
+      msg = 'All weights values must add up to 100!!';
     } else {
       return;
     }
@@ -162,7 +174,10 @@ export class StepperComponent implements OnInit {
       this.weights.clearValidators();
       this.weights.setValidators(validWeightTotal(this.allowEmptyInput));
     } else {
-      this.weights.setValidators([emptyWeights(), validWeightTotal(this.allowEmptyInput), ]);
+      this.weights.setValidators([
+        emptyWeights(),
+        validWeightTotal(this.allowEmptyInput),
+      ]);
     }
     for (let index = 0; index < this.weights.length; index++) {
       let element = this.weights.at(index);
@@ -170,7 +185,10 @@ export class StepperComponent implements OnInit {
         element.clearValidators();
         element.setValidators([Validators.min(0), Validators.max(100)]);
       } else {
-        element.setValidators([Validators.required, Validators.compose([Validators.min(0), Validators.max(100)])]);
+        element.setValidators([
+          Validators.required,
+          Validators.compose([Validators.min(0), Validators.max(100)]),
+        ]);
       }
       element.updateValueAndValidity();
     }
@@ -193,29 +211,33 @@ export class StepperComponent implements OnInit {
     return this.query?.get('weights') as FormArray;
   }
   get isWeightStepComplete(): boolean {
-    return !this.allowEmptyInput && this.query.get('weights').errors?.emptyWeights;
+    return (
+      !this.allowEmptyInput && this.query.get('weights').errors?.emptyWeights
+    );
   }
 }
 
 export function hasEmpty(array: FormArray): boolean {
   let result = false;
-    for (let index = 0; index < array.value.length; index++) {
-      if (!array.value[index]) result = true;
-    }
-    return result;
+  for (let index = 0; index < array.value.length; index++) {
+    if (!array.value[index]) result = true;
+  }
+  return result;
 }
 export function emptyWeights(): ValidatorFn {
-  return (control: AbstractControl): {[key: string]: any} | null => {
+  return (control: AbstractControl): { [key: string]: any } | null => {
     /* let isComplete = true;
     for (let index = 0; index < control.value.length; index++) {
       if (!control.value[index]) isComplete = false;
     } */
-    return hasEmpty(control as FormArray) ? {emptyWeights: {value: control.value}} : null;
+    return hasEmpty(control as FormArray)
+      ? { emptyWeights: { value: control.value } }
+      : null;
   };
 }
 
 export function validWeightTotal(allowEmpty: boolean): ValidatorFn {
-  return (control: AbstractControl): {[key: string]: any} | null => {
+  return (control: AbstractControl): { [key: string]: any } | null => {
     let total = 0;
     for (let index = 0; index < control.value.length; index++) {
       if (control.value[index]) total += control.value[index];
@@ -228,14 +250,14 @@ export function validWeightTotal(allowEmpty: boolean): ValidatorFn {
       //If empty inputs are allowed and there are empty inputs present then total weight must be less than 100, to allow for the distrubtion of remaining weight
       if (empty && total == 100) {
         //If there are empty inputs but the total is already equal to 100, then input is invalid
-        return {distributeWeight: {value: control.value}};
+        return { distributeWeight: { value: control.value } };
       } else if (!empty && total != 100) {
         //If there aren't empty inputs, then total weight must still equal 100
-        return {validWeightTotal: {value: control.value}};
+        return { validWeightTotal: { value: control.value } };
       }
       return null;
     } else {
-      return {validWeightTotal: {value: control.value}};
+      return { validWeightTotal: { value: control.value } };
     }
   };
 }
