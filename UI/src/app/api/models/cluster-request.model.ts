@@ -7,9 +7,8 @@ export interface IClusterRequest {
   time_steps: number; // Specifies the number of time steps to cluster
   attributes: any; // { 'db_name': weight.00 }
   database?: Database;
-  time_steps?: number;
   time_interval?: any;
-  starting_time_step?: number;
+  starting_time_step: number;
 }
 
 export enum ClusterType {

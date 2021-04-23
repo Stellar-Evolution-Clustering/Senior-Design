@@ -76,8 +76,9 @@ export class StepperComponent implements OnInit {
 
     let steps = {};
     if (this.query.get('temporal_val').enabled) {
-      steps['min'] = steps['max'] = this.query.get('temporal_val').value;
-      
+      //steps['min'] = steps['max'] = this.query.get('temporal_val').value;
+      steps['min'] = 0;
+      steps['max'] = this.query.get('temporal_val').value;
     } else {
       steps['min'] = this.query.get('time_interval').value[0];
       steps['max'] = this.query.get('time_interval').value[1];
@@ -89,11 +90,10 @@ export class StepperComponent implements OnInit {
       eps: this.query.get('eps').value,
       n_samples: this.query.get('n_samples').value,
       standardizer: this.query.get('standardizer').value as DataProcessors,
-      time_steps: 3,
       attributes: attributes,
       database: this.query.get('dbSelect').value as Database,
-      time_steps: steps['min'],
-      starting_time_step: steps['max']
+      time_steps: steps['max'],
+      starting_time_step: steps['min']
     };
 
     return this.request;

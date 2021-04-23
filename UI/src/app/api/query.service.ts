@@ -74,7 +74,6 @@ export class QueryService {
     params['eps'] = request.eps;
     params['n_samples'] = request.n_samples;
     params['standardizer'] = request.standardizer;
-    params['time_steps'] = request.time_steps;
     params['database'] = request.database;
     params['time_steps'] = request.time_steps;
     params['starting_time_step'] = request.starting_time_step;
@@ -104,9 +103,8 @@ export class QueryService {
       n_samples: Number(params?.n_samples),
       n_clusters: Number(params?.n_clusters),
       standardizer: params?.standardizer,
-      time_steps: +params.time_steps,
       database: params?.database,
-      time_steps: Number(params?.temporal_val),
+      time_steps: Number(params?.time_steps),
       starting_time_step: Number(params?.starting_time_step)
     };
   }
