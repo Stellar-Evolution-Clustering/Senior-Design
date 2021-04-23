@@ -21,11 +21,13 @@ def preprocess_data(data: np.ndarray, standardizer: str) -> np.ndarray:
     return DATA_PROCESSORS[standardizer].fit_transform(data)
 
 def get_stars(n_clusters: int=None, n_samples: int=None, eps: float=None, standardizer: str=None,
-                cluster_type: str=None, attributes: dict=None, time_steps: int=1, start_ts: int=0) -> list:
+                cluster_type: str=None, attributes: dict=None, time_steps: int=1, start_ts: int=1) -> list:
 
     if not standardizer:
         standardizer = 'standard'
-
+    
+    # user will give 1-indexed value. Need to convert to 0 indexed before doing anything else.
+    start_ts = start_ts - 1
     end_ts = start_ts + time_steps
     binarystars = InterpolatedBinaryStars.objects.annotate(time_id_mod=(F('time_id') - 1) % MAX_ROWS).filter(
                                                             time_id_mod__range=(start_ts, end_ts - 1)).order_by('time_id')
