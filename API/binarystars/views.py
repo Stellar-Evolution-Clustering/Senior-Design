@@ -115,7 +115,8 @@ def queue_cluster(request):
     response = ClusterQueue.objects.create(
         query=body, finished=False, response=[])
 
-    t = threading.Thread(target=process_stars, args=[response.id, body])
+    t = threading.Thread(target=process_stars_background,
+                         args=[response.id, body])
     t.setDaemon(True)
     t.start()
 
