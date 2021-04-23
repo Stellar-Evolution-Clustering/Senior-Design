@@ -23,6 +23,7 @@ class ClusterRequestBody(enum.Enum):
     CLUSTER_TYPE = 'cluster_type'
     ATTRIBUTES = 'attributes'
     TIME_STEPS = 'time_steps'
+    START_TS = 'starting_time_step'
 
 
 @api_view(['GET', 'POST', 'DELETE'])
@@ -64,15 +65,16 @@ def binarystars_cluster(request):
         body = JSONParser().parse(request)
         clust = None
         if body[ClusterRequestBody.CLUSTER_TYPE.value] == 'kmeans':
-            # try:
-            # Using Kmeans, don't need to worry about n_samples or eps
-            clust = cluster.get_stars(n_clusters=body[ClusterRequestBody.N_CLUSTERS.value],
-                                      attributes=body[ClusterRequestBody.ATTRIBUTES.value],
-                                      standardizer=body[ClusterRequestBody.STANDARDIZER.value],
-                                      cluster_type=body[ClusterRequestBody.CLUSTER_TYPE.value],
-                                      time_steps=body[ClusterRequestBody.TIME_STEPS.value])
-            # except: # improper information provided to request...
-         #   return JsonResponse({"msg": "BAD REQUEST"}, status=status.HTTP_400_BAD_REQUEST)
+            try:
+                # Using Kmeans, don't need to worry about n_samples or eps
+                clust = cluster.get_stars(n_clusters=body[ClusterRequestBody.N_CLUSTERS.value],
+                                          attributes=body[ClusterRequestBody.ATTRIBUTES.value],
+                                          standardizer=body[ClusterRequestBody.STANDARDIZER.value],
+                                          cluster_type=body[ClusterRequestBody.CLUSTER_TYPE.value],
+                                          time_steps=body[ClusterRequestBody.TIME_STEPS.value],
+                                          start_ts=body[ClusterRequestBody.START_TS.value])
+            except:  # improper information provided to request...
+                return JsonResponse({"msg": "BAD REQUEST"}, status=status.HTTP_400_BAD_REQUEST)
         elif body[ClusterRequestBody.CLUSTER_TYPE.value] == 'dbscan':
             try:
                 # since it is dbscan, ignore n_clusters
@@ -81,7 +83,8 @@ def binarystars_cluster(request):
                                           attributes=body[ClusterRequestBody.ATTRIBUTES.value],
                                           standardizer=body[ClusterRequestBody.STANDARDIZER.value],
                                           cluster_type=body[ClusterRequestBody.CLUSTER_TYPE.value],
-                                          time_steps=body[ClusterRequestBody.TIME_STEPS.value])
+                                          time_steps=body[ClusterRequestBody.TIME_STEPS.value],
+                                          start_ts=body[ClusterRequestBody.START_TS.value])
             except:  # improper information provided to request...
                 return JsonResponse({"msg": "BAD REQUEST"}, status=status.HTTP_400_BAD_REQUEST)
         else:  # didn't provide cluster method, raise error
@@ -122,10 +125,11 @@ def queue_cluster(request):
 def queue_get_cluster(request, uid):
     queueItem = ClusterQueue.objects.filter(id=uid).first()
     return JsonResponse(queueItem.response, status=status.HTTP_200_OK, safe=False)
+
 # background version
 
 
-def process_stars(id, body):
+def process_stars_background(id, body):
     clust = None
     if body[ClusterRequestBody.CLUSTER_TYPE.value] == 'kmeans':
         try:
@@ -134,7 +138,8 @@ def process_stars(id, body):
                                       attributes=body[ClusterRequestBody.ATTRIBUTES.value],
                                       standardizer=body[ClusterRequestBody.STANDARDIZER.value],
                                       cluster_type=body[ClusterRequestBody.CLUSTER_TYPE.value],
-                                      time_steps=body[ClusterRequestBody.TIME_STEPS.value])
+                                      time_steps=body[ClusterRequestBody.TIME_STEPS.value],
+                                      start_ts=body[ClusterRequestBody.START_TS.value])
         except:  # improper information provided to request...
             ClusterQueue.objects.filter(id=id).update(error=True)
             return
@@ -146,9 +151,9 @@ def process_stars(id, body):
                                       attributes=body[ClusterRequestBody.ATTRIBUTES.value],
                                       standardizer=body[ClusterRequestBody.STANDARDIZER.value],
                                       cluster_type=body[ClusterRequestBody.CLUSTER_TYPE.value],
-                                      time_steps=body[ClusterRequestBody.TIME_STEPS.value])
+                                      time_steps=body[ClusterRequestBody.TIME_STEPS.value],
+                                      start_ts=body[ClusterRequestBody.START_TS.value])
         except:  # improper information provided to request...
             ClusterQueue.objects.filter(id=id).update(error=True)
             return
-
     ClusterQueue.objects.filter(id=id).update(response=clust, finished=True)
