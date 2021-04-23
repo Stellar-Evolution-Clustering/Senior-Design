@@ -1,5 +1,6 @@
 from django.db import models
 import uuid
+from datetime import datetime
 
 # Create your models here.
 
@@ -19,6 +20,7 @@ class ClusterQueue(models.Model):
     query = models.JSONField(editable=False)
     finished = models.BooleanField(default=False)
     response = models.JSONField()
+    date_added = models.DateTimeField(auto_now_add=True, blank=True)
 
     class Meta:
         managed = True
