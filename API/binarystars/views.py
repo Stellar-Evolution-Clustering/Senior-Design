@@ -5,13 +5,15 @@ from django.http.response import JsonResponse
 from rest_framework.parsers import JSONParser
 from rest_framework import status
 
-from binarystars.models import BinaryStars, Attribute, InterpolatedBinaryStars
-from binarystars.serializers import BinaryStarsSerializer, AttributeSerializer, InterpolatedBinaryStarsSerializer
+from binarystars.models import BinaryStars, Attribute, InterpolatedBinaryStars, ClusterQueue
+from binarystars.serializers import BinaryStarsSerializer, AttributeSerializer, InterpolatedBinaryStarsSerializer, ClusterQueueSerializer
 from rest_framework.decorators import api_view
 from binarystars.cluster.interpolation import interpolate_all
 
 import binarystars.cluster.cluster as cluster
 import enum
+import threading
+
 
 class ClusterRequestBody(enum.Enum):
     N_CLUSTERS = 'n_clusters'
@@ -21,6 +23,7 @@ class ClusterRequestBody(enum.Enum):
     CLUSTER_TYPE = 'cluster_type'
     ATTRIBUTES = 'attributes'
     TIME_STEPS = 'time_steps'
+
 
 @api_view(['GET', 'POST', 'DELETE'])
 def binarystars_list(request):
@@ -37,6 +40,7 @@ def binarystars_list(request):
             return JsonResponse(binarystars_serializer.data, status=status.HTTP_201_CREATED)
         return JsonResponse(binarystars_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
 @api_view(['GET', 'PUT', 'DELETE'])
 def binarystars_detail(request, pk):
     binarystar = InterpolatedBinaryStars.objects.get(pk=pk)
@@ -45,6 +49,7 @@ def binarystars_detail(request, pk):
         binarystar_serializer = InterpolatedBinaryStarsSerializer(binarystar)
         return JsonResponse(binarystar_serializer.data, safe=False)
 
+
 @api_view(['GET'])
 def binarystars_attributes(request):
     att = Attribute.objects.all().exclude(enabled=False)
@@ -52,35 +57,37 @@ def binarystars_attributes(request):
     if request.method == 'GET':
         return JsonResponse(att_serializer.data, safe=False)
 
+
 @api_view(['POST'])
 def binarystars_cluster(request):
     if request.method == 'POST':
         body = JSONParser().parse(request)
         clust = None
         if body[ClusterRequestBody.CLUSTER_TYPE.value] == 'kmeans':
-            try:
-                # Using Kmeans, don't need to worry about n_samples or eps
-                clust = cluster.get_stars(n_clusters=body[ClusterRequestBody.N_CLUSTERS.value],
-                                        attributes=body[ClusterRequestBody.ATTRIBUTES.value],
-                                        standardizer=body[ClusterRequestBody.STANDARDIZER.value],
-                                        cluster_type=body[ClusterRequestBody.CLUSTER_TYPE.value],
-                                        time_steps=body[ClusterRequestBody.TIME_STEPS.value])
-            except: # improper information provided to request...
-                return JsonResponse({"msg": "BAD REQUEST"}, status=status.HTTP_400_BAD_REQUEST)
+            # try:
+            # Using Kmeans, don't need to worry about n_samples or eps
+            clust = cluster.get_stars(n_clusters=body[ClusterRequestBody.N_CLUSTERS.value],
+                                      attributes=body[ClusterRequestBody.ATTRIBUTES.value],
+                                      standardizer=body[ClusterRequestBody.STANDARDIZER.value],
+                                      cluster_type=body[ClusterRequestBody.CLUSTER_TYPE.value],
+                                      time_steps=body[ClusterRequestBody.TIME_STEPS.value])
+            # except: # improper information provided to request...
+         #   return JsonResponse({"msg": "BAD REQUEST"}, status=status.HTTP_400_BAD_REQUEST)
         elif body[ClusterRequestBody.CLUSTER_TYPE.value] == 'dbscan':
             try:
                 # since it is dbscan, ignore n_clusters
                 clust = cluster.get_stars(n_samples=body[ClusterRequestBody.N_SAMPLES.value],
-                                        eps=body[ClusterRequestBody.EPS.value],
-                                        attributes=body[ClusterRequestBody.ATTRIBUTES.value],
-                                        standardizer=body[ClusterRequestBody.STANDARDIZER.value],
-                                        cluster_type=body[ClusterRequestBody.CLUSTER_TYPE.value],
-                                        time_steps=body[ClusterRequestBody.TIME_STEPS.value])
-            except: # improper information provided to request...
+                                          eps=body[ClusterRequestBody.EPS.value],
+                                          attributes=body[ClusterRequestBody.ATTRIBUTES.value],
+                                          standardizer=body[ClusterRequestBody.STANDARDIZER.value],
+                                          cluster_type=body[ClusterRequestBody.CLUSTER_TYPE.value],
+                                          time_steps=body[ClusterRequestBody.TIME_STEPS.value])
+            except:  # improper information provided to request...
                 return JsonResponse({"msg": "BAD REQUEST"}, status=status.HTTP_400_BAD_REQUEST)
-        else: # didn't provide cluster method, raise error
+        else:  # didn't provide cluster method, raise error
             return JsonResponse({"msg": "clustering method was not provided"}, status=status.HTTP_400_BAD_REQUEST)
         return JsonResponse(clust, status=status.HTTP_200_OK, safe=False)
+
 
 @api_view(['GET'])
 def interpolate_data(request):
@@ -92,3 +99,45 @@ def interpolate_data(request):
         else:
             interpolate_all()
             return JsonResponse("stars successfully interpolated", status=status.HTTP_200_OK, safe=False)
+
+
+@api_view(['POST', 'GET'])
+def queue_cluster(request):
+    if request.method == 'GET':
+        queue = ClusterQueue.objects.values("id", "finished", "query")
+        return JsonResponse(list(queue), status=status.HTTP_200_OK, safe=False)
+
+    body = JSONParser().parse(request)
+    response = ClusterQueue.objects.create(
+        query=body, finished=False, response=[])
+
+    t = threading.Thread(target=process_stars, args=[response.id, body])
+    t.setDaemon(True)
+    t.start()
+
+    return JsonResponse(ClusterQueueSerializer(response).data, status=status.HTTP_201_CREATED)
+
+
+def queue_get_cluster(request, uid):
+    queueItem = ClusterQueue.objects.filter(id=uid).first()
+    return JsonResponse(queueItem.response, status=status.HTTP_200_OK, safe=False)
+# background version
+
+
+def process_stars(id, body):
+    clust = None
+    if body[ClusterRequestBody.CLUSTER_TYPE.value] == 'kmeans':
+        clust = cluster.get_stars(n_clusters=body[ClusterRequestBody.N_CLUSTERS.value],
+                                  attributes=body[ClusterRequestBody.ATTRIBUTES.value],
+                                  standardizer=body[ClusterRequestBody.STANDARDIZER.value],
+                                  cluster_type=body[ClusterRequestBody.CLUSTER_TYPE.value],
+                                  time_steps=body[ClusterRequestBody.TIME_STEPS.value] or 1)
+    elif body[ClusterRequestBody.CLUSTER_TYPE.value] == 'dbscan':
+        clust = cluster.get_stars(n_samples=body[ClusterRequestBody.N_SAMPLES.value],
+                                  eps=body[ClusterRequestBody.EPS.value],
+                                  attributes=body[ClusterRequestBody.ATTRIBUTES.value],
+                                  standardizer=body[ClusterRequestBody.STANDARDIZER.value],
+                                  cluster_type=body[ClusterRequestBody.CLUSTER_TYPE.value],
+                                  time_steps=body[ClusterRequestBody.TIME_STEPS.value])
+
+    ClusterQueue.objects.filter(id=id).update(response=clust, finished=True)

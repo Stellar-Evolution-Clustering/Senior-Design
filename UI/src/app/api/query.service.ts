@@ -5,7 +5,10 @@ import { catchError, filter, map, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { Attribute } from './models/attribute.model';
 import { IClusterRequest } from './models/cluster-request.model';
-import { ClusterBinaryStar, ClusterBinaryStarTimesteps } from './models/clustered-binary-star.model';
+import {
+  ClusterBinaryStar,
+  ClusterBinaryStarTimesteps,
+} from './models/clustered-binary-star.model';
 
 @Injectable()
 export class QueryService {
@@ -47,7 +50,7 @@ export class QueryService {
 
   postQuery(body: IClusterRequest): Observable<ClusterBinaryStarTimesteps> {
     return this.http
-      .post<ClusterBinaryStarTimesteps>(`${this.backendUrl}/cluster`, body)
+      .post<ClusterBinaryStarTimesteps>(`${this.backendUrl}/queue`, body)
       .pipe(
         tap((_) => console.log('posting query to backend')),
         tap((_) => console.log(body)),
@@ -91,7 +94,7 @@ export class QueryService {
   fromQueryParams(params: any, attributeKeys: string[]): IClusterRequest {
     const attr = {};
     for (let key of Object.keys(params)) {
-      if (attributeKeys.includes(key) && key != "time_steps") {
+      if (attributeKeys.includes(key) && key != 'time_steps') {
         attr[key] = Number(params[key]);
       }
     }
@@ -105,7 +108,7 @@ export class QueryService {
       standardizer: params?.standardizer,
       database: params?.database,
       time_steps: Number(params?.time_steps),
-      starting_time_step: Number(params?.starting_time_step)
+      starting_time_step: Number(params?.starting_time_step),
     };
   }
 }
