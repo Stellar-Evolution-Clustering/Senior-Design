@@ -15,11 +15,18 @@ class Attribute(models.Model):
         db_table = 'attributes'
 
 
+def default(obj):
+    if isinstance(obj, Decimal):
+        return str(obj)
+    raise TypeError("Object of type '%s' is not JSON serializable" %
+                    type(obj).__name__)
+
+
 class ClusterQueue(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     query = models.JSONField(editable=False)
     finished = models.BooleanField(default=False)
-    response = models.JSONField()
+    response = models.JSONField(default=default)
     date_added = models.DateTimeField(auto_now_add=True, blank=True)
     error = models.BooleanField(default=False)
 
