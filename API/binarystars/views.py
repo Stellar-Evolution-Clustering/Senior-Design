@@ -21,6 +21,7 @@ class ClusterRequestBody(enum.Enum):
     CLUSTER_TYPE = 'cluster_type'
     ATTRIBUTES = 'attributes'
     TIME_STEPS = 'time_steps'
+    START_TS = 'starting_time_step'
 
 @api_view(['GET', 'POST', 'DELETE'])
 def binarystars_list(request):
@@ -64,7 +65,8 @@ def binarystars_cluster(request):
                                         attributes=body[ClusterRequestBody.ATTRIBUTES.value],
                                         standardizer=body[ClusterRequestBody.STANDARDIZER.value],
                                         cluster_type=body[ClusterRequestBody.CLUSTER_TYPE.value],
-                                        time_steps=body[ClusterRequestBody.TIME_STEPS.value])
+                                        time_steps=body[ClusterRequestBody.TIME_STEPS.value],
+                                        start_ts=body[ClusterRequestBody.START_TS.value])
             except: # improper information provided to request...
                 return JsonResponse({"msg": "BAD REQUEST"}, status=status.HTTP_400_BAD_REQUEST)
         elif body[ClusterRequestBody.CLUSTER_TYPE.value] == 'dbscan':
@@ -75,7 +77,8 @@ def binarystars_cluster(request):
                                         attributes=body[ClusterRequestBody.ATTRIBUTES.value],
                                         standardizer=body[ClusterRequestBody.STANDARDIZER.value],
                                         cluster_type=body[ClusterRequestBody.CLUSTER_TYPE.value],
-                                        time_steps=body[ClusterRequestBody.TIME_STEPS.value])
+                                        time_steps=body[ClusterRequestBody.TIME_STEPS.value],
+                                        start_ts=body[ClusterRequestBody.START_TS.value])
             except: # improper information provided to request...
                 return JsonResponse({"msg": "BAD REQUEST"}, status=status.HTTP_400_BAD_REQUEST)
         else: # didn't provide cluster method, raise error
