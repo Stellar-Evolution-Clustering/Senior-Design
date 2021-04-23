@@ -6,3 +6,7 @@ export interface ClusterBinaryStar {
     cluster_idx: number;
     cluster_attributes: any;
 }
+
+export interface ClusterBinaryStarTimesteps {
+    timesteps: ClusterBinaryStar[][];
+}

@@ -1,7 +1,47 @@
-<p>Help Page that describes each step in the clustering process</p>
-<br/>
-<p>About the DBs</p>
-<p>What are attributes?</p>
-<p>What are weight function for?</p>
-<p>What are distance functions?</p>
-<p>What are the cluster functions (dbscan and kmeans)</p>
+<h1>Stellar-Evolution-Clustering | How to Use the Application</h1>
+
+<div>
+  <h2>Query Form</h2>
+  <div>
+    <p>1. Any clustering begins by filling out the query form</p>
+    <img class="image" src="assets/images/home_page.PNG" alt="Home Page"/>
+  </div>
+  <div>
+    <p>2. The first item on the form is the selection of attributes</p>
+    <img class="image" src="assets/images/query_attr.PNG" alt="Query Page, attribute select"/>
+  </div>
+  <div>
+    <p>3. Select the attributes you'd wish to cluster by, and add them to the right hand side</p>
+    <img class="image" src="assets/images/query_attr_2.PNG" alt="Query Page, attribute select 2"/>
+  </div>
+  <div>
+    <p>4. Next, define weights for each attribute. The larger the value, the more that attribute will effect clustering. The weights should add to 1.00</p>
+    <img class="image" src="assets/images/query_weight.PNG" alt="Query Page, weight select"/>
+  </div>
+  <div>
+    <p>5. Select the cluster method you'd like to use. The two clustering methods provided are K-means and DBScan</p>
+    <img class="image" src="assets/images/query_cluster_method.PNG" alt="Query Page, cluster method select"/>
+  </div>
+  <div>
+    <p>6. Finally, review the clustering form and submit to visualize the data</p>
+    <img class="image" src="assets/images/query_review_and_submit.PNG" alt="Query Page, review and submit"/>
+  </div>
+</div>
+
+<div>
+  <h2>Cluster Visualization</h2>
+  <div>
+    <p>
+      1. After submiting a query form, the selected atrributes will be pulled from the database and clustered. Here are the three attributes plotted on a 3D graph.
+    </p>
+    <img class="image" src="assets/images/graph_3D.PNG" alt="Home Page"/>
+  </div>
+  <div>
+    <p>2. Users will have the ability to view this data either 3 attributes at a time (3D graph), 2 attributes at a time (2D graph), or 1 attribute at a time (One Attribute Over Time).    </p>
+    <img class="image" src="assets/images/graph_configure.PNG" alt="Home Page"/>
+  </div>
+  <div>
+    <p>3. Clusters can be toggled on and off. Other graph tools, such as zooming and highlighting is available in the graph tool bar</p>
+    <img class="image" src="assets/images/graph_toggle_clusters.PNG" alt="Home Page"/>
+  </div>
+</div>

@@ -4,6 +4,7 @@ export interface IClusterRequest {
   eps?: number; // Need if doing cluster_type = DBScan
   standardizer?: DataProcessors; //Optional for data processing
   cluster_type: ClusterType; //Cluster type is required
+  time_steps: number; // Specifies the number of time steps to cluster
   attributes: any; // { 'db_name': weight.00 }
   database?: Database;
   time_steps?: number;

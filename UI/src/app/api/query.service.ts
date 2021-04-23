@@ -5,7 +5,7 @@ import { catchError, filter, map, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { Attribute } from './models/attribute.model';
 import { IClusterRequest } from './models/cluster-request.model';
-import { ClusterBinaryStar } from './models/clustered-binary-star.model';
+import { ClusterBinaryStar, ClusterBinaryStarTimesteps } from './models/clustered-binary-star.model';
 
 @Injectable()
 export class QueryService {
@@ -33,13 +33,6 @@ export class QueryService {
     );
   }
 
-  getInterpolatedData(): Observable<any> {
-    return this.http.get<any>(`${this.backendUrl}/interpolate`).pipe(
-      tap((_) => console.log('getting interpolated data')),
-      catchError(this.handleError<any>('getInterpolatedData', null))
-    );
-  }
-
   getAttributes(): Observable<Attribute[]> {
     return this.attributes.pipe(filter((value) => value != null));
   }
@@ -52,13 +45,13 @@ export class QueryService {
     );
   }
 
-  postQuery(body: IClusterRequest): Observable<ClusterBinaryStar[]> {
+  postQuery(body: IClusterRequest): Observable<ClusterBinaryStarTimesteps> {
     return this.http
-      .post<ClusterBinaryStar>(`${this.backendUrl}/cluster`, body)
+      .post<ClusterBinaryStarTimesteps>(`${this.backendUrl}/cluster`, body)
       .pipe(
         tap((_) => console.log('posting query to backend')),
         tap((_) => console.log(body)),
-        catchError(this.handleError<any>('postQuery', null))
+        catchError(this.handleError<any>('postQuery failed', null))
       );
   }
 
@@ -81,6 +74,7 @@ export class QueryService {
     params['eps'] = request.eps;
     params['n_samples'] = request.n_samples;
     params['standardizer'] = request.standardizer;
+    params['time_steps'] = request.time_steps;
     params['database'] = request.database;
     params['time_steps'] = request.time_steps;
     params['starting_time_step'] = request.starting_time_step;
@@ -98,7 +92,7 @@ export class QueryService {
   fromQueryParams(params: any, attributeKeys: string[]): IClusterRequest {
     const attr = {};
     for (let key of Object.keys(params)) {
-      if (attributeKeys.includes(key)) {
+      if (attributeKeys.includes(key) && key != "time_steps") {
         attr[key] = Number(params[key]);
       }
     }
@@ -110,6 +104,7 @@ export class QueryService {
       n_samples: Number(params?.n_samples),
       n_clusters: Number(params?.n_clusters),
       standardizer: params?.standardizer,
+      time_steps: +params.time_steps,
       database: params?.database,
       time_steps: Number(params?.temporal_val),
       starting_time_step: Number(params?.starting_time_step)

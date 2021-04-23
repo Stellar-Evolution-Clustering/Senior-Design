@@ -1,3 +1,110 @@
-<p>About page describes our team</p>
-<br/>
-<p>points to our senior design page and such</p>
+
+<div class="errthang">
+  <h1>Stellar-Evolution-Clustering | About Clustering and the Developement Team</h1>
+
+  <div>
+    <h2>About Clustering Technology</h2>
+    <div>
+      <p>
+        Clustering is a data analysis tool that finds similarities between data points. Clusters are defined so that two points within a cluster are closely related and
+        any two points in different clusters are not related. By applying clustering on large data sets, we can better organize the data, and even inferences based on
+        the supplied patterns. Real world application may be to identify spam emails, specialize advertisements, or in our case analyze stellar evolutions.
+      </p>
+      <img class="image" src="assets/images/cluster_explaination.png" alt="Home Page"/>
+      <p>This application utilizes two clustering algorithms, K-means and DBScan.</p>
+      <h3><strong>K-means</strong></h3>
+      <p>
+        The K-means clustering algorithm works by explicitly picking the number of clusters. Each cluster is represented by a centroid. K-means is an iterative algorithm;
+        with each iteration of the algorithm, the clusters are refined. Centroid positions are arbitrarily determined at the beginning of the algorithm. With each iteration,
+        points are assigned to the nearest cluster centroid. Next, using the mean of all points in a cluster, the centroid's position is recalculated to minimize the distance
+        from every point to the centroid. This is one iteration. After some number of iteration (can be determined by the elbow method), the clusters cannot be refined any more
+        and the algorithm terminates.
+      </p>
+      <p>Pros</p>
+      <p>&ensp;- One of the most efficient clustering algorithms</p>
+      <p>Cons</p>
+      <p>&ensp;- The number of clusters must be predetermined</p>
+      <p>&ensp;- Data with nonuniform density or unusual patterns can distupt clustering</p>
+      <img class="image" src="assets/images/kmeans_example.PNG" alt="Home Page"/>
+      <h3><strong>DBScan</strong></h3>
+      <p>
+        The DBScan clustering algorithm works by explicitly providing a neighbor distance (i.e. eps). The eps is the maximum distance that a point can be another point
+        in a cluster, in order to be considered part of that cluster (i.e. the average density of a cluster). If eps is too small, then no clusters will form; if eps is
+        too large, then there will be one large cluster, so it is important to estimate this value accurately. The algorithm starts by taking a single point and adding
+        points within the eps to its cluster. Once no more points are in eps distance from any point in the cluster a new unclustered point is selected and a new cluster
+        is constructed. This process repeats until all point are assigned to a cluster. If a cluster contains a abnormally low number of points, the those points may be
+        marked as outliers.
+      </p>
+      <p>Pros</p>
+      <p>&ensp;- Can detect outliers</p>
+      <p>&ensp;- Works well with unique data patterns and shapes</p>
+      <p>Cons</p>
+      <p>&ensp;- If the density of clusters is greatly varied, the algorithm performs poorly</p>
+      <img class="image" src="assets/images/dbscan_example.PNG" alt="Home Page"/>
+    </div>
+  </div>
+
+  <div>
+    <h2>About the Stellar Databases</h2>
+    <div>
+      <p>
+        There are two available databases to be clustered with in this application. The databases contain data for roughly 3,000 stars. This data is organized by attributes.
+        Attributes are single measurements from a star such as the Luminosity, Mass, or Helium concentration. The following is a list of available attributes:
+      </p>
+      <table>
+        <tr>
+          <th>tphys</th> <th>kstar_1   <th>mass0_1</th>   <th>mass_1</th>    <th>lumin_1</th>   <th>rad_1</th>   <th>teff_1</th>    <th>massc_1</th>   <th>radc_1</th>    <th>menv_1</th>    <th>renv_1</th>    <th>epoch_1</th>   <th>ospin_1</th>   <th>deltam_1</th>
+        </tr>
+        <tr>
+          <th>rrol_1</th>  <th>kstar_2</th>   <th>mass0_2</th>   <th>mass_2</th>    <th>lumin_2</th>   <th>rad_2</th>   <th>teff_2</th>    <th>massc_2</th>   <th>radc_2</th>    <th>menv_2</th>    <th>renv_2</th>    <th>epoch_2</th>   <th>ospin_2</th>   <th>deltam_2</th>
+        </tr>
+        <tr>
+          <th>rrol_2</th><th>porb</th> <th>sep</th>      <th>ecc</th>      <th>b_0_1</th>  <th>b_0_2</th>  <th>snkick_1</th> <th>snkick_2</th> <th>vsys_final</th> <th>sntheta_final</th> <th>sn_1</th>     <th>sn_2</th>     <th>bin_state</th> <th>merger_type</th>
+        </tr>
+        <tr>
+          <th>bin_num</th>  <th>time_id</th>
+        </tr>
+      </table>
+      <p>
+        The last attribute is an important one, time_id. The databases have been interpolated so that every star has the same amount of time_ids. Previously this was not true,
+        so comparing two stars with varying time steps was not possible. With the same amount of time steps, stars can be accurately clustered.
+      </p>
+    </div>
+    <!--
+    TODO -> This probably needs to be updated | also add the database names if possible
+    List the 2
+    Explain attributes
+    Explain time
+
+    -->
+  </div>
+
+  <div>
+    <h2>The Development Team</h2>
+    <div>
+      <p>
+        This appliation was designed by an ISU senior design team in the 2020-2021 school year. The group members include Adam Corpstein, Willis Knox, Joel Holm,
+        Ethan Vander Wiel, Becker Mathie, and Philip Payne. The following is a link to our senior design page.
+        <a href="http://sdmay21-30.sd.ece.iastate.edu/">http://sdmay21-30.sd.ece.iastate.edu/</a>
+        We extend our thanks to our professor Dr. Trajcevski, his grad student Xu Teng, and Prabin Giri for their help with this project.
+      </p>
+      <img class="image" src="assets/images/isu.jpg" alt="ISU"/>
+    </div>
+  </div>
+
+  <div>
+    <h2>References</h2>
+    <div>
+      <p><a href="https://realpython.com/k-means-clustering-python/">https://realpython.com/k-means-clustering-python/</a></p>
+      <p><a href="https://scikit-learn.org/stable/modules/generated/sklearn.cluster.DBSCAN.html">https://scikit-learn.org/stable/modules/generated/sklearn.cluster.DBSCAN.html</a></p>
+    </div>
+
+    <!--
+    TODO -> Add to this maybe ?
+    link to dbs
+    link to clustering method explainations
+    Research Papers?
+
+    -->
+  </div>
+</div>

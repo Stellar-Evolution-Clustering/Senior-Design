@@ -89,6 +89,7 @@ export class StepperComponent implements OnInit {
       eps: this.query.get('eps').value,
       n_samples: this.query.get('n_samples').value,
       standardizer: this.query.get('standardizer').value as DataProcessors,
+      time_steps: 3,
       attributes: attributes,
       database: this.query.get('dbSelect').value as Database,
       time_steps: steps['min'],

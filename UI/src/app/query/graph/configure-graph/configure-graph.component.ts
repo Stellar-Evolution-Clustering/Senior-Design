@@ -10,7 +10,7 @@ import { GraphType } from '../clusteredData';
 })
 export class ConfigureGraphComponent implements OnInit {
 
-  public graphType: GraphType = GraphType.Graph_3D;
+  public graphType: GraphType = GraphType.Graph_2_Attr;
   public canApply: boolean = true;
   public GraphTypeEnum = GraphType;
 
@@ -54,18 +54,13 @@ export class ConfigureGraphComponent implements OnInit {
   attrChecked(event) {
     if(event){
       this.numAttrSelected++;
-      //if this is the 2nd/3rd attribute selected, then disable the other boxes
-      if( this.graphType == GraphType.Graph_2D ){
+
+      if ( this.graphType == GraphType.Graph_2_Attr ){
         if( this.numAttrSelected == 2 ){
           this.disableUncheckedBoxes(true);
           this.canApply = false;
         }
-      } else if ( this.graphType == GraphType.Graph_3D ){
-        if( this.numAttrSelected == 3 ){
-          this.disableUncheckedBoxes(true);
-          this.canApply = false;
-        }
-      } else if ( this.graphType == GraphType.Graph_1D ){
+      } else if ( this.graphType == GraphType.Graph_1_Attr ){
         if( this.numAttrSelected == 1 ){
           this.disableUncheckedBoxes(true);
           this.canApply = false;
@@ -73,19 +68,12 @@ export class ConfigureGraphComponent implements OnInit {
       }
     } else {
       this.numAttrSelected--;
-
-      //if this is the 2nd/3rd attribute selected, then enable all boxes
-      if( this.graphType == GraphType.Graph_2D ){
+      if ( this.graphType == GraphType.Graph_2_Attr ){
         if( this.numAttrSelected == 1 ){
           this.disableUncheckedBoxes(false);
           this.canApply = true;
         }
-      } else if ( this.graphType == GraphType.Graph_3D ){
-        if( this.numAttrSelected == 2 ){
-          this.disableUncheckedBoxes(false);
-          this.canApply = true;
-        }
-      } else if ( this.graphType == GraphType.Graph_1D ){
+      } else if ( this.graphType == GraphType.Graph_1_Attr ){
         if( this.numAttrSelected == 0 ){
           this.disableUncheckedBoxes(false);
           this.canApply = true;
