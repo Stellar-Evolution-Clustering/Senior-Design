@@ -8,6 +8,6 @@ urlpatterns = [
     url(r'^api/binarystars/cluster$', views.binarystars_cluster),
     url(r'^api/binarystars/attributes$', views.binarystars_attributes),
     url(r'^api/binarystars/interpolate$', views.interpolate_data),
-    url(r'api/binarystars/queue/$', views.queue_cluster),
-    path(r'api/binarystars/queue/<str:uid>', views.queue_get_cluster)
+    url(r'api/binarystars/queue$', views.queue_cluster),
+    path(r'api/binarystars/cluster/<str:uid>', views.queue_get_cluster)
 ]

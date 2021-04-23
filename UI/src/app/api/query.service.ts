@@ -9,6 +9,7 @@ import {
   ClusterBinaryStar,
   ClusterBinaryStarTimesteps,
 } from './models/clustered-binary-star.model';
+import { Queue } from './models/queue.model';
 
 @Injectable()
 export class QueryService {
@@ -45,6 +46,16 @@ export class QueryService {
       map((attributes) => {
         return attributes.map((attribute) => attribute.database_name);
       })
+    );
+  }
+
+  getCurrentQueue(): Observable<Queue[]> {
+    return this.http.get<any[]>(`${this.backendUrl}/queue`);
+  }
+
+  getCluster(id: string): Observable<ClusterBinaryStarTimesteps> {
+    return this.http.get<ClusterBinaryStarTimesteps>(
+      `${this.backendUrl}/cluster/${id}`
     );
   }
 

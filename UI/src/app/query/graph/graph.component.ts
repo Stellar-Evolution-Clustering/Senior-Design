@@ -2,7 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { concatMap } from 'rxjs/operators';
-import { ClusterBinaryStar, ClusterBinaryStarTimesteps } from 'src/app/api/models/clustered-binary-star.model';
+import {
+  ClusterBinaryStar,
+  ClusterBinaryStarTimesteps,
+} from 'src/app/api/models/clustered-binary-star.model';
 import { IClusterRequest } from 'src/app/api/models/cluster-request.model';
 import { QueryService } from '../../api/query.service';
 import { ClusteredData, GraphType } from './clusteredData';
@@ -45,7 +48,7 @@ export class GraphComponent implements OnInit {
             text: '',
             font: {
               size: 20,
-            }
+            },
           },
           type: 'linear',
           zeroline: false,
@@ -55,7 +58,7 @@ export class GraphComponent implements OnInit {
             text: '',
             font: {
               size: 20,
-            }
+            },
           },
           type: 'linear',
           zeroline: false,
@@ -97,7 +100,7 @@ export class GraphComponent implements OnInit {
               text: '',
               font: {
                 size: 20,
-              }
+              },
             },
             type: 'linear',
             zeroline: false,
@@ -107,7 +110,7 @@ export class GraphComponent implements OnInit {
               text: '',
               font: {
                 size: 20,
-              }
+              },
             },
             type: 'linear',
             zeroline: false,
@@ -117,7 +120,7 @@ export class GraphComponent implements OnInit {
               text: '',
               font: {
                 size: 20,
-              }
+              },
             },
             type: 'linear',
             zeroline: false,
@@ -132,11 +135,8 @@ export class GraphComponent implements OnInit {
   getBackendDataTest(): void {
     this.route.queryParams
       .pipe(
-        concatMap((queryParams) =>
-          this.queryService.fromQueryParamsAsync(queryParams)
-        ),
-        concatMap((body: IClusterRequest) => {
-          return this.queryService.postQuery(body);
+        concatMap((params: any) => {
+          return this.queryService.getCluster(params.queryId);
         })
       )
       .subscribe((response: ClusterBinaryStarTimesteps) => {
@@ -164,8 +164,8 @@ export class GraphComponent implements OnInit {
       this.clusteredData.setSelectedAttributes(data['attrs']);
       if (this.clusteredData.graphType == GraphType.Graph_2_Attr) {
         this.set3DGraph();
-      } else if ( this.clusteredData.graphType == GraphType.Graph_1_Attr ) {
-        this.set2DGraph()
+      } else if (this.clusteredData.graphType == GraphType.Graph_1_Attr) {
+        this.set2DGraph();
       }
     });
   }

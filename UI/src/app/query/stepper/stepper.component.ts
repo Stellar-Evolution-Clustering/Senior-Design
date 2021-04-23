@@ -40,9 +40,12 @@ export class StepperComponent implements OnInit {
     n_samples: [null, [Validators.required, Validators.min(0)]],
     eps: [null, [Validators.required, Validators.min(0)]],
     standardizer: [DataProcessors.Standard],
-    temporal_val: [null, {validators: Validators.required, disabled: false}],
+    temporal_val: [null, { validators: Validators.required, disabled: false }],
     time_interval: this.fb.array(
-      [this.fb.control({value: null, disabled: true}), this.fb.control({value: null, disabled: true})],
+      [
+        this.fb.control({ value: null, disabled: true }),
+        this.fb.control({ value: null, disabled: true }),
+      ],
       Validators.required
     ),
   });
@@ -71,7 +74,6 @@ export class StepperComponent implements OnInit {
       } else {
         attributes[at] = this.weights.controls[index].value / 100;
       }
-      
     }
 
     let steps = {};
@@ -93,26 +95,10 @@ export class StepperComponent implements OnInit {
       attributes: attributes,
       database: this.query.get('dbSelect').value as Database,
       time_steps: steps['max'],
-      starting_time_step: steps['min']
+      starting_time_step: steps['min'],
     };
 
     return this.request;
-  }
-
-  buildAttributeDisplayArr(): any[] {
-    //used to pass display names and weights to the query summary
-
-    var attributes: any[] = [];
-
-    for (let index = 0; index < this.attributes.length; index++) {
-      let at = this.attributes.controls[index].value.database_name;
-      let cur = {
-        name: this.attributes.controls[index].value?.display_name,
-        weight: this.request?.attributes[at],
-      };
-      attributes.push(cur);
-    }
-    return attributes;
   }
 
   distributeWeights(): any {
@@ -137,10 +123,11 @@ export class StepperComponent implements OnInit {
   }
 
   onSubmit() {
-    const queryParams = this.queryService.toQueryPararms(
-      this.buildRequestTemplate()
-    );
-    this.router.navigate(['/query/graph'], { queryParams: queryParams });
+    this.queryService
+      .postQuery(this.buildRequestTemplate())
+      .subscribe((value) => {
+        this.router.navigate(['/home']);
+      });
   }
 
   addAttribute(attribute: Attribute): void {

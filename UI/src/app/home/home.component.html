@@ -1,3 +1,26 @@
 <h1 class="center-text">Welcome to the Binary Star Clustering Tool!</h1>
-
-<a class="center-button" mat-raised-button color="primary" id="queryButton" [routerLink]="['/query/step']">Create New Query</a>
+<a class="center-button" mat-raised-button color="primary" id="queryButton" [routerLink]="['/query/step']">Create New
+    Query</a>
+<mat-accordion>
+    <mat-expansion-panel *ngFor="let item of queue | async; trackBy: trackByQueueId">
+        <mat-expansion-panel-header>
+            <mat-panel-title>
+                <div> {{item.date_added | date:'medium'}}</div>
+            </mat-panel-title>
+            <mat-panel-description>
+                <div></div>
+                <mat-spinner *ngIf="!item.finished && !item.error" [diameter]="20"></mat-spinner>
+                <mat-icon *ngIf="item.finished" style="color:green">done</mat-icon>
+                <mat-icon *ngIf="item.error" color="error">error</mat-icon>
+            </mat-panel-description>
+        </mat-expansion-panel-header>
+        <div>
+            <app-query-summary [request]="item.query"></app-query-summary>
+        </div>
+        <a [disabled]="!item.finished || item.error" [routerLink]="['/query/graph']" [queryParams]="{queryId: item.id}"
+            mat-raised-button color="primary">
+            <mat-icon>bar_chart</mat-icon> View
+            Clusters
+        </a>
+    </mat-expansion-panel>
+</mat-accordion>

@@ -1,49 +1,77 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
-import { IClusterRequest, ClusterType, DataProcessors, Database } from 'src/app/api/models/cluster-request.model';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { Attribute } from 'src/app/api/models/attribute.model';
+import {
+  IClusterRequest,
+  ClusterType,
+  DataProcessors,
+  Database,
+} from 'src/app/api/models/cluster-request.model';
+import { QueryService } from 'src/app/api/query.service';
 
 @Component({
   selector: 'app-query-summary',
   templateUrl: './query-summary.component.html',
-  styleUrls: ['./query-summary.component.scss']
+  styleUrls: ['./query-summary.component.scss'],
 })
 export class QuerySummaryComponent implements OnInit {
-  @Input() request : IClusterRequest;
-  @Input() attributeTable : any;
+  @Input() request: IClusterRequest;
 
-  tableSource : MatTableDataSource<AttributeDisplay>;
+  tableSource: Observable<MatTableDataSource<AttributeDisplay>>;
   columnsToDisplay: string[] = ['name', 'weight'];
 
-  constructor() {
-    this.tableSource = new MatTableDataSource(this.attributeTable);
-   }
+  constructor(private queryService: QueryService) {
+    this.tableSource = queryService.getAttributes().pipe(
+      map((attributes: Attribute[]) => {
+        var table: any[] = [];
+        for (let attributeKey of Object.keys(this.request.attributes)) {
+          let cur = {
+            name: attributes.find(
+              (attribute) => attribute.database_name === attributeKey
+            ).display_name,
+            weight: this.request?.attributes[attributeKey],
+          };
+          table.push(cur);
+        }
+        return new MatTableDataSource(table);
+      })
+    );
+  }
 
   ngOnInit(): void {
     //console.log(this.request);
   }
 
-  get usingDBScan() : boolean {
+  get usingDBScan(): boolean {
     return this.request?.cluster_type == ClusterType.DBScan;
   }
 
-  getRequestParam(param: string) : any {
+  getRequestParam(param: string): any {
     switch (param) {
-      case "n_clusters":
+      case 'n_clusters':
         return this.request?.n_clusters == null ? 0 : this.request.n_clusters;
-      case "n_samples":
+      case 'n_samples':
         return this.request?.n_samples == null ? 0 : this.request.n_samples;
-      case "eps":
+      case 'eps':
         return this.request?.eps == null ? 0 : this.request.eps;
-      case "standardizer":
-        return this.request?.standardizer == null ? "Standard" : this.standardizer;
-      case "cluster_type":
-        return this.request?.cluster_type == null ? "Undefined" : this.clusterMethod;
-      case "database":
-        return this.request?.database == null ? "Undefined" : this.request.database;
+      case 'standardizer':
+        return this.request?.standardizer == null
+          ? 'Standard'
+          : this.standardizer;
+      case 'cluster_type':
+        return this.request?.cluster_type == null
+          ? 'Undefined'
+          : this.clusterMethod;
+      case 'database':
+        return this.request?.database == null
+          ? 'Undefined'
+          : this.request.database;
       case 'temporal_val':
         return this.request?.time_steps == null ? 0 : this.request.time_steps;
       default:
-        return "Undefined";
+        return 'Undefined';
     }
   }
 
@@ -54,7 +82,7 @@ export class QuerySummaryComponent implements OnInit {
       case ClusterType.KMeans:
         return ClusterType.d_KMeans;
       default:
-        return "Undefined"
+        return 'Undefined';
     }
   }
 
@@ -67,12 +95,12 @@ export class QuerySummaryComponent implements OnInit {
       case DataProcessors.Standard:
         return DataProcessors.d_Standard;
       default:
-        return "Undefined";
+        return 'Undefined';
     }
   }
 }
 
 export interface AttributeDisplay {
-  name: string,
-  weight: number
+  name: string;
+  weight: number;
 }

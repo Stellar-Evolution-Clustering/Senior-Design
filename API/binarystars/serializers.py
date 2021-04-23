@@ -11,7 +11,7 @@ class AttributeSerializer(serializers.ModelSerializer):
 class ClusterQueueSerializer(serializers.ModelSerializer):
     class Meta:
         model = ClusterQueue
-        fields = ('id', 'query', 'finished')
+        fields = ('id', 'query', 'finished', 'date_added')
 
 
 class BinaryStarsSerializer(serializers.ModelSerializer):

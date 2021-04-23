@@ -104,7 +104,8 @@ def interpolate_data(request):
 @api_view(['POST', 'GET'])
 def queue_cluster(request):
     if request.method == 'GET':
-        queue = ClusterQueue.objects.values("id", "finished", "query")
+        queue = ClusterQueue.objects.values(
+            "id", "finished", "query", "date_added", "error").order_by("date_added").reverse()
         return JsonResponse(list(queue), status=status.HTTP_200_OK, safe=False)
 
     body = JSONParser().parse(request)
@@ -127,17 +128,27 @@ def queue_get_cluster(request, uid):
 def process_stars(id, body):
     clust = None
     if body[ClusterRequestBody.CLUSTER_TYPE.value] == 'kmeans':
-        clust = cluster.get_stars(n_clusters=body[ClusterRequestBody.N_CLUSTERS.value],
-                                  attributes=body[ClusterRequestBody.ATTRIBUTES.value],
-                                  standardizer=body[ClusterRequestBody.STANDARDIZER.value],
-                                  cluster_type=body[ClusterRequestBody.CLUSTER_TYPE.value],
-                                  time_steps=body[ClusterRequestBody.TIME_STEPS.value] or 1)
+        try:
+            # Using Kmeans, don't need to worry about n_samples or eps
+            clust = cluster.get_stars(n_clusters=body[ClusterRequestBody.N_CLUSTERS.value],
+                                      attributes=body[ClusterRequestBody.ATTRIBUTES.value],
+                                      standardizer=body[ClusterRequestBody.STANDARDIZER.value],
+                                      cluster_type=body[ClusterRequestBody.CLUSTER_TYPE.value],
+                                      time_steps=body[ClusterRequestBody.TIME_STEPS.value])
+        except:  # improper information provided to request...
+            ClusterQueue.objects.filter(id=id).update(error=True)
+            return
     elif body[ClusterRequestBody.CLUSTER_TYPE.value] == 'dbscan':
-        clust = cluster.get_stars(n_samples=body[ClusterRequestBody.N_SAMPLES.value],
-                                  eps=body[ClusterRequestBody.EPS.value],
-                                  attributes=body[ClusterRequestBody.ATTRIBUTES.value],
-                                  standardizer=body[ClusterRequestBody.STANDARDIZER.value],
-                                  cluster_type=body[ClusterRequestBody.CLUSTER_TYPE.value],
-                                  time_steps=body[ClusterRequestBody.TIME_STEPS.value])
+        try:
+            # since it is dbscan, ignore n_clusters
+            clust = cluster.get_stars(n_samples=body[ClusterRequestBody.N_SAMPLES.value],
+                                      eps=body[ClusterRequestBody.EPS.value],
+                                      attributes=body[ClusterRequestBody.ATTRIBUTES.value],
+                                      standardizer=body[ClusterRequestBody.STANDARDIZER.value],
+                                      cluster_type=body[ClusterRequestBody.CLUSTER_TYPE.value],
+                                      time_steps=body[ClusterRequestBody.TIME_STEPS.value])
+        except:  # improper information provided to request...
+            ClusterQueue.objects.filter(id=id).update(error=True)
+            return
 
     ClusterQueue.objects.filter(id=id).update(response=clust, finished=True)

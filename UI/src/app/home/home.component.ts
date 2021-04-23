@@ -1,15 +1,26 @@
 import { Component, OnInit } from '@angular/core';
+import { Observable, timer } from 'rxjs';
+import { mergeMap } from 'rxjs/operators';
+import { Queue } from '../api/models/queue.model';
+import { QueryService } from '../api/query.service';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss']
+  styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit {
+  queue: Observable<Queue[]>;
 
-  constructor() { }
+  trackByQueueId = (index, queue) => queue.id;
 
-  ngOnInit(): void {
+  constructor(private queryService: QueryService) {
+    this.queue = timer(0, 5000).pipe(
+      mergeMap(() => {
+        return this.queryService.getCurrentQueue();
+      })
+    );
   }
 
+  ngOnInit(): void {}
 }

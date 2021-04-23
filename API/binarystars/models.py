@@ -21,6 +21,7 @@ class ClusterQueue(models.Model):
     finished = models.BooleanField(default=False)
     response = models.JSONField()
     date_added = models.DateTimeField(auto_now_add=True, blank=True)
+    error = models.BooleanField(default=False)
 
     class Meta:
         managed = True
