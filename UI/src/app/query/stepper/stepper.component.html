@@ -65,17 +65,9 @@
             </button>
           </div>
         </mat-step>
-        <mat-step>
+        <mat-step > <!-- [stepControl]="query.get('cluster_params')" -->
           <ng-template matStepLabel>Set AdditionalParameters</ng-template>
-          <app-clusterparams 
-            [clusterControl]="query.get('n_clusters')" 
-            [sampleControl]="query.get('n_samples')"
-            [epsControl]="query.get('eps')" 
-            [standardizerControl]="query.get('standardizer')"
-            [clusterType]="query.get('algorithm').value"
-            [timeStepControl]="query.get('temporal_val')"
-            [timeIntervalControl]="query.get('time_interval')">
-          
+          <app-clusterparams [clusterType]="query.get('algorithm').value" [paramsControl]="query.get('cluster_params')">
           </app-clusterparams>
           <div>
             <button mat-button matStepperPrevious type="button">Back</button>
