@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable, timer } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
+import { IClusterRequest } from '../api/models/cluster-request.model';
 import { Queue } from '../api/models/queue.model';
 import { QueryService } from '../api/query.service';
 
@@ -23,4 +24,9 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit(): void {}
+
+  requery(request: IClusterRequest) {
+    console.log(request);
+    this.queryService.postQuery(request).subscribe();
+  }
 }

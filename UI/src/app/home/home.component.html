@@ -22,5 +22,6 @@
             <mat-icon>bar_chart</mat-icon> View
             Clusters
         </a>
+        <button mat-raised-button color="primary" *ngIf="item.error" (click)="requery(item.query)">Requery</button>
     </mat-expansion-panel>
 </mat-accordion>
