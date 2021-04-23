@@ -40,6 +40,8 @@ export class QuerySummaryComponent implements OnInit {
         return this.request?.cluster_type == null ? "Undefined" : this.clusterMethod;
       case "database":
         return this.request?.database == null ? "Undefined" : this.request.database;
+      case 'temporal_val':
+        return this.request?.time_steps == null ? 0 : this.request.time_steps;
       default:
         return "Undefined";
     }

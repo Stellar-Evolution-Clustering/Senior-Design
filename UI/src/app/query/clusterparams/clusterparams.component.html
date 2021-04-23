@@ -20,7 +20,7 @@
 </div>
 
 
-<mat-divider></mat-divider>
+<mat-divider [inset]="true"></mat-divider>
 
 <h3>Select a Data Processor:</h3>
 <mat-form-field appearance="standard">
@@ -30,4 +30,24 @@
             {{ stan.name }}
         </mat-option>
     </mat-select>
+</mat-form-field>
+
+<mat-divider [inset]="true"></mat-divider>
+
+<h3>Set Temporal Value Range:</h3>
+<mat-checkbox (change)="useIntervalChanged($event)">
+    Use time step interval.
+</mat-checkbox>
+<mat-form-field>
+    <mat-label>Time Step</mat-label>
+    <input matInput type="number" [formControl]="timeStepControl"/>
+</mat-form-field>
+<mat-form-field>
+    <mat-label>Min</mat-label>
+    <input matInput type="number" [formControl]="timeIntervalControl.at(0)"/>
+</mat-form-field>
+<span>-</span>
+<mat-form-field>
+    <mat-label>Max</mat-label>
+    <input matInput type="number" [formControl]="timeIntervalControl.at(1)"/>
 </mat-form-field>

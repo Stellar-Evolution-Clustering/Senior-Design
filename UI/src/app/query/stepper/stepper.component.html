@@ -66,13 +66,15 @@
           </div>
         </mat-step>
         <mat-step>
-          <ng-template matStepLabel>Set Parameters & Data Processor</ng-template>
+          <ng-template matStepLabel>Set AdditionalParameters</ng-template>
           <app-clusterparams 
             [clusterControl]="query.get('n_clusters')" 
             [sampleControl]="query.get('n_samples')"
             [epsControl]="query.get('eps')" 
             [standardizerControl]="query.get('standardizer')"
-            [clusterType]="query.get('algorithm').value">
+            [clusterType]="query.get('algorithm').value"
+            [timeStepControl]="query.get('temporal_val')"
+            [timeIntervalControl]="query.get('time_interval')">
           
           </app-clusterparams>
           <div>

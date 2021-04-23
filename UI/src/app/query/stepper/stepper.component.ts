@@ -40,7 +40,11 @@ export class StepperComponent implements OnInit {
     n_samples: [null, [Validators.required, Validators.min(0)]],
     eps: [null, [Validators.required, Validators.min(0)]],
     standardizer: [DataProcessors.Standard],
-    temporal_val: [null, Validators.required],
+    temporal_val: [null, {validators: Validators.required, disabled: false}],
+    time_interval: this.fb.array(
+      [this.fb.control({value: null, disabled: true}), this.fb.control({value: null, disabled: true})],
+      Validators.required
+    ),
   });
 
   constructor(
@@ -61,11 +65,24 @@ export class StepperComponent implements OnInit {
     for (let index = 0; index < this.attributes.length; index++) {
       let at = this.attributes.controls[index].value.database_name;
       if (empty[at]) {
-        this.weights.controls[index].setValue(empty[at]);
-        this.weights.controls[index].updateValueAndValidity(); //update the actual form control value
+        //this.weights.controls[index].setValue(empty[at]);
+        //this.weights.controls[index].updateValueAndValidity(); //update the actual form control value
+        attributes[at] = empty[at] / 100;
+      } else {
+        attributes[at] = this.weights.controls[index].value / 100;
       }
-      attributes[at] = this.weights.controls[index].value / 100;
+      
     }
+
+    let steps = {};
+    if (this.query.get('temporal_val').enabled) {
+      steps['min'] = steps['max'] = this.query.get('temporal_val').value;
+      
+    } else {
+      steps['min'] = this.query.get('time_interval').value[0];
+      steps['max'] = this.query.get('time_interval').value[1];
+    } //Need to double check how backend needs the time steps to be sent
+
     this.request = <IClusterRequest>{
       cluster_type: this.query.get('algorithm').value as ClusterType,
       n_clusters: this.query.get('n_clusters').value,
@@ -74,8 +91,10 @@ export class StepperComponent implements OnInit {
       standardizer: this.query.get('standardizer').value as DataProcessors,
       attributes: attributes,
       database: this.query.get('dbSelect').value as Database,
-      temporal_val: this.query.get('temporal_val').value,
+      time_steps: steps['min'],
+      starting_time_step: steps['max']
     };
+
     return this.request;
   }
 
