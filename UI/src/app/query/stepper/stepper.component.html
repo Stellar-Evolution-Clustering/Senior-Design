@@ -7,12 +7,7 @@
           <ng-template matStepLabel>Choose DB</ng-template>
           <app-db [fc]="query.get('dbSelect')"></app-db>
           <div>
-            <button
-              mat-raised-button
-              matStepperNext
-              type="button"
-              color="primary"
-            >
+            <button mat-raised-button matStepperNext type="button" color="primary">
               Next
             </button>
           </div>
@@ -23,17 +18,20 @@
             (deleteAttributeEvent)="deleteAttribute($event)"></app-attribute>
           <div>
             <button mat-button matStepperPrevious type="button">Back</button>
-            <button mat-raised-button color="primary" matStepperNext type="button" [disabled]="query.get('attributes').errors?.required">
+            <button mat-raised-button color="primary" matStepperNext type="button"
+              [disabled]="query.get('attributes').errors?.required">
               Next
             </button>
           </div>
         </mat-step>
         <mat-step [stepControl]="query.get('weights')" #weightStep>
           <ng-template matStepLabel>Define Weight</ng-template>
-          <app-weight [weightArray]="query.get('weights')" [attributeArray]="this.attributes.controls" (allowEmptyInputEvent)="changeInputMode($event)" ></app-weight><!-- [allowEmptyInput]="allowEmptyInput" -->
+          <app-weight [weightArray]="query.get('weights')" [attributeArray]="this.attributes.controls"
+            (allowEmptyInputEvent)="changeInputMode($event)"></app-weight><!-- [allowEmptyInput]="allowEmptyInput" -->
           <div>
             <button mat-button matStepperPrevious type="button">Back</button>
-            <button mat-raised-button color="primary" matStepperNext type="button" (click)="needToShowSnackBar()" [disabled]="!this.allowEmptyInput && query.get('weights').errors?.emptyWeights">
+            <button mat-raised-button color="primary" matStepperNext type="button" (click)="needToShowSnackBar()"
+              [disabled]="!this.allowEmptyInput && query.get('weights').errors?.emptyWeights">
               Next
             </button>
           </div>
@@ -58,33 +56,28 @@
           <app-cluster-method [fc]="query.get('algorithm')"></app-cluster-method>
           <div>
             <button mat-button matStepperPrevious type="button">Back</button>
-            <button mat-raised-button color="primary"
-                    matStepperNext type="button"
-                    [disabled]="query.get('algorithm').errors?.required">
+            <button mat-raised-button color="primary" matStepperNext type="button"
+              [disabled]="query.get('algorithm').errors?.required">
               Next
             </button>
           </div>
         </mat-step>
-        <mat-step > <!-- [stepControl]="query.get('cluster_params')" -->
+        <mat-step>
+          <!-- [stepControl]="query.get('cluster_params')" -->
           <ng-template matStepLabel>Set AdditionalParameters</ng-template>
           <app-clusterparams [clusterType]="query.get('algorithm').value" [paramsControl]="query.get('cluster_params')">
           </app-clusterparams>
           <div>
             <button mat-button matStepperPrevious type="button">Back</button>
-            <button 
-            mat-raised-button 
-            matStepperNext 
-            color="primary" 
-            (click)="this.request = buildRequestTemplate(); print();" 
-            matStepperNext type="button" 
-            [disabled]="false">
+            <button mat-raised-button matStepperNext color="primary"
+              (click)="this.request = buildRequestTemplate(); print();" matStepperNext type="button" [disabled]="false">
               Next
             </button>
           </div>
         </mat-step>
         <mat-step>
           <ng-template matStepLabel>Review & Submit</ng-template>
-          <app-query-summary [request]="this.request" [attributeTable]="buildAttributeDisplayArr()"></app-query-summary>
+          <app-query-summary [request]="buildRequestTemplate()"></app-query-summary>
           <div>
             <button mat-button matStepperPrevious type="button">Back</button>
             <button mat-button (click)="stepper.reset()">Reset</button>

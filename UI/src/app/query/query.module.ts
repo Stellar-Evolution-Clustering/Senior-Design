@@ -40,5 +40,6 @@ PlotlyModule.plotlyjs = Plotly;
     ReactiveFormsModule,
     PlotlyModule,
   ],
+  exports: [QuerySummaryComponent],
 })
 export class QueryModule {}

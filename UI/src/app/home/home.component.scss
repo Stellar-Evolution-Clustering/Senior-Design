@@ -3,10 +3,8 @@
   font-size: 200%;
 }
 
-.center-button {
-  width: 100%;
-  padding: 20%;
-  height: 50%;
-  font-size: 600%;
-  text-align: center;
+.mat-expansion-panel-header-description {
+  flex-basis: 0;
+  justify-content: space-between;
+  align-items: center;
 }
