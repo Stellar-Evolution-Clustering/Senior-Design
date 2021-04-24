@@ -102,7 +102,7 @@ def cluster_stars(stars, attributes, weights, cluster_type, n_clusters, standard
     for i, item in enumerate(clust):
         cluster_att_dict = {}
         for j, att in enumerate(attributes):
-            cluster_att_dict[att] = stars_arr[i][j]
+            cluster_att_dict[att] = float(stars_arr[i][j])
 
         clustered_star = cstar.ClusteredStar(
             key=ids[i], idx=int(item), cluster_attributes=cluster_att_dict)

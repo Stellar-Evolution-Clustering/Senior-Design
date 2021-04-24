@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -16,14 +16,18 @@ import { QueryService } from 'src/app/api/query.service';
   templateUrl: './query-summary.component.html',
   styleUrls: ['./query-summary.component.scss'],
 })
-export class QuerySummaryComponent implements OnInit {
+export class QuerySummaryComponent implements OnInit, OnChanges {
   @Input() request: IClusterRequest;
 
   tableSource: Observable<MatTableDataSource<AttributeDisplay>>;
   columnsToDisplay: string[] = ['name', 'weight'];
 
-  constructor(private queryService: QueryService) {
-    this.tableSource = queryService.getAttributes().pipe(
+  constructor(private queryService: QueryService) {}
+
+  ngOnInit(): void {}
+
+  ngOnChanges() {
+    this.tableSource = this.queryService.getAttributes().pipe(
       map((attributes: Attribute[]) => {
         var table: any[] = [];
         for (let attributeKey of Object.keys(this.request.attributes)) {
@@ -38,10 +42,6 @@ export class QuerySummaryComponent implements OnInit {
         return new MatTableDataSource(table);
       })
     );
-  }
-
-  ngOnInit(): void {
-    //console.log(this.request);
   }
 
   get usingDBScan(): boolean {
@@ -69,10 +69,26 @@ export class QuerySummaryComponent implements OnInit {
           ? 'Undefined'
           : this.request.database;
       case 'temporal_val':
-        return this.request?.time_steps == null ? 0 : this.request.time_steps;
+        return this.request?.time_steps == null ||
+          this.request?.starting_time_step == null
+          ? 0
+          : this.timeStepString;
       default:
         return 'Undefined';
     }
+  }
+
+  get timeStepString(): string {
+    return this.useTimeStepRange
+      ? 'min:  ' +
+          this.request?.starting_time_step +
+          '   |   max:  ' +
+          this.request?.time_steps
+      : '' + this.request?.time_steps;
+  }
+
+  get useTimeStepRange(): boolean {
+    return this.request?.time_steps != this.request?.starting_time_step;
   }
 
   get clusterMethod(): string {

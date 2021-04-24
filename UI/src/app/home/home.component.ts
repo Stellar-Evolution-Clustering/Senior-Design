@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable, timer } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 import { IClusterRequest } from '../api/models/cluster-request.model';
 import { Queue } from '../api/models/queue.model';
 import { QueryService } from '../api/query.service';
+import { QueueService } from '../api/queue.service';
 
 @Component({
   selector: 'app-home',
@@ -15,18 +17,34 @@ export class HomeComponent implements OnInit {
 
   trackByQueueId = (index, queue) => queue.id;
 
-  constructor(private queryService: QueryService) {
+  constructor(
+    private queryService: QueryService,
+    private queueService: QueueService,
+    private snackBar: MatSnackBar
+  ) {}
+
+  ngOnInit(): void {
+    this.setupHttpQuery();
+  }
+
+  requery(request: IClusterRequest) {
+    console.log(request);
+    this.queueService.addClusterRequestToQueue(request).subscribe((value) => {
+      this.snackBar.open('Added to Queue');
+    });
+  }
+
+  setupHttpQuery() {
     this.queue = timer(0, 5000).pipe(
       mergeMap(() => {
-        return this.queryService.getCurrentQueue();
+        return this.queueService.getCurrentQueue();
       })
     );
   }
 
-  ngOnInit(): void {}
-
-  requery(request: IClusterRequest) {
-    console.log(request);
-    this.queryService.postQuery(request).subscribe();
+  deleteCluster(queryId: string) {
+    this.queueService.deleteFromQueue(queryId).subscribe((value) => {
+      this.snackBar.open('Deleted from Queue');
+    });
   }
 }

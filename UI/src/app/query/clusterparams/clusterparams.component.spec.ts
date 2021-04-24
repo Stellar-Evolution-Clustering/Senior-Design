@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormArray, FormControl } from '@angular/forms';
+import { FormArray, FormControl, FormGroup } from '@angular/forms';
 
 import { ClusterparamsComponent } from './clusterparams.component';
 
@@ -16,7 +16,7 @@ describe('ClusterparamsComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(ClusterparamsComponent);
     component = fixture.componentInstance;
-    component.timeIntervalControl = new FormArray([]);
+    component.paramsControl = new FormGroup({});
     fixture.detectChanges();
   });
 

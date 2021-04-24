@@ -49,24 +49,10 @@ export class QueryService {
     );
   }
 
-  getCurrentQueue(): Observable<Queue[]> {
-    return this.http.get<any[]>(`${this.backendUrl}/queue`);
-  }
-
-  getCluster(id: string): Observable<ClusterBinaryStarTimesteps> {
+  getCluster(queueId: string): Observable<ClusterBinaryStarTimesteps> {
     return this.http.get<ClusterBinaryStarTimesteps>(
-      `${this.backendUrl}/cluster/${id}`
+      `${this.backendUrl}/cluster/${queueId}`
     );
-  }
-
-  postQuery(body: IClusterRequest): Observable<ClusterBinaryStarTimesteps> {
-    return this.http
-      .post<ClusterBinaryStarTimesteps>(`${this.backendUrl}/queue`, body)
-      .pipe(
-        tap((_) => console.log('posting query to backend')),
-        tap((_) => console.log(body)),
-        catchError(this.handleError<any>('postQuery failed', null))
-      );
   }
 
   private handleError<T>(operation = 'operation', result?: T) {

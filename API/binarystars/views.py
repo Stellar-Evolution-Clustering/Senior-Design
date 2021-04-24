@@ -1,7 +1,7 @@
 # Create your views here.
 
 # from django.shortcuts import render
-from django.http.response import JsonResponse
+from django.http.response import JsonResponse, HttpResponse
 from rest_framework.parsers import JSONParser
 from rest_framework import status
 
@@ -13,6 +13,7 @@ from binarystars.cluster.interpolation import interpolate_all
 import binarystars.cluster.cluster as cluster
 import enum
 import threading
+from django.views.decorators.csrf import csrf_exempt
 
 
 class ClusterRequestBody(enum.Enum):
@@ -123,10 +124,15 @@ def queue_cluster(request):
     return JsonResponse(ClusterQueueSerializer(response).data, status=status.HTTP_201_CREATED)
 
 
+@csrf_exempt
 def queue_get_cluster(request, uid):
     queueItem = ClusterQueue.objects.filter(id=uid).first()
-    return JsonResponse(queueItem.response, status=status.HTTP_200_OK, safe=False)
-
+    if request.method == 'DELETE':
+        queueItem.delete()
+        return HttpResponse(status=status.HTTP_200_OK)
+    elif request.method == 'GET':
+        return JsonResponse(queueItem.response, status=status.HTTP_200_OK, safe=False)
+    return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
 # background version
 
 

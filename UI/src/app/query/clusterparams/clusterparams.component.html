@@ -3,18 +3,18 @@
     <div *ngSwitchCase="'dbscan'">
         <mat-form-field>
             <mat-label>Number of Samples</mat-label>
-            <input matInput type="number" [formControl]="sampleControl"/>
+            <input matInput type="number" [formControl]="paramsControl?.controls['n_samples']"/>
         </mat-form-field>
         <mat-form-field>
             <mat-label>EPS</mat-label>
-            <input matInput type="number" [formControl]="epsControl"/>
+            <input matInput type="number" [formControl]="paramsControl?.controls['eps']"/>
         </mat-form-field>
     </div>
     
     <div *ngSwitchCase="'kmeans'">
         <mat-form-field>
             <mat-label>Number of Clusters</mat-label>
-            <input matInput type="number" [formControl]="clusterControl"/>
+            <input matInput type="number" [formControl]="paramsControl?.controls['n_clusters']"/>
         </mat-form-field>
     </div>
 </div>
@@ -25,7 +25,7 @@
 <h3>Select a Data Processor:</h3>
 <mat-form-field appearance="standard">
     <mat-label>Data Processor</mat-label>
-    <mat-select [formControl]="standardizerControl">
+    <mat-select [formControl]="paramsControl?.controls['standardizer']">
         <mat-option *ngFor="let stan of standardizers" [value]="stan.value">
             {{ stan.name }}
         </mat-option>
@@ -40,14 +40,14 @@
 </mat-checkbox>
 <mat-form-field>
     <mat-label>Time Step</mat-label>
-    <input matInput type="number" [formControl]="timeStepControl"/>
+    <input matInput type="number" [formControl]="paramsControl?.controls['temporal_val']"/>
 </mat-form-field>
 <mat-form-field>
     <mat-label>Min</mat-label>
-    <input matInput type="number" [formControl]="timeIntervalControl.at(0)"/>
+    <input matInput type="number" [formControl]="paramsControl?.controls['time_interval']?.at(0)"/>
 </mat-form-field>
 <span>-</span>
 <mat-form-field>
     <mat-label>Max</mat-label>
-    <input matInput type="number" [formControl]="timeIntervalControl.at(1)"/>
+    <input matInput type="number" [formControl]="paramsControl?.controls['time_interval']?.at(1)"/>
 </mat-form-field>

@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormArray, FormControl } from '@angular/forms';
+import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { ClusterType, DataProcessors } from 'src/app/api/models/cluster-request.model';
 
@@ -10,12 +10,7 @@ import { ClusterType, DataProcessors } from 'src/app/api/models/cluster-request.
 })
 export class ClusterparamsComponent implements OnInit {
 
-  @Input() clusterControl: FormControl;
-  @Input() sampleControl: FormControl;
-  @Input() epsControl: FormControl;
-  @Input() standardizerControl: FormControl;
-  @Input() timeStepControl: FormControl;
-  @Input() timeIntervalControl: FormArray;
+  @Input() paramsControl: FormGroup;
 
   @Input() clusterType: ClusterType;
 
@@ -34,11 +29,11 @@ export class ClusterparamsComponent implements OnInit {
 
   useIntervalChanged(event: MatCheckboxChange) {
     if (event.checked) {
-      this.timeIntervalControl.enable();
-      this.timeStepControl.disable();
+      this.paramsControl.get('time_interval').enable();
+      this.paramsControl.get('temporal_val').disable({emitEvent: false});
     } else {
-      this.timeStepControl.enable();
-      this.timeIntervalControl.disable();
+      this.paramsControl.get('temporal_val').enable();
+      this.paramsControl.get('time_interval').disable({emitEvent: false});
     }
   }
 
