@@ -1,0 +1,39 @@
+tphys,Evolution Time,t
+kstar_1,Evolutionary State(P),t
+mass0_1,Previous Stage Mass(P),t
+mass_1,Mass(P),t
+lumin_1,Luminosity(P),t
+rad_1,Radius(P),t
+teff_1,Effective Temperature(P),t
+massc_1,Core Mass(P),t
+radc_1,Core Radius(P),t
+menv_1,Envelope Mass(P),t
+renv_1,Envelope Radius(P),t
+epoch_1,Epoch(P),t
+ospin_1,Spin(P),t
+deltam_1,Mass Transfer Rate(P),t
+rrol_1,Radius in units of Roche lobe radii(P),t
+b_0_1,Neutron Star Magnetic Field(P),t
+sn_1,Supernova Type(P),t
+kstar_2,Evolutionary State(S),t
+mass0_2,Previous Stage Mass(S),t
+mass_2,Mass(S),t
+lumin_2,Luminosity(S),t
+rad_2,Radius(S),t
+teff_2,Effective Temperature(S),t
+massc_2,Core Mass(S),t
+radc_2,Core Radius(S),t
+menv_2,Envelope Mass(S),t
+renv_2,Envelope Radius(S),t
+epoch_2,Epoch(S),t
+ospin_2,Spin(S),t
+deltam_2,Mass Transfer Rate(S),t
+rrol_2,Radius in units of Roche lobe radii(S),t
+b_0_2,Neutron Star Magnetic Field(S),t
+sn_2,Supernova Type(S),t
+porb,Orbital Period,t
+sep,Semimajor Axis,t
+ecc,Eccentricity,t
+bin_state,State of the Binary,t
+merger_type,String of the kstar's in the merger,t
+bin_num,Unique binary Index,t
