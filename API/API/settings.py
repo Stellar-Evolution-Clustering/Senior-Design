@@ -96,7 +96,7 @@ if os.environ.get('ENV') == 'PROD':
             'NAME': 'production',
             'USER': os.environ.get('DB_USER'),
             'PASSWORD': os.environ.get('DB_PASSWORD'),
-            'HOST': 'sdmay21-30.ece.iastate.edu',
+            'HOST': os.environ.get('DB_URL') or 'sdmay21-30.ece.iastate.edu',
             'PORT': '5432'
         }
     }
@@ -107,7 +107,7 @@ else:
             'NAME': 'dev',
             'USER': os.environ.get('DB_USER'),
             'PASSWORD': os.environ.get('DB_PASSWORD'),
-            'HOST': 'sdmay21-30.ece.iastate.edu',
+            'HOST': os.environ.get('DB_URL') or 'sdmay21-30.ece.iastate.edu',
             'PORT': '5432'
         }
     }
